@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, MapPin } from "lucide-react";
 
 import { Card, ProfessionalCard, Section, StatusPill, TrustScore } from "@/components/ui-kit";
-import { getPropertyBySlug, professionals } from "@/data/mock";
+import { getPropertyBySlug, professionals, type Property } from "@/data/mock";
 
 export const Route = createFileRoute("/properties/$slug")({
   loader: ({ params }) => {
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/properties/$slug")({
 });
 
 function PropertyDetail() {
-  const { property } = Route.useLoaderData();
+  const { property } = Route.useLoaderData() as { property: Property };
   const relatedPros = professionals.slice(0, 2);
 
   return (
