@@ -118,8 +118,8 @@ export function PropertyCard({ property }: { property: Property }) {
 
 export function ProfessionalCard({ pro }: { pro: Professional }) {
   return (
-    <Card className="flex flex-col gap-4">
-      <div className="flex min-w-0 items-center gap-3">
+    <Card className="flex min-w-0 flex-col gap-4">
+      <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3">
         <img
           src={pro.avatar}
           alt={pro.name}
@@ -132,9 +132,9 @@ export function ProfessionalCard({ pro }: { pro: Professional }) {
             {pro.role} · {pro.firm}
           </p>
         </div>
-        <StatusPill status="verified" className="ml-auto" />
+        <StatusPill status="verified" />
       </div>
-      <p className="text-sm text-muted-foreground">{pro.bio}</p>
+      <p className="min-w-0 text-sm text-muted-foreground">{pro.bio}</p>
       <div className="flex flex-wrap gap-1.5">
         {pro.specialties.map((s) => (
           <span key={s} className="rounded-full bg-secondary px-2.5 py-1 text-xs text-secondary-foreground">
