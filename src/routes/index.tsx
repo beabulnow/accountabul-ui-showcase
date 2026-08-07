@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, FileCheck2, ScanSearch, Users } from "lucide-react";
 
-import { Card, ProfessionalCard, PropertyCard, Section, SectionHeading } from "@/components/ui-kit";
+import { Card, EmptyState, ProfessionalCard, PropertyCard, Section, SectionHeading } from "@/components/ui-kit";
 import { professionals, properties, trustPrinciples } from "@/data/mock";
 
 export const Route = createFileRoute("/")({
@@ -57,9 +57,9 @@ function Home() {
             </div>
             <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {[
-                { k: "Evidence items filed", v: "12,480" },
-                { k: "Verified professionals", v: "1,204" },
-                { k: "Median trust score", v: "86" },
+                { k: "Evidence items filed", v: "—" },
+                { k: "Verified professionals", v: "—" },
+                { k: "Median trust score", v: "—" },
               ].map((s) => (
                 <div key={s.k} className="min-w-0">
                   <dt className="truncate text-xs text-muted-foreground">{s.k}</dt>
@@ -70,31 +70,40 @@ function Home() {
           </div>
 
           <div className="min-w-0">
-            <Card className="overflow-hidden p-0">
-              <img
-                src={properties[0].image}
-                alt="Featured property"
-                className="aspect-16/10 w-full object-cover"
-              />
-              <div className="space-y-3 p-5">
-                <p className="eyebrow">Sample evidence trail</p>
-                {properties[0].evidence.slice(0, 3).map((e) => (
-                  <div
-                    key={e.id}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-surface px-3.5 py-3"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{e.label}</p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {e.source} · {e.updated}
-                      </p>
+            {featured[0] ? (
+              <Card className="overflow-hidden p-0">
+                <img
+                  src={featured[0].image}
+                  alt="Featured property"
+                  className="aspect-16/10 w-full object-cover"
+                />
+                <div className="space-y-3 p-5">
+                  <p className="eyebrow">Sample evidence trail</p>
+                  {featured[0].evidence.slice(0, 3).map((e) => (
+                    <div
+                      key={e.id}
+                      className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-surface px-3.5 py-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">{e.label}</p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {e.source} · {e.updated}
+                        </p>
+                      </div>
+                      <span className="shrink-0 text-xs text-muted-foreground">{e.status}</span>
                     </div>
-                    <span className="shrink-0 text-xs text-muted-foreground">{e.status}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
+                  ))}
+                </div>
+              </Card>
+            ) : (
+              <EmptyState
+                title="No evidence trail to show yet"
+                description="Once listings are connected, the most recently verified documents will appear here."
+                className="bg-card"
+              />
+            )}
           </div>
+
         </div>
       </div>
 
@@ -147,11 +156,19 @@ function Home() {
               </Link>
             }
           />
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p) => (
-              <PropertyCard key={p.id} property={p} />
-            ))}
-          </div>
+          {featured.length > 0 ? (
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((p) => (
+                <PropertyCard key={p.id} property={p} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              className="mt-8"
+              title="No properties published yet"
+              description="Listings with a documented evidence trail will appear here as soon as they are added."
+            />
+          )}
         </Section>
       </div>
 
@@ -168,11 +185,19 @@ function Home() {
             </Link>
           }
         />
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {pros.map((p) => (
-            <ProfessionalCard key={p.id} pro={p} />
-          ))}
-        </div>
+        {pros.length > 0 ? (
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {pros.map((p) => (
+              <ProfessionalCard key={p.id} pro={p} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            className="mt-8"
+            title="No professionals listed yet"
+            description="Verified solicitors, surveyors and contractors will be shown here once the directory is connected."
+          />
+        )}
       </Section>
 
       <div className="border-t border-border bg-surface">

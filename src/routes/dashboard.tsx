@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 
-import { Card, PropertyCard, StatusPill, TrustScore } from "@/components/ui-kit";
+import { Card, EmptyState, PropertyCard, StatusPill, TrustScore } from "@/components/ui-kit";
 import { properties, workspaceActivity, workspaceStats, workspaceTasks } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
@@ -40,8 +40,8 @@ function Dashboard() {
       <aside className="min-w-0">
         <div className="rounded-2xl border border-border bg-card p-4 shadow-soft">
           <p className="eyebrow">Signed in as</p>
-          <p className="mt-2 truncate font-medium">Demo buyer</p>
-          <p className="truncate text-sm text-muted-foreground">Edinburgh search</p>
+          <p className="mt-2 truncate font-medium">Guest</p>
+          <p className="truncate text-sm text-muted-foreground">No saved search yet</p>
         </div>
         <nav className="mt-4 flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
           {tabs.map((t) => (
@@ -64,7 +64,7 @@ function Dashboard() {
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 sm:flex sm:justify-between">
           <div className="min-w-0">
             <h1 className="truncate text-3xl">Workspace</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Demo data — nothing here is persisted yet.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Nothing saved yet — this workspace is not connected to data.</p>
           </div>
           <Link
             to="/properties"
@@ -75,11 +75,19 @@ function Dashboard() {
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {workspaceStats.map((s) => (
+          {(workspaceStats.length > 0
+            ? workspaceStats
+            : [
+                { label: "Saved properties", value: "0", delta: "Nothing saved yet" },
+                { label: "Open evidence gaps", value: "0", delta: "No gaps tracked" },
+                { label: "Verified pros engaged", value: "0", delta: "No introductions" },
+                { label: "Median trust score", value: "—", delta: "Awaiting data" },
+              ]
+          ).map((s) => (
             <Card key={s.label} className="p-4">
               <p className="truncate text-xs text-muted-foreground">{s.label}</p>
               <p className="mt-1 font-display text-3xl">{s.value}</p>
-              <p className="mt-1 text-xs text-verified">{s.delta}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{s.delta}</p>
             </Card>
           ))}
         </div>
@@ -88,6 +96,9 @@ function Dashboard() {
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <Card>
               <h2 className="text-xl">Tasks</h2>
+              {workspaceTasks.length === 0 ? (
+                <p className="mt-4 text-sm text-muted-foreground">No tasks yet. Tasks appear when you engage a verified professional.</p>
+              ) : null}
               <ul className="mt-4 space-y-3">
                 {workspaceTasks.map((t) => (
                   <li key={t.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
@@ -108,6 +119,9 @@ function Dashboard() {
             </Card>
             <Card>
               <h2 className="text-xl">Watchlist scores</h2>
+              {saved.length === 0 ? (
+                <p className="mt-4 text-sm text-muted-foreground">No saved properties yet. Save a listing to track its trust score here.</p>
+              ) : null}
               <ul className="mt-4 space-y-3">
                 {saved.map((p) => (
                   <li key={p.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
@@ -124,14 +138,37 @@ function Dashboard() {
         ) : null}
 
         {tab === "Saved" ? (
-          <div className="mt-8 grid gap-6 sm:grid-cols-2">
-            {saved.map((p) => (
-              <PropertyCard key={p.id} property={p} />
-            ))}
-          </div>
+          saved.length > 0 ? (
+            <div className="mt-8 grid gap-6 sm:grid-cols-2">
+              {saved.map((p) => (
+                <PropertyCard key={p.id} property={p} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              className="mt-8"
+              title="No saved properties"
+              description="Properties you save while browsing will be collected here with their latest trust score."
+              action={
+                <Link
+                  to="/properties"
+                  className="inline-flex rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:opacity-90"
+                >
+                  Browse properties
+                </Link>
+              }
+            />
+          )
         ) : null}
 
         {tab === "Evidence gaps" ? (
+          gaps.length === 0 ? (
+            <EmptyState
+              className="mt-8"
+              title="No open evidence gaps"
+              description="Pending or flagged items on your saved properties will be listed here."
+            />
+          ) : (
           <div className="mt-8 space-y-3">
             {gaps.map((g) => (
               <Card key={g.id}>
@@ -155,9 +192,17 @@ function Dashboard() {
               </Card>
             ))}
           </div>
+          )
         ) : null}
 
         {tab === "Activity" ? (
+          workspaceActivity.length === 0 ? (
+            <EmptyState
+              className="mt-8"
+              title="No activity yet"
+              description="Uploads, verifications and flags across your workspace will show up on this timeline."
+            />
+          ) : (
           <Card className="mt-8">
             <ol className="space-y-4 border-l border-border pl-5">
               {workspaceActivity.map((a) => (
@@ -171,6 +216,7 @@ function Dashboard() {
               ))}
             </ol>
           </Card>
+          )
         ) : null}
       </main>
     </div>
