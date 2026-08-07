@@ -34,7 +34,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border px-5 py-5">
         <p className="mx-auto max-w-6xl text-xs text-muted-foreground">
-          Demo interface with representative data. © {new Date().getFullYear()} Accountabul.
+          Interface preview — not connected to live data. © {new Date().getFullYear()} Accountabul.
         </p>
       </div>
     </footer>

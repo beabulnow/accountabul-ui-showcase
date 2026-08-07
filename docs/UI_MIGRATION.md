@@ -35,31 +35,33 @@ Never hardcode color utilities in components — extend the tokens instead.
 | `/professionals` | `src/routes/professionals.tsx` | Verified professional directory with role filter and per-person check list |
 | `/trust` | `src/routes/trust.tsx` | Trust center: principles, trust-score bands, verification checks, FAQs |
 | `/dashboard` | `src/routes/dashboard.tsx` | Workspace states: stats, tabs for Overview / Saved / Evidence gaps / Activity |
-| `/sitemap.xml` | `src/routes/sitemap[.]xml.ts` | Generated from the same mock property list |
+| `/sitemap.xml` | `src/routes/sitemap[.]xml.ts` | Static routes plus one entry per property (currently none) |
 
 Shared chrome (header + footer) lives in `src/routes/__root.tsx`.
 
 ## Components
 
 - `src/components/site-header.tsx` — sticky nav with mobile disclosure menu.
-- `src/components/site-footer.tsx` — link columns + demo-data notice.
+- `src/components/site-footer.tsx` — link columns + interface notice.
 - `src/components/ui-kit.tsx` — `Section`, `SectionHeading`, `Card`, `StatusPill`,
   `TrustScore`, `PropertyCard`, `ProfessionalCard`. These are the reusable presentation
   primitives; prefer extending them over one-off markup.
 - shadcn primitives remain available under `src/components/ui/`.
 
-## Mock data assumptions
+## Data assumptions
 
-All demo data is in `src/data/mock.ts` — static, synchronous, typed:
+`src/data/mock.ts` is the data contract only — it contains **no demo records**:
 
-- `Property` — 6 listings (Scotland), each with `trustScore` (0–100), `evidenceCount`,
-  `evidence[]` (`verified | pending | flagged`, with `source` and `updated` date), and a
-  short `timeline[]`.
-- `Professional` — 6 people with `role`, `licence`, `verifiedSince`, `rating`, `specialties`,
-  and a `checks[]` list mirroring the trust-center cadence.
-- `trustPrinciples`, `trustChecks`, `workspaceStats`, `workspaceTasks`, `workspaceActivity`.
-- Photography uses remote Unsplash URLs; swap for owned assets before any public launch.
-- Dates, licence numbers, firms and people are fictional and illustrative only.
+- `properties: Property[]` and `professionals: Professional[]` are exported as empty arrays.
+- `workspaceStats`, `workspaceTasks`, `workspaceActivity` are exported as empty arrays.
+- `trustPrinciples` and `trustChecks` remain populated: they are editorial page copy for the
+  trust center, not records.
+- The `Property`, `Professional` and `EvidenceItem` types are the contract every component
+  reads from; keep them stable when wiring the database.
+
+Because the collections are empty, every list surface renders an empty state via
+`EmptyState` in `src/components/ui-kit.tsx`. `/properties/$slug` throws `notFound()` for any
+slug, which is handled by the root `notFoundComponent`.
 
 Filtering, sorting and tab state are all client-side (`useState`/`useMemo`) — no network calls.
 
@@ -75,7 +77,7 @@ Filtering, sorting and tab state are all client-side (`useState`/`useMemo`) — 
 
 1. Keep the exported types in `src/data/mock.ts` as the contract; move them to
    `src/data/types.ts` when real fetching lands.
-2. Replace each mock export with a TanStack Query `queryOptions` object; call
+2. Replace each empty export with a TanStack Query `queryOptions` object; call
    `context.queryClient.ensureQueryData(...)` in route loaders and `useSuspenseQuery(...)`
    in components. Component markup should not need to change.
 3. Move search/filter/sort from `useMemo` into query params + server-side filtering
