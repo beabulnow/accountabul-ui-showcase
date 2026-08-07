@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useMemo, useState } from "react";
 
-import { PropertyCard, Section, SectionHeading } from "@/components/ui-kit";
+import { EmptyState, PropertyCard, Section, SectionHeading } from "@/components/ui-kit";
 import { properties } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
@@ -123,9 +123,15 @@ function PropertiesPage() {
       </div>
 
       {results.length === 0 ? (
-        <div className="mt-10 rounded-2xl border border-dashed border-border p-10 text-center text-muted-foreground">
-          No properties match those filters yet.
-        </div>
+        <EmptyState
+          className="mt-10"
+          title={properties.length === 0 ? "No properties published yet" : "No properties match those filters"}
+          description={
+            properties.length === 0
+              ? "Listings will appear here with their evidence trail, trust score and open questions once they are added."
+              : "Try clearing the search, widening the trust score or selecting a different property type."
+          }
+        />
       ) : null}
     </Section>
   );
