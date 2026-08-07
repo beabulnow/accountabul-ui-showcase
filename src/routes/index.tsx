@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, FileCheck2, ScanSearch, Users } from "lucide-react";
 
-import { Card, ProfessionalCard, PropertyCard, Section, SectionHeading } from "@/components/ui-kit";
+import { Card, EmptyState, ProfessionalCard, PropertyCard, Section, SectionHeading } from "@/components/ui-kit";
 import { professionals, properties, trustPrinciples } from "@/data/mock";
 
 export const Route = createFileRoute("/")({
