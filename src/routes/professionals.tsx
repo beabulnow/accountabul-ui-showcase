@@ -37,43 +37,54 @@ function ProfessionalsPage() {
         description="Each person below has been matched to a public register. Their checks and the cadence we re-run them at are shown on their profile."
       />
 
-      <div className="mt-8 flex flex-wrap gap-2">
-        {roles.map((r) => (
-          <button
-            key={r}
-            type="button"
-            onClick={() => setRole(r)}
-            className={cn(
-              "rounded-full border px-3.5 py-1.5 text-sm transition-colors",
-              role === r
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border bg-card text-muted-foreground hover:bg-secondary",
-            )}
-          >
-            {r}
-          </button>
-        ))}
-      </div>
+      {roles.length > 1 ? (
+        <div className="mt-8 flex flex-wrap gap-2">
+          {roles.map((r) => (
+            <button
+              key={r}
+              type="button"
+              onClick={() => setRole(r)}
+              className={cn(
+                "rounded-full border px-3.5 py-1.5 text-sm transition-colors",
+                role === r
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card text-muted-foreground hover:bg-secondary",
+              )}
+            >
+              {r}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
-      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {list.map((p) => (
-          <div key={p.id} className="min-w-0 space-y-3">
-            <ProfessionalCard pro={p} />
-            <Card className="p-4">
-              <p className="eyebrow">Checks</p>
-              <ul className="mt-3 space-y-2">
-                {p.checks.map((c) => (
-                  <li key={c.label} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-                    <span className="truncate text-sm text-muted-foreground">{c.label}</span>
-                    <StatusPill status={c.status} />
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-3 text-xs text-muted-foreground">Licence {p.licence}</p>
-            </Card>
-          </div>
-        ))}
-      </div>
+      {list.length > 0 ? (
+        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {list.map((p) => (
+            <div key={p.id} className="min-w-0 space-y-3">
+              <ProfessionalCard pro={p} />
+              <Card className="p-4">
+                <p className="eyebrow">Checks</p>
+                <ul className="mt-3 space-y-2">
+                  {p.checks.map((c) => (
+                    <li key={c.label} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                      <span className="truncate text-sm text-muted-foreground">{c.label}</span>
+                      <StatusPill status={c.status} />
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-3 text-xs text-muted-foreground">Licence {p.licence}</p>
+              </Card>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <EmptyState
+          className="mt-8"
+          title="No verified professionals yet"
+          description="Once the directory is connected, each person will appear here with their register match, checks and re-check cadence."
+        />
+      )}
+
 
       <div className="mt-14 rounded-2xl border border-border bg-surface p-6 sm:p-8">
         <h2 className="text-2xl">What we check, and how often</h2>
