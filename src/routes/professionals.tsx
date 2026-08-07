@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 
-import { Card, ProfessionalCard, Section, SectionHeading, StatusPill } from "@/components/ui-kit";
+import { Card, EmptyState, ProfessionalCard, Section, SectionHeading, StatusPill } from "@/components/ui-kit";
 import { professionals, trustChecks } from "@/data/mock";
 import { cn } from "@/lib/utils";
 
