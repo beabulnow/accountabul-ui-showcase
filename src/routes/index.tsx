@@ -185,11 +185,19 @@ function Home() {
             </Link>
           }
         />
-        <div className="mt-8 grid gap-6 md:grid-cols-3">
-          {pros.map((p) => (
-            <ProfessionalCard key={p.id} pro={p} />
-          ))}
-        </div>
+        {pros.length > 0 ? (
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {pros.map((p) => (
+              <ProfessionalCard key={p.id} pro={p} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            className="mt-8"
+            title="No professionals listed yet"
+            description="Verified solicitors, surveyors and contractors will be shown here once the directory is connected."
+          />
+        )}
       </Section>
 
       <div className="border-t border-border bg-surface">
