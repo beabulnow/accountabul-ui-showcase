@@ -156,11 +156,19 @@ function Home() {
               </Link>
             }
           />
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p) => (
-              <PropertyCard key={p.id} property={p} />
-            ))}
-          </div>
+          {featured.length > 0 ? (
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {featured.map((p) => (
+                <PropertyCard key={p.id} property={p} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState
+              className="mt-8"
+              title="No properties published yet"
+              description="Listings with a documented evidence trail will appear here as soon as they are added."
+            />
+          )}
         </Section>
       </div>
 
