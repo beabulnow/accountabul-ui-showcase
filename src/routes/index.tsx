@@ -57,9 +57,9 @@ function Home() {
             </div>
             <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {[
-                { k: "Evidence items filed", v: "12,480" },
-                { k: "Verified professionals", v: "1,204" },
-                { k: "Median trust score", v: "86" },
+                { k: "Evidence items filed", v: "—" },
+                { k: "Verified professionals", v: "—" },
+                { k: "Median trust score", v: "—" },
               ].map((s) => (
                 <div key={s.k} className="min-w-0">
                   <dt className="truncate text-xs text-muted-foreground">{s.k}</dt>
@@ -70,31 +70,40 @@ function Home() {
           </div>
 
           <div className="min-w-0">
-            <Card className="overflow-hidden p-0">
-              <img
-                src={properties[0].image}
-                alt="Featured property"
-                className="aspect-16/10 w-full object-cover"
-              />
-              <div className="space-y-3 p-5">
-                <p className="eyebrow">Sample evidence trail</p>
-                {properties[0].evidence.slice(0, 3).map((e) => (
-                  <div
-                    key={e.id}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-surface px-3.5 py-3"
-                  >
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{e.label}</p>
-                      <p className="truncate text-xs text-muted-foreground">
-                        {e.source} · {e.updated}
-                      </p>
+            {featured[0] ? (
+              <Card className="overflow-hidden p-0">
+                <img
+                  src={featured[0].image}
+                  alt="Featured property"
+                  className="aspect-16/10 w-full object-cover"
+                />
+                <div className="space-y-3 p-5">
+                  <p className="eyebrow">Sample evidence trail</p>
+                  {featured[0].evidence.slice(0, 3).map((e) => (
+                    <div
+                      key={e.id}
+                      className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl bg-surface px-3.5 py-3"
+                    >
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-medium">{e.label}</p>
+                        <p className="truncate text-xs text-muted-foreground">
+                          {e.source} · {e.updated}
+                        </p>
+                      </div>
+                      <span className="shrink-0 text-xs text-muted-foreground">{e.status}</span>
                     </div>
-                    <span className="shrink-0 text-xs text-muted-foreground">{e.status}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
+                  ))}
+                </div>
+              </Card>
+            ) : (
+              <EmptyState
+                title="No evidence trail to show yet"
+                description="Once listings are connected, the most recently verified documents will appear here."
+                className="bg-card"
+              />
+            )}
           </div>
+
         </div>
       </div>
 
