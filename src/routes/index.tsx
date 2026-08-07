@@ -35,8 +35,9 @@ function Home() {
               Every listing, backed by evidence you can actually check.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-              Accountabul shows the documents, the source and the date behind each claim — and names the
-              verified professional who stands behind it. Gaps stay visible instead of quietly disappearing.
+              Accountabul shows the documents, the source and the date behind each claim — and names
+              the verified professional who stands behind it. Gaps stay visible instead of quietly
+              disappearing.
             </p>
             <dl className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3">
               {[
