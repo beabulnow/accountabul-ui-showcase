@@ -153,3 +153,28 @@ export function ProfessionalCard({ pro }: { pro: Professional }) {
     </Card>
   );
 }
+
+export function EmptyState({
+  title,
+  description,
+  action,
+  className,
+}: {
+  title: string;
+  description?: string;
+  action?: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "grid place-items-center gap-3 rounded-2xl border border-dashed border-border bg-card/50 px-6 py-14 text-center",
+        className,
+      )}
+    >
+      <p className="font-display text-xl">{title}</p>
+      {description ? <p className="max-w-md text-sm text-muted-foreground">{description}</p> : null}
+      {action ? <div className="mt-1">{action}</div> : null}
+    </div>
+  );
+}
