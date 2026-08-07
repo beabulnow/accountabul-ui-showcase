@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -64,13 +63,5 @@ export function EmptyState({
       {description ? <p className="max-w-md text-sm text-muted-foreground">{description}</p> : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>
-  );
-}
-
-export function HomeLink({ children, className }: { children: ReactNode; className?: string }) {
-  return (
-    <Link to="/" className={className}>
-      {children}
-    </Link>
   );
 }
