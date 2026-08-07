@@ -4,7 +4,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-5 py-12">
         <p className="font-display text-xl">Accountabul</p>
         <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-          Evidence-first property discovery. Every claim carries a source, a date and a verified name.
+          Evidence-first property discovery. Every claim carries a source, a date and a verified
+          name.
         </p>
       </div>
       <div className="border-t border-border px-5 py-5">

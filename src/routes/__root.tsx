@@ -80,13 +80,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Accountabul — Evidence-first property discovery" },
       {
         name: "description",
-        content: "Calm, evidence-first property discovery with verified professionals and an open trust center.",
+        content:
+          "Calm, evidence-first property discovery with verified professionals and an open trust center.",
       },
       { name: "author", content: "Accountabul" },
       { property: "og:title", content: "Accountabul — Evidence-first property discovery" },
       {
         property: "og:description",
-        content: "Calm, evidence-first property discovery with verified professionals and an open trust center.",
+        content:
+          "Calm, evidence-first property discovery with verified professionals and an open trust center.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

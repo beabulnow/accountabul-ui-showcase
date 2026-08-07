@@ -2,14 +2,12 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-export function Section({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <section className={cn("mx-auto w-full max-w-6xl px-5 py-14 sm:py-20", className)}>{children}</section>;
+export function Section({ children, className }: { children: ReactNode; className?: string }) {
+  return (
+    <section className={cn("mx-auto w-full max-w-6xl px-5 py-14 sm:py-20", className)}>
+      {children}
+    </section>
+  );
 }
 
 export function SectionHeading({
@@ -37,7 +35,9 @@ export function SectionHeading({
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-soft", className)}>{children}</div>
+    <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-soft", className)}>
+      {children}
+    </div>
   );
 }
 
