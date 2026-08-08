@@ -24,13 +24,13 @@ import {
 export const Route = createFileRoute("/_authenticated/registrations/$id")({
   head: () => ({
     meta: [
-      { title: "Registry receipt — Accountabul Registry" },
+      { title: "Registry receipt — Verifiabul Registry" },
       {
         name: "description",
         content:
-          "View your Accountabul registry receipt: submitted property details, review status history and record-proof state.",
+          "View your Verifiabul registry receipt: submitted property details, review status history and record-proof state.",
       },
-      { property: "og:title", content: "Registry receipt — Accountabul Registry" },
+      { property: "og:title", content: "Registry receipt — Verifiabul Registry" },
       { property: "og:description", content: "Your property registration receipt and status." },
     ],
   }),
@@ -161,7 +161,7 @@ function RegistrationDetailPage() {
       <Card className="mt-6">
         <h2 className="text-xl">Record proof</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Accountabul may publish a tamper-evident hash of an approved record to the XRP Ledger and
+          Verifiabul may publish a tamper-evident hash of an approved record to the XRP Ledger and
           pays any network fee itself. No wallet, token, or transferable asset is issued to you.
         </p>
         <div className="mt-3">

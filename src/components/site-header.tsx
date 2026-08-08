@@ -26,7 +26,7 @@ export function SiteHeader() {
             <ShieldCheck className="size-4 sm:size-4.5" />
           </span>
           <span className="font-display text-base leading-none whitespace-nowrap sm:text-xl">
-            Accountabul
+            Verifiabul
           </span>
         </Link>
 

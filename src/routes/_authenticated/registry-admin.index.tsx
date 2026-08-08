@@ -17,14 +17,14 @@ import {
 export const Route = createFileRoute("/_authenticated/registry-admin/")({
   head: () => ({
     meta: [
-      { title: "Business portal overview — Accountabul registry staff" },
+      { title: "Business portal overview — Verifiabul registry staff" },
       {
         name: "description",
         content:
           "Registry operations overview: submission volume, review workload, evidence coverage and recent staff activity.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Business portal overview — Accountabul" },
+      { property: "og:title", content: "Business portal overview — Verifiabul" },
       { property: "og:description", content: "Staff-only registry operations overview." },
     ],
   }),

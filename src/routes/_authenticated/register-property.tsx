@@ -31,13 +31,13 @@ import {
 export const Route = createFileRoute("/_authenticated/register-property")({
   head: () => ({
     meta: [
-      { title: "Register a property record — Accountabul Registry" },
+      { title: "Register a property record — Verifiabul Registry" },
       {
         name: "description",
         content:
-          "Submit a property record to the Accountabul registry for staff review. Registration is not title, ownership transfer, valuation or government approval.",
+          "Submit a property record to the Verifiabul registry for staff review. Registration is not title, ownership transfer, valuation or government approval.",
       },
-      { property: "og:title", content: "Register a property record — Accountabul Registry" },
+      { property: "og:title", content: "Register a property record — Verifiabul Registry" },
       { property: "og:description", content: "Submit a property record for registry review." },
     ],
   }),

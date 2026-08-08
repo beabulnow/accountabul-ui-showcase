@@ -1,4 +1,4 @@
-# Accountabul Property Registry — Current Architecture
+# Verifiabul Property Registry — Current Architecture
 
 ## Product boundary
 
@@ -37,7 +37,7 @@ The detailed schema and proposed evidence model are in [DATABASE_SPEC.md](DATABA
 
 ## XRPL boundary
 
-XRPL signing and submission are not implemented. The reserved proof fields hold a deterministic payload hash, network, validated transaction hash, ledger index, and anchor time. Signing material must remain server-side, Accountabul pays the fee, and the user receives an in-app registry receipt rather than a wallet, NFT, or transferable token.
+XRPL signing and submission are not implemented. The reserved proof fields hold a deterministic payload hash, network, validated transaction hash, ledger index, and anchor time. Signing material must remain server-side, Verifiabul pays the fee, and the user receives an in-app registry receipt rather than a wallet, NFT, or transferable token.
 
 ## Manual administration
 

@@ -37,14 +37,14 @@ import { errorMessage } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/registry-admin/queue")({
   head: () => ({
     meta: [
-      { title: "Review queue — Accountabul registry staff" },
+      { title: "Review queue — Verifiabul registry staff" },
       {
         name: "description",
         content:
-          "Internal review queue for Accountabul property record submissions. Staff authorization required.",
+          "Internal review queue for Verifiabul property record submissions. Staff authorization required.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Review queue — Accountabul registry staff" },
+      { property: "og:title", content: "Review queue — Verifiabul registry staff" },
       { property: "og:description", content: "Staff-only registry review queue." },
     ],
   }),
