@@ -29,7 +29,9 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function DashboardPage() {
   const { user } = useSession();
+  const { isStaff, role } = useIsStaff();
   const { data: profile } = useProfile(user?.id);
+
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["my-registrations", user?.id],
