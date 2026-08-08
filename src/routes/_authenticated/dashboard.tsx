@@ -9,7 +9,7 @@ import { StatusChip } from "@/components/status-chip";
 import { formatDate, statusHelp, type RegistrationStatus } from "@/lib/registry";
 import { profileDisplayName } from "@/lib/profile";
 import { useProfile } from "@/hooks/use-profile";
-import { useSession } from "@/hooks/use-session";
+import { useIsStaff, useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
