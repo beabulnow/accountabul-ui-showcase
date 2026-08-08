@@ -35,6 +35,37 @@ const NEEDS_ACTION: RegistrationStatus[] = ["submitted", "under_review"];
 
 function RegistryAdminHome() {
   const { role, isStaff, checking } = useIsStaff();
+  const { user } = useSession();
+
+  const { data: myReviews } = useQuery({
+    queryKey: ["admin-overview-my-reviews", user?.id],
+    enabled: isStaff && Boolean(user?.id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("registration_status_history")
+        .select("id, registration_id, from_status, to_status, created_at, user_visible_message")
+        .eq("changed_by", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(10);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
+  const { data: myNotes } = useQuery({
+    queryKey: ["admin-overview-my-notes", user?.id],
+    enabled: isStaff && Boolean(user?.id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("staff_notes")
+        .select("id, registration_id, created_at")
+        .eq("author_id", user!.id)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
 
   const { data: registrations, isLoading } = useQuery({
     queryKey: ["admin-overview-registrations"],
