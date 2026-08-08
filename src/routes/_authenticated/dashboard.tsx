@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BadgeCheck, Clock3, FilePlus2, Files, Link2, UserRound } from "lucide-react";
+import { BadgeCheck, Clock3, FilePlus2, Files, Link2, ShieldCheck, UserRound } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
