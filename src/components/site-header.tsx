@@ -39,12 +39,8 @@ export function SiteHeader() {
               >
                 Dashboard
               </Link>
-              <Link
-                to="/profile"
-                className="hidden rounded-full px-3 py-2 transition-colors hover:bg-accent sm:inline-flex"
-              >
-                Profile
-              </Link>
+              {isStaff ? (
+
               {isStaff ? (
                 <Link
                   to="/registry-admin"
