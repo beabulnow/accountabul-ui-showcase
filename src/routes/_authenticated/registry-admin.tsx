@@ -489,6 +489,15 @@ function SubmissionInspector({
       </Card>
 
       <Card className="grid gap-2">
+        <h3 className="text-lg">Supporting documents</h3>
+        <RegistrationDocumentSlots
+          registrationId={registration.id}
+          emptyLabel="No documents were attached to this submission."
+        />
+      </Card>
+
+
+      <Card className="grid gap-2">
         <h3 className="text-lg">History</h3>
         <StatusHistory entries={history ?? []} />
       </Card>
