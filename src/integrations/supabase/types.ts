@@ -14,7 +14,253 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      property_registrations: {
+        Row: {
+          address_line1: string
+          address_line2: string | null
+          affirm_accurate: boolean
+          affirm_authorized: boolean
+          affirm_not_title: boolean
+          city: string
+          county: string
+          created_at: string
+          id: string
+          normalized_address: string | null
+          parcel_id: string | null
+          postal_code: string
+          property_type: Database["public"]["Enums"]["property_type"]
+          public_source_notes: string | null
+          receipt_code: string
+          relationship: Database["public"]["Enums"]["submitter_relationship"]
+          relationship_other: string | null
+          state: string
+          status: Database["public"]["Enums"]["registration_status"]
+          submitted_at: string | null
+          submitter_full_name: string
+          updated_at: string
+          user_id: string
+          user_note: string | null
+        }
+        Insert: {
+          address_line1: string
+          address_line2?: string | null
+          affirm_accurate?: boolean
+          affirm_authorized?: boolean
+          affirm_not_title?: boolean
+          city: string
+          county: string
+          created_at?: string
+          id?: string
+          normalized_address?: string | null
+          parcel_id?: string | null
+          postal_code: string
+          property_type: Database["public"]["Enums"]["property_type"]
+          public_source_notes?: string | null
+          receipt_code?: string
+          relationship: Database["public"]["Enums"]["submitter_relationship"]
+          relationship_other?: string | null
+          state?: string
+          status?: Database["public"]["Enums"]["registration_status"]
+          submitted_at?: string | null
+          submitter_full_name: string
+          updated_at?: string
+          user_id: string
+          user_note?: string | null
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string | null
+          affirm_accurate?: boolean
+          affirm_authorized?: boolean
+          affirm_not_title?: boolean
+          city?: string
+          county?: string
+          created_at?: string
+          id?: string
+          normalized_address?: string | null
+          parcel_id?: string | null
+          postal_code?: string
+          property_type?: Database["public"]["Enums"]["property_type"]
+          public_source_notes?: string | null
+          receipt_code?: string
+          relationship?: Database["public"]["Enums"]["submitter_relationship"]
+          relationship_other?: string | null
+          state?: string
+          status?: Database["public"]["Enums"]["registration_status"]
+          submitted_at?: string | null
+          submitter_full_name?: string
+          updated_at?: string
+          user_id?: string
+          user_note?: string | null
+        }
+        Relationships: []
+      }
+      record_anchors: {
+        Row: {
+          anchored_at: string | null
+          canonical_payload_hash: string | null
+          created_at: string
+          id: string
+          registration_id: string
+          updated_at: string
+          validated_ledger_index: number | null
+          xrpl_network: string | null
+          xrpl_tx_hash: string | null
+        }
+        Insert: {
+          anchored_at?: string | null
+          canonical_payload_hash?: string | null
+          created_at?: string
+          id?: string
+          registration_id: string
+          updated_at?: string
+          validated_ledger_index?: number | null
+          xrpl_network?: string | null
+          xrpl_tx_hash?: string | null
+        }
+        Update: {
+          anchored_at?: string | null
+          canonical_payload_hash?: string | null
+          created_at?: string
+          id?: string
+          registration_id?: string
+          updated_at?: string
+          validated_ledger_index?: number | null
+          xrpl_network?: string | null
+          xrpl_tx_hash?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "record_anchors_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: true
+            referencedRelation: "property_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      registration_status_history: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          from_status: Database["public"]["Enums"]["registration_status"] | null
+          id: string
+          is_user_visible: boolean
+          registration_id: string
+          to_status: Database["public"]["Enums"]["registration_status"]
+          user_visible_message: string | null
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?:
+            | Database["public"]["Enums"]["registration_status"]
+            | null
+          id?: string
+          is_user_visible?: boolean
+          registration_id: string
+          to_status: Database["public"]["Enums"]["registration_status"]
+          user_visible_message?: string | null
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          from_status?:
+            | Database["public"]["Enums"]["registration_status"]
+            | null
+          id?: string
+          is_user_visible?: boolean
+          registration_id?: string
+          to_status?: Database["public"]["Enums"]["registration_status"]
+          user_visible_message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registration_status_history_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "property_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_notes: {
+        Row: {
+          author_id: string | null
+          body: string
+          created_at: string
+          id: string
+          registration_id: string
+        }
+        Insert: {
+          author_id?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          registration_id: string
+        }
+        Update: {
+          author_id?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          registration_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "staff_notes_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "property_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      staff_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["staff_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["staff_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["staff_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +269,30 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      property_type:
+        | "single_family"
+        | "multi_family"
+        | "condo"
+        | "townhouse"
+        | "land"
+        | "commercial"
+        | "mixed_use"
+        | "other"
+      registration_status:
+        | "draft"
+        | "submitted"
+        | "under_review"
+        | "needs_information"
+        | "approved"
+        | "anchoring"
+        | "anchored"
+        | "rejected"
+      staff_role: "admin" | "reviewer"
+      submitter_relationship:
+        | "owner"
+        | "authorized_representative"
+        | "property_professional"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +419,34 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      property_type: [
+        "single_family",
+        "multi_family",
+        "condo",
+        "townhouse",
+        "land",
+        "commercial",
+        "mixed_use",
+        "other",
+      ],
+      registration_status: [
+        "draft",
+        "submitted",
+        "under_review",
+        "needs_information",
+        "approved",
+        "anchoring",
+        "anchored",
+        "rejected",
+      ],
+      staff_role: ["admin", "reviewer"],
+      submitter_relationship: [
+        "owner",
+        "authorized_representative",
+        "property_professional",
+        "other",
+      ],
+    },
   },
 } as const
