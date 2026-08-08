@@ -1,10 +1,13 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { ProfileAvatar } from "@/components/profile-avatar";
 import { Card, Section, SectionHeading } from "@/components/ui-kit";
+import { useProfile } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
+import { profileDisplayName } from "@/lib/profile";
 import {
   emptyRegistration,
   propertyTypeOptions,
@@ -66,9 +69,18 @@ function Field({
 function RegisterPropertyPage() {
   const navigate = useNavigate();
   const { user } = useSession();
+  const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
   const [form, setForm] = useState<RegistrationInput>(emptyRegistration);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (!profile) return;
+    const name = profileDisplayName(profile);
+    setForm((previous) =>
+      previous.submitter_full_name ? previous : { ...previous, submitter_full_name: name },
+    );
+  }, [profile]);
 
   function set<K extends keyof RegistrationInput>(key: K, value: RegistrationInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -145,18 +157,32 @@ function RegisterPropertyPage() {
       >
         <Card className="grid gap-4">
           <h2 className="text-xl">About you</h2>
-          <Field
-            label="Full name"
-            htmlFor="submitter_full_name"
-            error={errors["submitter_full_name"]}
-          >
-            <input
-              id="submitter_full_name"
-              className={inputClass}
-              value={form.submitter_full_name}
-              onChange={(e) => set("submitter_full_name", e.target.value)}
+          <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface px-4 py-4">
+            <ProfileAvatar
+              avatarPath={profile?.avatar_path}
+              name={profileDisplayName(profile)}
+              className="size-12 text-sm"
             />
-          </Field>
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-medium">
+                {profileLoading ? "Loading your profile…" : form.submitter_full_name}
+              </p>
+              <p className="truncate text-xs text-muted-foreground">
+                {profile?.email ?? user?.email}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Your confirmed profile name will be saved with this registration.
+              </p>
+            </div>
+            <Link to="/profile" className="text-sm underline underline-offset-4">
+              Edit profile
+            </Link>
+          </div>
+          {errors["submitter_full_name"] ? (
+            <p role="alert" className="text-xs text-destructive">
+              {errors["submitter_full_name"]}
+            </p>
+          ) : null}
           <Field label="Relationship to the property" htmlFor="relationship">
             <select
               id="relationship"
@@ -348,14 +374,14 @@ function RegisterPropertyPage() {
         <div className="flex flex-wrap gap-3">
           <button
             type="submit"
-            disabled={busy}
+            disabled={busy || profileLoading || !form.submitter_full_name}
             className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {busy ? "Working…" : "Submit for review"}
           </button>
           <button
             type="button"
-            disabled={busy}
+            disabled={busy || profileLoading || !form.submitter_full_name}
             onClick={() => void save("draft")}
             className="inline-flex items-center justify-center rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-60"
           >

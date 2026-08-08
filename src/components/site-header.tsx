@@ -1,12 +1,16 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
+import { ProfileAvatar } from "@/components/profile-avatar";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/use-profile";
 import { useIsStaff, useSession } from "@/hooks/use-session";
+import { profileDisplayName } from "@/lib/profile";
 
 export function SiteHeader() {
   const { user, loading } = useSession();
   const { isStaff } = useIsStaff();
+  const { data: profile } = useProfile(user?.id);
   const navigate = useNavigate();
 
   async function signOut() {
@@ -31,44 +35,57 @@ export function SiteHeader() {
             <>
               <Link
                 to="/dashboard"
-                className="rounded-full px-2.5 py-1.5 transition-colors sm:px-3 sm:py-2 hover:bg-accent"
+                className="rounded-full px-2.5 py-1.5 transition-colors hover:bg-accent sm:px-3 sm:py-2"
               >
                 Dashboard
+              </Link>
+              <Link
+                to="/profile"
+                className="hidden rounded-full px-3 py-2 transition-colors hover:bg-accent sm:inline-flex"
+              >
+                Profile
               </Link>
               {isStaff ? (
                 <Link
                   to="/registry-admin"
-                  className="hidden rounded-full px-2.5 py-1.5 transition-colors sm:px-3 sm:py-2 hover:bg-accent sm:inline-flex"
+                  className="hidden rounded-full px-2.5 py-1.5 transition-colors hover:bg-accent sm:inline-flex sm:px-3 sm:py-2"
                 >
                   Registry admin
                 </Link>
               ) : null}
               <Link
                 to="/register-property"
-                className="hidden rounded-full bg-primary px-3 py-1.5 font-medium sm:px-3.5 sm:py-2 text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex"
+                className="hidden rounded-full bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex sm:px-3.5 sm:py-2"
               >
                 Register a property
               </Link>
               <button
                 type="button"
                 onClick={() => void signOut()}
-                className="rounded-full border border-input px-2.5 py-1.5 transition-colors sm:px-3 sm:py-2 hover:bg-accent"
+                className="rounded-full border border-input px-2.5 py-1.5 transition-colors hover:bg-accent sm:px-3 sm:py-2"
               >
                 Sign out
               </button>
+              <Link to="/profile" aria-label="Open your profile" className="rounded-full">
+                <ProfileAvatar
+                  avatarPath={profile?.avatar_path}
+                  name={profileDisplayName(profile)}
+                  className="size-9 text-xs"
+                />
+              </Link>
             </>
           ) : (
             <>
               <Link
                 to="/auth"
-                className="rounded-full px-2.5 py-1.5 transition-colors sm:px-3 sm:py-2 hover:bg-accent"
+                className="rounded-full px-2.5 py-1.5 transition-colors hover:bg-accent sm:px-3 sm:py-2"
               >
                 Sign in
               </Link>
               <Link
                 to="/auth"
                 search={{ mode: "signup" }}
-                className="rounded-full bg-primary px-3 py-1.5 font-medium sm:px-3.5 sm:py-2 text-primary-foreground transition-opacity hover:opacity-90"
+                className="rounded-full bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:px-3.5 sm:py-2"
               >
                 Create account
               </Link>

@@ -14,7 +14,14 @@ dist-ssr
 .vinxi
 .tanstack/**
 .nitro
+supabase/.temp/
 *.local
+supabase/.temp/
+
+# Local environment and credential files
+.env
+.env.*
+!.env.example
 
 # Wrangler / Cloudflare
 .wrangler/
@@ -30,11 +37,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Environment
-.env
-.env.*
-!.env.example
-
-# Supabase local state
-supabase/.temp

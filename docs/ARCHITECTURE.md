@@ -1,83 +1,44 @@
-# Architecture — Accountabul Property Verification Registry
+# Accountabul Property Registry — Current Architecture
 
-Canonical database contract: [docs/DATABASE_SPEC.md](DATABASE_SPEC.md).
-Repository rules: [docs/GITHUB_WORKFLOW.md](GITHUB_WORKFLOW.md).
+## Product boundary
 
-## Stack
+The application registers and reviews property records. It does not create or transfer legal title, tokenize property value, issue an investment, provide an appraisal, or represent government approval.
 
-- **TanStack Start v1** (React 19, Vite 7) — file-based routing under `src/routes`.
-- **Tailwind CSS v4** — design tokens live in `src/styles.css` (`@theme`), never hardcoded colors.
-- **Lovable Cloud (Supabase Postgres + Auth)** — accessed from the browser client at
-  `src/integrations/supabase/client.ts`; row-level security is the authorization boundary.
-
-## Routes
+## Application routes
 
 | Route | Access | Purpose |
 | --- | --- | --- |
-| `/` | public | Registry landing page: what the registry is and is not. |
-| `/auth` | public | Email + password and Google sign-in / account creation. |
-| `/reset-password` | public | Password reset landing target. |
-| `/_authenticated/dashboard` | signed in | The user's own registrations. |
-| `/_authenticated/register-property` | signed in | Submission form with required affirmations. |
-| `/_authenticated/registrations/$id` | owner or staff | Registry receipt, status history, record-proof state. |
-| `/_authenticated/registry-admin` | staff only | Review queue, internal notes, status transitions. |
+| `/` | Public | Product explanation and boundary |
+| `/auth` | Public | Sign in, account creation, Google authentication, and password recovery request |
+| `/reset-password` | Public | Set a password from a recovery link |
+| `/dashboard` | Signed in | Current user's registrations |
+| `/register-property` | Signed in | Save a draft or submit a property record |
+| `/registrations/$id` | Owner or staff through RLS | Registry receipt, history, and record-proof state |
+| `/registry-admin` | Staff only | Unlinked, noindex review workspace |
 
-`src/routes/_authenticated/route.tsx` is the integration-managed gate (`ssr: false`); it checks
-the persisted Supabase session and redirects to `/auth`. The gate is convenience only — every
-read and write is independently enforced by RLS.
+The `_authenticated` route gate handles session redirects. Database row-level security remains the authoritative data boundary.
 
-## Components and shared code
+## Shared application code
 
-- `src/components/site-header.tsx` — responsive, session-aware navigation (staff see the
-  registry-admin link). The compact mobile sizing must be preserved.
-- `src/components/site-footer.tsx` — registry disclaimers.
-- `src/components/ui-kit.tsx` — `Section`, `SectionHeading`, `Card`, `EmptyState`.
-- `src/components/status-chip.tsx` — status token → chip styling.
-- `src/components/ui/*` — shadcn primitives; retained even when currently unused.
-- `src/lib/registry.ts` — status labels, option lists, Zod schemas, formatting helpers.
-- `src/hooks/use-session.ts` — `useSession` and `useIsStaff`.
+- `src/components/site-header.tsx` and `site-footer.tsx` provide the application shell.
+- `src/components/ui-kit.tsx` contains shared layout primitives.
+- `src/components/status-chip.tsx` renders the eight registration states.
+- `src/lib/registry.ts` contains labels, validation, and formatting.
+- `src/hooks/use-session.ts` exposes session and staff-role state.
+- `src/data/mock.ts` contains editorial copy only; it does not contain property or user records.
 
-## Authorization model
+## Database
 
-- Roles live in `public.staff_roles` and are only assignable server-side
-  (see [docs/ADMIN_BOOTSTRAP.md](ADMIN_BOOTSTRAP.md)).
-- `app_private.is_staff(uuid)` is a private `SECURITY DEFINER` helper; it is not exposed to
-  clients.
-- Owners may read and edit only their own draft / needs-information registrations.
-- Generated and identity fields (`receipt_code`, `user_id`, `normalized_address`, timestamps)
-  are not client-updatable: table-wide `UPDATE` is revoked and only submission fields plus
-  `status` carry a column grant.
+Lovable Cloud / Supabase Postgres stores `profiles`, `staff_roles`, `property_registrations`, `registration_status_history`, `staff_notes`, and `record_anchors`. Every public table uses RLS. Staff authorization comes only from `staff_roles`; users cannot assign themselves a role.
 
-## Status transitions
+Generated ownership, receipt, and timestamp fields are server-controlled. Staff status changes use one database function so the authoritative status and its history entry commit together.
 
-Staff never update `property_registrations.status` directly from the client. They call:
+The detailed schema and proposed evidence model are in [DATABASE_SPEC.md](DATABASE_SPEC.md).
 
-```ts
-supabase.rpc("review_registration_status", {
-  _registration_id,
-  _to_status,
-  _user_visible_message,
-});
-```
+## XRPL boundary
 
-`public.review_registration_status` is `SECURITY INVOKER`, verifies
-`app_private.is_staff(auth.uid())`, locks the row `FOR UPDATE`, updates the status and inserts
-the matching `registration_status_history` row inside one transaction. Execute is revoked from
-`PUBLIC` and `anon`, granted to `authenticated`. Authorization still resolves through RLS
-because the function runs as the caller.
+XRPL signing and submission are not implemented. The reserved proof fields hold a deterministic payload hash, network, validated transaction hash, ledger index, and anchor time. Signing material must remain server-side, Accountabul pays the fee, and the user receives an in-app registry receipt rather than a wallet, NFT, or transferable token.
 
-## Record proof (XRPL) boundary
+## Manual administration
 
-`record_anchors` stores proof metadata only. `enforce_anchor_proof()` refuses to let a
-registration reach `anchored` unless a matching anchor row has a canonical payload hash,
-network, transaction hash, validated ledger index and anchored timestamp.
-
-Out of scope in this phase and not to be added without explicit approval: XRPL signing keys or
-seeds in the app, tokens/NFTs, property-value tokenization, title or legal-ownership claims,
-and any new Phase 2 evidence tables.
-
-## Environment
-
-Runtime configuration is injected by Lovable Cloud. `.env` is environment-local and must not be
-committed; `.env.example` documents the required variable names. No service-role key, database
-password or signing secret belongs in this repository.
+The first staff role still requires the controlled server-side process in [ADMIN_BOOTSTRAP.md](ADMIN_BOOTSTRAP.md). No account is staff until that role is explicitly assigned.
