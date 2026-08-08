@@ -45,7 +45,7 @@ export function SiteHeader() {
                   className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 px-2.5 py-1.5 font-medium text-primary transition-colors hover:bg-accent sm:px-3 sm:py-2"
                 >
                   <ShieldCheck className="size-3.5" />
-                  <span className="hidden xs:inline sm:inline">Admin</span>
+                  <span>Admin</span>
                 </Link>
               ) : null}
 
