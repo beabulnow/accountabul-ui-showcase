@@ -6,6 +6,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { inputClass, primaryButtonClass, Section } from "@/components/ui-kit";
+import { errorMessage } from "@/lib/utils";
 
 const searchSchema = z.object({
   redirect: z.string().optional(),

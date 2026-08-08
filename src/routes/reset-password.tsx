@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { inputClass, primaryButtonClass, Section } from "@/components/ui-kit";
+import { errorMessage } from "@/lib/utils";
 
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
@@ -35,8 +36,9 @@ function ResetPasswordPage() {
     const { error: updateError } = await supabase.auth.updateUser({ password });
     setBusy(false);
     if (updateError) {
-      setError(errorMessage(updateError, "Could not update your password"));
-      toast.error(errorMessage(updateError, "Could not update your password"));
+      const message = errorMessage(updateError, "Could not update your password");
+      setError(message);
+      toast.error(message);
       return;
     }
     toast.success("Password updated");
