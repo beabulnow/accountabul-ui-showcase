@@ -71,19 +71,38 @@ function Home() {
               records can later carry a tamper-evident record proof published by Accountabul.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/auth"
-                search={{ mode: "signup" }}
-                className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
-              >
-                Register a property
-              </Link>
-              <Link
-                to="/auth"
-                className="inline-flex items-center justify-center rounded-full border border-input bg-background px-5 py-3 text-sm font-medium transition-colors hover:bg-accent"
-              >
-                Sign in
-              </Link>
+              {user ? (
+                <>
+                  <Link
+                    to="/register-property"
+                    className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    Register a property
+                  </Link>
+                  <Link
+                    to="/dashboard"
+                    className="inline-flex items-center justify-center rounded-full border border-input bg-background px-5 py-3 text-sm font-medium transition-colors hover:bg-accent"
+                  >
+                    Go to dashboard
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/auth"
+                    search={{ mode: "signup" }}
+                    className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-3 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+                  >
+                    Register a property
+                  </Link>
+                  <Link
+                    to="/auth"
+                    className="inline-flex items-center justify-center rounded-full border border-input bg-background px-5 py-3 text-sm font-medium transition-colors hover:bg-accent"
+                  >
+                    Sign in
+                  </Link>
+                </>
+              )}
             </div>
             <p className="mt-4 text-xs text-muted-foreground">
               No wallet required. No blockchain fees for you. Registration is not title or proof of
