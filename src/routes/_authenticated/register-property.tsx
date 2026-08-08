@@ -399,8 +399,9 @@ function RegisterPropertyPage() {
             disabled={busy || profileLoading || !form.submitter_full_name}
             className={primaryButtonClass}
           >
-            {busy ? "Working…" : "Submit for review"}
+            {uploading ? "Uploading documents…" : busy ? "Working…" : "Submit for review"}
           </button>
+
           <button
             type="button"
             disabled={busy || profileLoading || !form.submitter_full_name}
