@@ -155,8 +155,19 @@ function AuthPage() {
       });
       if (result.error) throw new Error(result.error.message ?? "Google sign-in failed");
       if (result.redirected) return;
-      toast.success("Signed in");
-      navigate({ to: resolveRedirect(), replace: true });
+      // Confirm the session actually persisted before leaving the page — a
+      // silent storage failure would otherwise land the user on a guarded
+      // route that immediately bounces back here.
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        throw new Error(
+          "Google signed you in, but the session could not be saved in this browser. Try again outside private browsing, or use email and password.",
+        );
+      }
+      const target = resolveRedirect();
+      sessionStorage.removeItem("accountabul:redirect");
+      window.location.replace(target);
+
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
       setNotice(message);
