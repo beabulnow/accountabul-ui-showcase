@@ -1,6 +1,6 @@
 # GitHub Workflow — Accountabul Property Verification Registry
 
-**Canonical repository:** https://github.com/JibreelMuhammad/accountabul-property-registry
+**Canonical repository:** https://github.com/JibreelMuhammad/accountabul-ui-showcase-4ce276e3
 **Visibility:** private
 **Default branch:** `main`
 **Project:** Accountabul Property Verification Registry
@@ -74,14 +74,15 @@ narrow and merge them promptly.
 Do not create, fork, or switch to a different GitHub repository for this
 project. The repository named above is the single canonical home.
 
-## 10. Sync status — automatic connection awaiting repair
+## 10. Sync status — verification in progress
 
-The GitHub App automatic two-way connection is **currently awaiting repair**:
-Lovable's installer returned a GitHub 404 when establishing the link.
+Lovable-to-GitHub sync was verified on 2026-08-08 when Lovable exported commit
+`3c79b5c` to this Lovable-created repository. This documentation update is the
+GitHub-to-Lovable verification commit; automatic two-way sync is healthy only
+after this commit appears in the Lovable project history.
 
-Do not claim automatic sync is healthy until a real push from Lovable has been
-verified as landing on GitHub. Until that verification happens, assume code must
-be moved manually and confirm the state of both sides before relying on either.
+Before starting work, confirm the latest `main` commit on both sides. Do not
+create or switch to another repository to work around an integration failure.
 
 ---
 
