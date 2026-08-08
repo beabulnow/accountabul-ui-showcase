@@ -2,15 +2,17 @@ import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 
 import { supabase } from "@/integrations/supabase/client";
-import { Card, Section } from "@/components/ui-kit";
+import { errorMessage } from "@/lib/utils";
+import { Card, DetailRow, Section } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
+import { StatusHistory } from "@/components/status-history";
+import { useRegistrationHistory } from "@/hooks/use-registration";
 import {
   formatDateTime,
   labelFor,
   propertyTypeOptions,
   relationshipOptions,
   statusHelp,
-  statusLabels,
   type RegistrationStatus,
 } from "@/lib/registry";
 
@@ -30,36 +32,23 @@ export const Route = createFileRoute("/_authenticated/registrations/$id")({
   component: RegistrationDetailPage,
 });
 
-function Row({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="grid gap-0.5 border-b border-border/60 py-3 last:border-0 sm:grid-cols-[220px_minmax(0,1fr)] sm:gap-4">
-      <dt className="text-sm text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 break-words text-sm">{value ?? "—"}</dd>
-    </div>
-  );
-}
-
 function RegistrationDetailPage() {
   const { id } = useParams({ from: "/_authenticated/registrations/$id" });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["registration", id],
     queryFn: async () => {
-      const { data: row, error: e1 } = await supabase
+      const { data: row, error: queryError } = await supabase
         .from("property_registrations")
         .select("*, record_anchors(*)")
         .eq("id", id)
         .maybeSingle();
-      if (e1) throw e1;
-      const { data: history, error: e2 } = await supabase
-        .from("registration_status_history")
-        .select("*")
-        .eq("registration_id", id)
-        .order("created_at", { ascending: false });
-      if (e2) throw e2;
-      return { row, history: history ?? [] };
+      if (queryError) throw queryError;
+      return row;
     },
   });
+
+  const { data: history } = useRegistrationHistory(id);
 
   if (isLoading) {
     return (
@@ -73,13 +62,13 @@ function RegistrationDetailPage() {
     return (
       <Section>
         <p role="alert" className="text-sm text-destructive">
-          {(error as Error).message}
+          {errorMessage(error, "This registry receipt could not be loaded.")}
         </p>
       </Section>
     );
   }
 
-  const row = data?.row;
+  const row = data;
   if (!row) {
     return (
       <Section>
@@ -119,8 +108,8 @@ function RegistrationDetailPage() {
       <Card className="mt-8">
         <h2 className="text-xl">Submitted details</h2>
         <dl className="mt-3">
-          <Row label="Submitter" value={row.submitter_full_name} />
-          <Row
+          <DetailRow label="Submitter" value={row.submitter_full_name} />
+          <DetailRow
             label="Relationship"
             value={
               row.relationship === "other" && row.relationship_other
@@ -128,12 +117,15 @@ function RegistrationDetailPage() {
                 : labelFor(relationshipOptions, row.relationship)
             }
           />
-          <Row label="Property type" value={labelFor(propertyTypeOptions, row.property_type)} />
-          <Row label="Parcel ID" value={row.parcel_id || "—"} />
-          <Row label="Public source notes" value={row.public_source_notes || "—"} />
-          <Row label="Your note" value={row.user_note || "—"} />
-          <Row label="Created" value={formatDateTime(row.created_at)} />
-          <Row label="Submitted" value={formatDateTime(row.submitted_at)} />
+          <DetailRow
+            label="Property type"
+            value={labelFor(propertyTypeOptions, row.property_type)}
+          />
+          <DetailRow label="Parcel ID" value={row.parcel_id || "—"} />
+          <DetailRow label="Public source notes" value={row.public_source_notes || "—"} />
+          <DetailRow label="Your note" value={row.user_note || "—"} />
+          <DetailRow label="Created" value={formatDateTime(row.created_at)} />
+          <DetailRow label="Submitted" value={formatDateTime(row.submitted_at)} />
         </dl>
       </Card>
 
@@ -146,11 +138,11 @@ function RegistrationDetailPage() {
         <div className="mt-3">
           {anchor?.xrpl_tx_hash ? (
             <dl>
-              <Row label="Canonical payload hash" value={anchor.canonical_payload_hash} />
-              <Row label="XRPL network" value={anchor.xrpl_network} />
-              <Row label="Transaction hash" value={anchor.xrpl_tx_hash} />
-              <Row label="Validated ledger index" value={anchor.validated_ledger_index} />
-              <Row label="Anchored at" value={formatDateTime(anchor.anchored_at)} />
+              <DetailRow label="Canonical payload hash" value={anchor.canonical_payload_hash} />
+              <DetailRow label="XRPL network" value={anchor.xrpl_network} />
+              <DetailRow label="Transaction hash" value={anchor.xrpl_tx_hash} />
+              <DetailRow label="Validated ledger index" value={anchor.validated_ledger_index} />
+              <DetailRow label="Anchored at" value={formatDateTime(anchor.anchored_at)} />
             </dl>
           ) : (
             <p className="rounded-xl border border-dashed border-border bg-surface px-4 py-6 text-sm text-muted-foreground">
@@ -163,29 +155,9 @@ function RegistrationDetailPage() {
 
       <Card className="mt-6">
         <h2 className="text-xl">Status history</h2>
-        {data!.history.length === 0 ? (
-          <p className="mt-2 text-sm text-muted-foreground">No status updates yet.</p>
-        ) : (
-          <ol className="mt-4 grid gap-4">
-            {data!.history.map((h) => (
-              <li key={h.id} className="border-l-2 border-border pl-4">
-                <p className="text-sm font-medium">
-                  {statusLabels[h.to_status as RegistrationStatus]}
-                  {h.from_status ? (
-                    <span className="text-muted-foreground">
-                      {" "}
-                      · from {statusLabels[h.from_status as RegistrationStatus]}
-                    </span>
-                  ) : null}
-                </p>
-                <p className="text-xs text-muted-foreground">{formatDateTime(h.created_at)}</p>
-                {h.user_visible_message ? (
-                  <p className="mt-1.5 text-sm text-muted-foreground">{h.user_visible_message}</p>
-                ) : null}
-              </li>
-            ))}
-          </ol>
-        )}
+        <div className="mt-4">
+          <StatusHistory entries={history ?? []} />
+        </div>
       </Card>
 
       <p className="mt-8 text-xs text-muted-foreground">
