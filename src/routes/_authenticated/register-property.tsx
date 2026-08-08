@@ -153,7 +153,11 @@ function RegisterPropertyPage() {
       >
         <Card className="grid gap-4">
           <h2 className="text-xl">About you</h2>
-          <Field label="Full name" htmlFor="submitter_full_name" error={errors["submitter_full_name"]}>
+          <Field
+            label="Full name"
+            htmlFor="submitter_full_name"
+            error={errors["submitter_full_name"]}
+          >
             <input
               id="submitter_full_name"
               className={inputClass}
@@ -295,7 +299,11 @@ function RegisterPropertyPage() {
               onChange={(e) => set("public_source_notes", e.target.value)}
             />
           </Field>
-          <Field label="Note to the reviewer (optional)" htmlFor="user_note" error={errors["user_note"]}>
+          <Field
+            label="Note to the reviewer (optional)"
+            htmlFor="user_note"
+            error={errors["user_note"]}
+          >
             <textarea
               id="user_note"
               rows={3}
@@ -315,8 +323,7 @@ function RegisterPropertyPage() {
             [
               {
                 key: "affirm_accurate" as const,
-                label:
-                  "The information I am providing is accurate to the best of my knowledge.",
+                label: "The information I am providing is accurate to the best of my knowledge.",
               },
               {
                 key: "affirm_authorized" as const,

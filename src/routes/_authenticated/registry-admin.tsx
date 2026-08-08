@@ -365,7 +365,10 @@ function SubmissionInspector({
           <StatusChip status={registration.status as RegistrationStatus} />
         </div>
         <dl className="mt-4 grid gap-2 text-sm">
-          <Detail label="Submitter" value={`${registration.submitter_full_name} (${submitterEmail})`} />
+          <Detail
+            label="Submitter"
+            value={`${registration.submitter_full_name} (${submitterEmail})`}
+          />
           <Detail
             label="Relationship"
             value={
@@ -448,7 +451,10 @@ function SubmissionInspector({
         </button>
         <ul className="grid gap-2">
           {(notes ?? []).map((n) => (
-            <li key={n.id} className="rounded-xl border border-border bg-surface px-3.5 py-3 text-sm">
+            <li
+              key={n.id}
+              className="rounded-xl border border-border bg-surface px-3.5 py-3 text-sm"
+            >
               <p className="whitespace-pre-wrap">{n.body}</p>
               <p className="mt-1 text-xs text-muted-foreground">{formatDateTime(n.created_at)}</p>
             </li>

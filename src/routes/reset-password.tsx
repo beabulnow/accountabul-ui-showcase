@@ -12,7 +12,8 @@ export const Route = createFileRoute("/reset-password")({
       { title: "Set a new password — Accountabul Registry" },
       {
         name: "description",
-        content: "Choose a new password for your Accountabul Property Verification Registry account.",
+        content:
+          "Choose a new password for your Accountabul Property Verification Registry account.",
       },
       { property: "og:title", content: "Set a new password — Accountabul Registry" },
       { property: "og:description", content: "Complete your password reset." },
