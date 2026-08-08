@@ -119,16 +119,10 @@ function RegisterPropertyPage() {
       return;
     }
 
-    await supabase.from("registration_status_history").insert({
-      registration_id: data.id,
-      to_status: payload.status,
-      changed_by: user.id,
-      is_user_visible: true,
-      user_visible_message:
-        intent === "submit"
-          ? "Registration submitted for registry review."
-          : "Draft saved. Not yet submitted for review.",
-    });
+    // The initial status history event is written server-side by a database
+    // trigger so clients cannot fabricate history entries.
+
+
 
     setBusy(false);
     toast.success(intent === "submit" ? "Submitted for review" : "Draft saved");
