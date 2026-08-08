@@ -5,7 +5,7 @@ import { z } from "zod";
 
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { Section } from "@/components/ui-kit";
+import { inputClass, primaryButtonClass, Section } from "@/components/ui-kit";
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
@@ -33,9 +33,6 @@ export const Route = createFileRoute("/auth")({
 });
 
 type Mode = "signin" | "signup" | "forgot";
-
-const inputClass =
-  "w-full rounded-xl border border-input bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30";
 
 function AuthPage() {
   const navigate = useNavigate();
@@ -133,7 +130,7 @@ function AuthPage() {
       toast.success("Signed in");
       navigate({ to: resolveRedirect(), replace: true });
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Something went wrong";
+      const message = errorMessage(err);
       setNotice(message);
       toast.error(message);
     } finally {
@@ -167,7 +164,7 @@ function AuthPage() {
       sessionStorage.removeItem("accountabul:redirect");
       window.location.replace(target);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Google sign-in failed";
+      const message = errorMessage(err, "Google sign-in failed");
       setNotice(message);
       toast.error(message);
     } finally {
@@ -292,7 +289,7 @@ function AuthPage() {
         <button
           type="submit"
           disabled={busy}
-          className="mt-1 inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          className={`mt-1 ${primaryButtonClass}`}
         >
           {busy
             ? "Working…"

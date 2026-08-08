@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
-import { Section } from "@/components/ui-kit";
+import { inputClass, primaryButtonClass, Section } from "@/components/ui-kit";
 
 export const Route = createFileRoute("/reset-password")({
   ssr: false,
@@ -35,8 +35,8 @@ function ResetPasswordPage() {
     const { error: updateError } = await supabase.auth.updateUser({ password });
     setBusy(false);
     if (updateError) {
-      setError(updateError.message);
-      toast.error(updateError.message);
+      setError(errorMessage(updateError, "Could not update your password"));
+      toast.error(errorMessage(updateError, "Could not update your password"));
       return;
     }
     toast.success("Password updated");
@@ -64,7 +64,7 @@ function ResetPasswordPage() {
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-xl border border-input bg-card px-3.5 py-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+            className={inputClass}
           />
         </div>
         {error ? (
@@ -75,7 +75,7 @@ function ResetPasswordPage() {
         <button
           type="submit"
           disabled={busy}
-          className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          className={primaryButtonClass}
         >
           {busy ? "Saving…" : "Update password"}
         </button>
