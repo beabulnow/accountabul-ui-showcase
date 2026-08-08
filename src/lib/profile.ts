@@ -56,7 +56,9 @@ export function normalizePhone(value: string) {
 
 export function profileDisplayName(
   profile:
-    Pick<Profile, "first_name" | "middle_name" | "last_name" | "full_name"> | null | undefined,
+    | Pick<Profile, "first_name" | "middle_name" | "last_name" | "full_name">
+    | null
+    | undefined,
 ) {
   if (!profile) return "Your account";
   const structured = [profile.first_name, profile.middle_name, profile.last_name]
