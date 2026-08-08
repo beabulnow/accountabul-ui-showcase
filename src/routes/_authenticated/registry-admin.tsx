@@ -17,7 +17,7 @@ export const Route = createFileRoute("/_authenticated/registry-admin")({
       { property: "og:description", content: "Staff-only registry review workspace." },
     ],
   }),
-  component: RegistryAdminLayout;
+  component: RegistryAdminLayout,
 });
 
 function RegistryAdminLayout() {
