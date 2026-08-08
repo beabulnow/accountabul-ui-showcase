@@ -27,7 +27,6 @@ export function SiteHeader() {
         </Link>
 
         <nav className="flex shrink-0 items-center gap-1 text-[13px] sm:gap-2 sm:text-sm">
-
           {loading ? null : user ? (
             <>
               <Link
@@ -60,7 +59,10 @@ export function SiteHeader() {
             </>
           ) : (
             <>
-              <Link to="/auth" className="rounded-full px-2.5 py-1.5 transition-colors sm:px-3 sm:py-2 hover:bg-accent">
+              <Link
+                to="/auth"
+                className="rounded-full px-2.5 py-1.5 transition-colors sm:px-3 sm:py-2 hover:bg-accent"
+              >
                 Sign in
               </Link>
               <Link
