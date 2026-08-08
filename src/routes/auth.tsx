@@ -110,6 +110,26 @@ function AuthPage() {
     }
   }
 
+  async function handleGoogle() {
+    setNotice(null);
+    setBusy(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: `${window.location.origin}/auth?redirect=${encodeURIComponent(safeRedirect)}`,
+      });
+      if (result.error) throw new Error(result.error.message ?? "Google sign-in failed");
+      if (result.redirected) return;
+      toast.success("Signed in");
+      navigate({ to: safeRedirect, replace: true });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Google sign-in failed";
+      setNotice(message);
+      toast.error(message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <Section className="max-w-lg">
       <p className="eyebrow">Accountabul Registry</p>
