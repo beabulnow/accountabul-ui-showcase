@@ -2,10 +2,11 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useSession } from "@/hooks/use-session";
+import { useIsStaff, useSession } from "@/hooks/use-session";
 
 export function SiteHeader() {
   const { user, loading } = useSession();
+  const { isStaff } = useIsStaff();
   const navigate = useNavigate();
 
   async function signOut() {
@@ -32,6 +33,14 @@ export function SiteHeader() {
               >
                 Dashboard
               </Link>
+              {isStaff ? (
+                <Link
+                  to="/registry-admin"
+                  className="hidden rounded-full px-3 py-2 transition-colors hover:bg-accent sm:inline-flex"
+                >
+                  Registry admin
+                </Link>
+              ) : null}
               <Link
                 to="/register-property"
                 className="hidden rounded-full bg-primary px-3.5 py-2 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex"

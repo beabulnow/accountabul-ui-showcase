@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -51,19 +51,19 @@ function AuthPage() {
   const isSafePath = (value: string | null | undefined): value is string =>
     !!value && value.startsWith("/") && !value.startsWith("//");
 
-  const storedRedirect =
-    typeof window === "undefined" ? null : sessionStorage.getItem("accountabul:redirect");
-
-  const safeRedirect = isSafePath(search.redirect)
-    ? search.redirect
-    : isSafePath(storedRedirect)
-      ? storedRedirect
-      : "/dashboard";
+  // Read at call time, never during render: touching sessionStorage while
+  // rendering makes the server and client disagree and breaks hydration.
+  const resolveRedirect = useCallback(() => {
+    if (isSafePath(search.redirect)) return search.redirect;
+    const stored =
+      typeof window === "undefined" ? null : sessionStorage.getItem("accountabul:redirect");
+    return isSafePath(stored) ? stored : "/dashboard";
+  }, [search.redirect]);
 
   useEffect(() => {
     const go = () => {
       sessionStorage.removeItem("accountabul:redirect");
-      navigate({ to: safeRedirect, replace: true });
+      navigate({ to: resolveRedirect(), replace: true });
     };
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) go();
@@ -72,7 +72,7 @@ function AuthPage() {
       if (session) go();
     });
     return () => sub.subscription.unsubscribe();
-  }, [navigate, safeRedirect]);
+  }, [navigate, resolveRedirect]);
 
   // If the Google popup is closed or blocked, its promise never settles. Clear
   // the pending state when the user comes back so the page is never stuck.
@@ -115,7 +115,7 @@ function AuthPage() {
           return;
         }
         toast.success("Account created");
-        navigate({ to: safeRedirect, replace: true });
+        navigate({ to: resolveRedirect(), replace: true });
         return;
       }
 
@@ -125,7 +125,7 @@ function AuthPage() {
       });
       if (error) throw error;
       toast.success("Signed in");
-      navigate({ to: safeRedirect, replace: true });
+      navigate({ to: resolveRedirect(), replace: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Something went wrong";
       setNotice(message);
@@ -142,14 +142,14 @@ function AuthPage() {
       // The redirect target must be a plain, allow-listed same-origin URL. The
       // intended destination is kept separately and applied after the session
       // is confirmed.
-      sessionStorage.setItem("accountabul:redirect", safeRedirect);
+      sessionStorage.setItem("accountabul:redirect", resolveRedirect());
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: `${window.location.origin}/auth`,
       });
       if (result.error) throw new Error(result.error.message ?? "Google sign-in failed");
       if (result.redirected) return;
       toast.success("Signed in");
-      navigate({ to: safeRedirect, replace: true });
+      navigate({ to: resolveRedirect(), replace: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
       setNotice(message);
