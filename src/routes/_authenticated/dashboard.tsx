@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BadgeCheck, Clock3, FilePlus2, Files, Link2, UserRound } from "lucide-react";
+import { BadgeCheck, Clock3, FilePlus2, Files, Link2, ShieldCheck, UserRound } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
@@ -9,7 +9,7 @@ import { StatusChip } from "@/components/status-chip";
 import { formatDate, statusHelp, type RegistrationStatus } from "@/lib/registry";
 import { profileDisplayName } from "@/lib/profile";
 import { useProfile } from "@/hooks/use-profile";
-import { useSession } from "@/hooks/use-session";
+import { useIsStaff, useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -29,7 +29,9 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function DashboardPage() {
   const { user } = useSession();
+  const { isStaff, role } = useIsStaff();
   const { data: profile } = useProfile(user?.id);
+
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["my-registrations", user?.id],
@@ -89,6 +91,24 @@ function DashboardPage() {
           <UserRound className="size-4" /> Edit profile
         </Link>
       </Card>
+
+      {isStaff ? (
+        <Card className="mt-4 flex flex-col gap-3 border-primary/30 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <p className="font-display text-lg">Registry staff access</p>
+            <p className="text-sm text-muted-foreground">
+              Your account is authorized as {role}. Open the business portal to review submissions.
+            </p>
+          </div>
+          <Link
+            to="/registry-admin"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <ShieldCheck className="size-4" /> Open admin portal
+          </Link>
+        </Card>
+      ) : null}
+
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {[

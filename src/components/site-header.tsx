@@ -42,11 +42,13 @@ export function SiteHeader() {
               {isStaff ? (
                 <Link
                   to="/registry-admin"
-                  className="hidden rounded-full px-2.5 py-1.5 transition-colors hover:bg-accent sm:inline-flex sm:px-3 sm:py-2"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 px-2.5 py-1.5 font-medium text-primary transition-colors hover:bg-accent sm:px-3 sm:py-2"
                 >
-                  Registry admin
+                  <ShieldCheck className="size-3.5" />
+                  <span>Admin</span>
                 </Link>
               ) : null}
+
               <Link
                 to="/register-property"
                 className="hidden rounded-full bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex sm:px-3.5 sm:py-2"
