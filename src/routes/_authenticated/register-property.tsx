@@ -122,8 +122,6 @@ function RegisterPropertyPage() {
     // The initial status history event is written server-side by a database
     // trigger so clients cannot fabricate history entries.
 
-
-
     setBusy(false);
     toast.success(intent === "submit" ? "Submitted for review" : "Draft saved");
     navigate({ to: "/registrations/$id", params: { id: data.id } });
