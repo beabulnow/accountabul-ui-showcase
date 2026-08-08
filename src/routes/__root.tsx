@@ -85,6 +85,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Submit your property details and documents to Verifiabul, then track the review in your account until our team confirms where the record stands.",
       },
       { name: "author", content: "Verifiabul" },
+      {
+        name: "google-site-verification",
+        content: "tAv0QuIiPfOigVFbIYoj3YmDEDjzadFBDmAPo0tAwF0",
+      },
       { property: "og:title", content: "Verifiabul | Property Verification Registry" },
       {
         property: "og:description",
