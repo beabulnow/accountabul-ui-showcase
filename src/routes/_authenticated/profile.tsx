@@ -18,6 +18,7 @@ function ProfilePage() {
   return (
     <Section className="max-w-3xl">
       <SectionHeading
+        as="h1"
         eyebrow="Your account"
         title="Profile and identity information"
         description="Keep the information connected to your property registrations accurate and current."

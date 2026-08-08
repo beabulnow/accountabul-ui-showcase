@@ -145,6 +145,7 @@ function RegisterPropertyPage() {
   return (
     <Section className="max-w-3xl">
       <SectionHeading
+        as="h1"
         eyebrow="Registry submission"
         title="Register a property record"
         description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."

@@ -11,7 +11,11 @@ export const Route = createFileRoute("/_authenticated/complete-profile")({
   head: () => ({
     meta: [
       { title: "Complete your profile — Verifiabul Registry" },
-      { name: "description", content: "Complete your private registry account profile." },
+      {
+        name: "description",
+        content:
+          "Set up your private Verifiabul registry account: add your name, date of birth and contact details before submitting a property record for review.",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
@@ -24,6 +28,7 @@ function CompleteProfilePage() {
   return (
     <Section className="max-w-3xl">
       <SectionHeading
+        as="h1"
         eyebrow="One-time account setup"
         title="Complete your profile"
         description="Before you register a property, tell us who is using this account. Your information stays private to you and authorized registry staff."
