@@ -369,11 +369,7 @@ export function ProfileForm({
       </Card>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          type="submit"
-          disabled={busy}
-          className={primaryButtonClass}
-        >
+        <button type="submit" disabled={busy} className={primaryButtonClass}>
           {busy ? "Saving…" : mode === "onboarding" ? "Save and continue" : "Save profile"}
         </button>
         {mode === "edit" ? (

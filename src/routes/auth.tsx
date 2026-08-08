@@ -287,11 +287,7 @@ function AuthPage() {
           </p>
         ) : null}
 
-        <button
-          type="submit"
-          disabled={busy}
-          className={`mt-1 ${primaryButtonClass}`}
-        >
+        <button type="submit" disabled={busy} className={`mt-1 ${primaryButtonClass}`}>
           {busy
             ? "Working…"
             : mode === "signup"

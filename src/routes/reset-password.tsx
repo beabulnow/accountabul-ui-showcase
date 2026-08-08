@@ -74,11 +74,7 @@ function ResetPasswordPage() {
             {error}
           </p>
         ) : null}
-        <button
-          type="submit"
-          disabled={busy}
-          className={primaryButtonClass}
-        >
+        <button type="submit" disabled={busy} className={primaryButtonClass}>
           {busy ? "Saving…" : "Update password"}
         </button>
       </form>

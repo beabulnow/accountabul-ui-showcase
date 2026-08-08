@@ -60,44 +60,46 @@ export function labelFor(
   return options.find((o) => o.value === value)?.label ?? "—";
 }
 
-export const registrationSchema = z.object({
-  submitter_full_name: z.string().trim().min(2, "Enter your full name").max(120),
-  relationship: z.enum(["owner", "authorized_representative", "property_professional", "other"]),
-  relationship_other: z.string().trim().max(160).optional().or(z.literal("")),
-  address_line1: z.string().trim().min(3, "Enter the street address").max(200),
-  address_line2: z.string().trim().max(200).optional().or(z.literal("")),
-  city: z.string().trim().min(2, "Enter the city").max(120),
-  state: z.string().trim().min(2, "Enter the state").max(60),
-  postal_code: z
-    .string()
-    .trim()
-    .regex(/^[0-9]{5}(-[0-9]{4})?$/, "Enter a 5 or 9 digit ZIP code"),
-  county: z.string().trim().min(2, "Enter the county or jurisdiction").max(120),
-  parcel_id: z.string().trim().max(80).optional().or(z.literal("")),
-  property_type: z.enum([
-    "single_family",
-    "multi_family",
-    "condo",
-    "townhouse",
-    "land",
-    "commercial",
-    "mixed_use",
-    "other",
-  ]),
-  public_source_notes: z.string().trim().max(4000).optional().or(z.literal("")),
-  user_note: z.string().trim().max(4000).optional().or(z.literal("")),
-  affirm_accurate: z.boolean(),
-  affirm_authorized: z.boolean(),
-  affirm_not_title: z.boolean(),
-}).superRefine((value, ctx) => {
-  if (value.relationship === "other" && !value.relationship_other?.trim()) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      path: ["relationship_other"],
-      message: "Describe your relationship to this property",
-    });
-  }
-});
+export const registrationSchema = z
+  .object({
+    submitter_full_name: z.string().trim().min(2, "Enter your full name").max(120),
+    relationship: z.enum(["owner", "authorized_representative", "property_professional", "other"]),
+    relationship_other: z.string().trim().max(160).optional().or(z.literal("")),
+    address_line1: z.string().trim().min(3, "Enter the street address").max(200),
+    address_line2: z.string().trim().max(200).optional().or(z.literal("")),
+    city: z.string().trim().min(2, "Enter the city").max(120),
+    state: z.string().trim().min(2, "Enter the state").max(60),
+    postal_code: z
+      .string()
+      .trim()
+      .regex(/^[0-9]{5}(-[0-9]{4})?$/, "Enter a 5 or 9 digit ZIP code"),
+    county: z.string().trim().min(2, "Enter the county or jurisdiction").max(120),
+    parcel_id: z.string().trim().max(80).optional().or(z.literal("")),
+    property_type: z.enum([
+      "single_family",
+      "multi_family",
+      "condo",
+      "townhouse",
+      "land",
+      "commercial",
+      "mixed_use",
+      "other",
+    ]),
+    public_source_notes: z.string().trim().max(4000).optional().or(z.literal("")),
+    user_note: z.string().trim().max(4000).optional().or(z.literal("")),
+    affirm_accurate: z.boolean(),
+    affirm_authorized: z.boolean(),
+    affirm_not_title: z.boolean(),
+  })
+  .superRefine((value, ctx) => {
+    if (value.relationship === "other" && !value.relationship_other?.trim()) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["relationship_other"],
+        message: "Describe your relationship to this property",
+      });
+    }
+  });
 
 /** Statuses a reviewer can set by hand. `anchored` is written only by the
  * anchoring pipeline, which must supply a complete validated on-chain proof;

@@ -117,7 +117,10 @@ function RegistrationDetailPage() {
                 : labelFor(relationshipOptions, row.relationship)
             }
           />
-          <DetailRow label="Property type" value={labelFor(propertyTypeOptions, row.property_type)} />
+          <DetailRow
+            label="Property type"
+            value={labelFor(propertyTypeOptions, row.property_type)}
+          />
           <DetailRow label="Parcel ID" value={row.parcel_id || "—"} />
           <DetailRow label="Public source notes" value={row.public_source_notes || "—"} />
           <DetailRow label="Your note" value={row.user_note || "—"} />

@@ -221,8 +221,8 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
                       <StatusChip status={r.status as RegistrationStatus} />
                     </div>
                     <p className="mt-1 truncate text-xs text-muted-foreground">
-                      {r.receipt_code} · {profileById.get(r.user_id)?.email || "unknown submitter"} ·{" "}
-                      {formatDateTime(r.created_at)}
+                      {r.receipt_code} · {profileById.get(r.user_id)?.email || "unknown submitter"}{" "}
+                      · {formatDateTime(r.created_at)}
                     </p>
                   </button>
                 </li>
@@ -410,7 +410,11 @@ function SubmissionInspector({
             label="Property type"
             value={labelFor(propertyTypeOptions, registration.property_type)}
           />
-          <DetailRow compact label="Public sources" value={registration.public_source_notes || "—"} />
+          <DetailRow
+            compact
+            label="Public sources"
+            value={registration.public_source_notes || "—"}
+          />
           <DetailRow compact label="User note" value={registration.user_note || "—"} />
           <DetailRow compact label="Submitted" value={formatDateTime(registration.submitted_at)} />
         </dl>
@@ -491,4 +495,3 @@ function SubmissionInspector({
     </div>
   );
 }
-
