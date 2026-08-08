@@ -61,9 +61,15 @@ function AuthPage() {
   }, [search.redirect]);
 
   useEffect(() => {
+    let done = false;
     const go = () => {
+      if (done) return;
+      done = true;
+      const target = resolveRedirect();
       sessionStorage.removeItem("accountabul:redirect");
-      navigate({ to: resolveRedirect(), replace: true });
+      // Full navigation: the OAuth popup writes the session from a different
+      // execution context, and a hard load guarantees every client picks it up.
+      window.location.replace(target);
     };
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) go();
@@ -73,6 +79,7 @@ function AuthPage() {
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate, resolveRedirect]);
+
 
   // If the Google popup is closed or blocked, its promise never settles. Clear
   // the pending state when the user comes back so the page is never stuck.
