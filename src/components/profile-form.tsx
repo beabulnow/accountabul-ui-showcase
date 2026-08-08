@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { ProfileAvatar } from "@/components/profile-avatar";
-import { Card } from "@/components/ui-kit";
+import { Card, Field, inputClass, primaryButtonClass } from "@/components/ui-kit";
 import { useProfile } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,48 +17,7 @@ import {
   profileSchema,
   type ProfileFormInput,
 } from "@/lib/profile";
-
-const inputClass =
-  "w-full rounded-xl border border-input bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30";
-
-const emptyForm: ProfileFormInput = {
-  first_name: "",
-  middle_name: "",
-  last_name: "",
-  date_of_birth: "",
-  phone: "",
-  bio: "",
-  privacy_accepted: false,
-};
-
-function Field({
-  label,
-  htmlFor,
-  hint,
-  error,
-  children,
-}: {
-  label: string;
-  htmlFor: string;
-  hint?: string;
-  error?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="grid gap-1.5">
-      <label htmlFor={htmlFor} className="text-sm font-medium">
-        {label}
-      </label>
-      {children}
-      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
-      {error ? (
-        <p role="alert" className="text-xs text-destructive">
-          {error}
-        </p>
-      ) : null}
-    </div>
-  );
-}
+import { errorMessage } from "@/lib/utils";
 
 function namePartsFromMetadata(metadata: Record<string, unknown> | undefined) {
   const given = typeof metadata?.given_name === "string" ? metadata.given_name.trim() : "";
@@ -209,7 +168,7 @@ export function ProfileForm({
         setRemoveAvatar(false);
       }
     } catch (saveError) {
-      toast.error(saveError instanceof Error ? saveError.message : "Could not save your profile");
+      toast.error(errorMessage(saveError, "Could not save your profile"));
     } finally {
       setBusy(false);
     }
@@ -222,7 +181,7 @@ export function ProfileForm({
   if (error || !profile) {
     return (
       <p role="alert" className="mt-8 text-sm text-destructive">
-        {error instanceof Error ? error.message : "Your profile could not be loaded."}
+        {errorMessage(error, "Your profile could not be loaded.")}
       </p>
     );
   }
@@ -403,7 +362,7 @@ export function ProfileForm({
         <button
           type="submit"
           disabled={busy}
-          className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          className={primaryButtonClass}
         >
           {busy ? "Saving…" : mode === "onboarding" ? "Save and continue" : "Save profile"}
         </button>

@@ -4,10 +4,19 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
-import { Card, Section, SectionHeading } from "@/components/ui-kit";
+import {
+  Card,
+  Field,
+  Section,
+  SectionHeading,
+  inputClass,
+  primaryButtonClass,
+  secondaryButtonClass,
+} from "@/components/ui-kit";
 import { useProfile } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
 import { profileDisplayName } from "@/lib/profile";
+import { errorMessage } from "@/lib/utils";
 import {
   emptyRegistration,
   propertyTypeOptions,
@@ -31,40 +40,6 @@ export const Route = createFileRoute("/_authenticated/register-property")({
   }),
   component: RegisterPropertyPage,
 });
-
-const inputClass =
-  "w-full rounded-xl border border-input bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30";
-
-function Field({
-  label,
-  htmlFor,
-  hint,
-  error,
-  children,
-  className,
-}: {
-  label: string;
-  htmlFor: string;
-  hint?: string;
-  error?: string;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={className ? `grid gap-1.5 ${className}` : "grid gap-1.5"}>
-      <label htmlFor={htmlFor} className="text-sm font-medium">
-        {label}
-      </label>
-      {children}
-      {hint ? <p className="text-xs text-muted-foreground">{hint}</p> : null}
-      {error ? (
-        <p role="alert" className="text-xs text-destructive">
-          {error}
-        </p>
-      ) : null}
-    </div>
-  );
-}
 
 function RegisterPropertyPage() {
   const navigate = useNavigate();
@@ -127,7 +102,7 @@ function RegisterPropertyPage() {
 
     if (error || !data) {
       setBusy(false);
-      toast.error(error?.message ?? "Could not save this registration");
+      toast.error(errorMessage(error, "Could not save this registration"));
       return;
     }
 
@@ -375,7 +350,7 @@ function RegisterPropertyPage() {
           <button
             type="submit"
             disabled={busy || profileLoading || !form.submitter_full_name}
-            className="inline-flex items-center justify-center rounded-full bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+            className={primaryButtonClass}
           >
             {busy ? "Working…" : "Submit for review"}
           </button>
