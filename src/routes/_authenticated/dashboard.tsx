@@ -90,6 +90,24 @@ function DashboardPage() {
         </Link>
       </Card>
 
+      {isStaff ? (
+        <Card className="mt-4 flex flex-col gap-3 border-primary/30 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
+            <p className="font-display text-lg">Registry staff access</p>
+            <p className="text-sm text-muted-foreground">
+              Your account is authorized as {role}. Open the business portal to review submissions.
+            </p>
+          </div>
+          <Link
+            to="/registry-admin"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <ShieldCheck className="size-4" /> Open admin portal
+          </Link>
+        </Card>
+      ) : null}
+
+
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {[
           { label: "Total properties", value: total, icon: Files },
