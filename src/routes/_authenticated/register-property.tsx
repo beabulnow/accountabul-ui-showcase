@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
+import { PendingDocumentSlots } from "@/components/document-slots";
 import {
   Card,
   Field,
@@ -15,6 +16,8 @@ import {
 } from "@/components/ui-kit";
 import { useProfile } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
+import { uploadRegistrationDocuments } from "@/hooks/use-registration-documents";
+import { countPendingDocuments, type PendingDocuments } from "@/lib/documents";
 import { profileDisplayName } from "@/lib/profile";
 import { errorMessage } from "@/lib/utils";
 import {
@@ -24,6 +27,7 @@ import {
   relationshipOptions,
   type RegistrationInput,
 } from "@/lib/registry";
+
 
 export const Route = createFileRoute("/_authenticated/register-property")({
   head: () => ({
