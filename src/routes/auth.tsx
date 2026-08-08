@@ -196,7 +196,7 @@ function AuthPage() {
                 d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0A9 9 0 0 0 .94 4.95l3.03 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
               />
             </svg>
-            Continue with Google
+            {googleBusy ? "Opening Google…" : "Continue with Google"}
           </button>
           <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-muted-foreground">
             <span className="h-px flex-1 bg-border" />
