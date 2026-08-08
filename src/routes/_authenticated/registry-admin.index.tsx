@@ -66,7 +66,6 @@ function RegistryAdminHome() {
     },
   });
 
-
   const { data: registrations, isLoading } = useQuery({
     queryKey: ["admin-overview-registrations"],
     enabled: isStaff,
@@ -275,8 +274,6 @@ function RegistryAdminHome() {
           </p>
         )}
       </Card>
-
-
 
       {isLoading ? (
         <p className="mt-8 text-sm text-muted-foreground">Loading registry data…</p>
