@@ -397,8 +397,9 @@ function SubmissionInspector({
           onChange={(e) => setNextStatus(e.target.value as RegistrationStatus)}
         >
           {REGISTRATION_STATUSES.map((s) => (
-            <option key={s} value={s}>
+            <option key={s} value={s} disabled={s === registration.status}>
               {statusLabels[s]}
+              {s === registration.status ? " (current)" : ""}
             </option>
           ))}
         </select>
@@ -412,11 +413,12 @@ function SubmissionInspector({
         />
         <p className="text-xs text-muted-foreground">
           &quot;Anchored&quot; is rejected by the database until a validated record proof with a
-          payload hash, transaction hash and ledger index exists.
+          canonical payload hash, network, transaction hash, validated ledger index and anchored
+          timestamp exists.
         </p>
         <button
           type="button"
-          disabled={busy}
+          disabled={busy || nextStatus === registration.status}
           onClick={() => void applyStatus()}
           className="justify-self-start rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
         >
