@@ -48,9 +48,16 @@ function AuthPage() {
   const [googleBusy, setGoogleBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const safeRedirect =
-    search.redirect && search.redirect.startsWith("/") && !search.redirect.startsWith("//")
-      ? search.redirect
+  const isSafePath = (value: string | null | undefined): value is string =>
+    !!value && value.startsWith("/") && !value.startsWith("//");
+
+  const storedRedirect =
+    typeof window === "undefined" ? null : sessionStorage.getItem("accountabul:redirect");
+
+  const safeRedirect = isSafePath(search.redirect)
+    ? search.redirect
+    : isSafePath(storedRedirect)
+      ? storedRedirect
       : "/dashboard";
 
   useEffect(() => {
