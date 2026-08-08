@@ -50,8 +50,11 @@ function RegisterPropertyPage() {
   const { user } = useSession();
   const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
   const [form, setForm] = useState<RegistrationInput>(emptyRegistration);
+  const [documents, setDocuments] = useState<PendingDocuments>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const documentCount = countPendingDocuments(documents);
 
   useEffect(() => {
     if (!profile) return;
@@ -84,6 +87,13 @@ function RegisterPropertyPage() {
         toast.error("All three affirmations are required before submitting");
         return;
       }
+      if (documentCount === 0) {
+        setErrors({
+          documents: "Attach at least one supporting document before submitting for review.",
+        });
+        toast.error("At least one supporting document is required to submit");
+        return;
+      }
     }
 
     setBusy(true);
@@ -113,10 +123,26 @@ function RegisterPropertyPage() {
     // The initial status history event is written server-side by a database
     // trigger so clients cannot fabricate history entries.
 
+    // Documents upload after the row exists so every object carries a real
+    // registration id. A failed file is reported; the saved record stands.
+    if (documentCount > 0) {
+      setUploading(true);
+      const { failures } = await uploadRegistrationDocuments({
+        userId: user.id,
+        registrationId: data.id,
+        documents,
+      });
+      setUploading(false);
+      for (const failure of failures) {
+        toast.error(`${failure.fileName}: ${failure.message}`);
+      }
+    }
+
     setBusy(false);
     toast.success(intent === "submit" ? "Submitted for review" : "Draft saved");
     navigate({ to: "/registrations/$id", params: { id: data.id } });
   }
+
 
   return (
     <Section className="max-w-3xl">
