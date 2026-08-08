@@ -1,7 +1,18 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
+import { supabase } from "@/integrations/supabase/client";
+import { useSession } from "@/hooks/use-session";
+
 export function SiteHeader() {
+  const { user, loading } = useSession();
+  const navigate = useNavigate();
+
+  async function signOut() {
+    await supabase.auth.signOut();
+    navigate({ to: "/auth", replace: true });
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
@@ -11,7 +22,45 @@ export function SiteHeader() {
           </span>
           <span className="truncate font-display text-xl leading-none">Accountabul</span>
         </Link>
-        <span className="shrink-0 text-xs text-muted-foreground">Interface preview</span>
+
+        <nav className="flex shrink-0 items-center gap-2 text-sm">
+          {loading ? null : user ? (
+            <>
+              <Link
+                to="/dashboard"
+                className="rounded-full px-3 py-2 transition-colors hover:bg-accent"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/register-property"
+                className="hidden rounded-full bg-primary px-3.5 py-2 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex"
+              >
+                Register a property
+              </Link>
+              <button
+                type="button"
+                onClick={() => void signOut()}
+                className="rounded-full border border-input px-3 py-2 transition-colors hover:bg-accent"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/auth" className="rounded-full px-3 py-2 transition-colors hover:bg-accent">
+                Sign in
+              </Link>
+              <Link
+                to="/auth"
+                search={{ mode: "signup" }}
+                className="rounded-full bg-primary px-3.5 py-2 font-medium text-primary-foreground transition-opacity hover:opacity-90"
+              >
+                Create account
+              </Link>
+            </>
+          )}
+        </nav>
       </div>
     </header>
   );

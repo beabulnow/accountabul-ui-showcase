@@ -3,14 +3,15 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-surface">
       <div className="mx-auto max-w-6xl px-5 py-12">
         <p className="font-display text-xl">Accountabul</p>
-        <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-          Evidence-first property discovery. Every claim carries a source, a date and a verified
-          name.
+        <p className="mt-2 max-w-md text-sm text-muted-foreground">
+          A property verification registry. Records are submitted by people, reviewed by staff, and
+          can later carry a tamper-evident record proof published by Accountabul.
         </p>
       </div>
       <div className="border-t border-border px-5 py-5">
         <p className="mx-auto max-w-6xl text-xs text-muted-foreground">
-          Interface preview — not connected to live data. © {new Date().getFullYear()} Accountabul.
+          Registration is not legal title, a deed, title insurance, an appraisal, or proof of
+          ownership. © {new Date().getFullYear()} Accountabul.
         </p>
       </div>
     </footer>
