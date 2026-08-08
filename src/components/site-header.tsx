@@ -16,15 +16,18 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
-        <Link to="/" className="flex min-w-0 items-center gap-2.5">
-          <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground">
-            <ShieldCheck className="size-4.5" />
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:gap-4 sm:px-5 sm:py-3.5">
+        <Link to="/" className="flex min-w-0 shrink items-center gap-2 sm:gap-2.5">
+          <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground sm:size-9">
+            <ShieldCheck className="size-4 sm:size-4.5" />
           </span>
-          <span className="truncate font-display text-xl leading-none">Accountabul</span>
+          <span className="font-display text-base leading-none whitespace-nowrap sm:text-xl">
+            Accountabul
+          </span>
         </Link>
 
-        <nav className="flex shrink-0 items-center gap-2 text-sm">
+        <nav className="flex shrink-0 items-center gap-1 text-[13px] sm:gap-2 sm:text-sm">
+
           {loading ? null : user ? (
             <>
               <Link
