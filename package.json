@@ -7,8 +7,10 @@
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "preview": "vite preview",
+    "build:preview": "node scripts/build-preview.mjs",
+    "preview": "npm run build:preview && node .output/server/index.mjs",
     "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write ."
   },
   "dependencies": {

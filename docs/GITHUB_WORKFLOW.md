@@ -1,7 +1,7 @@
 # GitHub Workflow — Verifiabul Property Verification Registry
 
-**Canonical repository:** https://github.com/JibreelMuhammad/accountabul-ui-showcase-4ce276e3
-**Visibility:** private
+**Canonical repository:** https://github.com/beabulnow/accountabul-ui-showcase
+**Visibility:** public (current GitHub setting as of 2026-08-08)
 **Default branch:** `main`
 **Project:** Verifiabul Property Verification Registry
 
@@ -58,10 +58,10 @@ Future XRPL work must anchor **only deterministic hashes and public proof
 metadata**. Users receive an in-app registry receipt — never a transferable
 token. No personally identifying or submission content goes on-ledger.
 
-## 7. Repository stays private
+## 7. Repository visibility requires approval
 
-Keep the repository private unless the founder explicitly approves a visibility
-change.
+The current canonical repository is public. Do not change repository visibility
+again without explicit founder approval.
 
 ## 8. Branching and review
 

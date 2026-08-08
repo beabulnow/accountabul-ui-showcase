@@ -7,14 +7,14 @@ A private, early-stage registry for submitting property records, reviewing them 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-git clone https://github.com/JibreelMuhammad/accountabul-property-registry.git
-cd accountabul-property-registry
+git clone https://github.com/beabulnow/accountabul-ui-showcase.git
+cd accountabul-ui-showcase
 cp .env.example .env
 npm i
 npm run dev
 ```
 
-Use `npm ci` for repeatable validation from the committed lockfile. The production build is `npm run build`; static checks are `npm run lint`.
+Use `npm ci` for repeatable validation from the committed lockfile. The production build is `npm run build`; static checks are `npm run lint` and `npm run typecheck`. To exercise a production-style local server, run `npm run preview`.
 
 ## Authentication
 

@@ -32,7 +32,6 @@ function DashboardPage() {
   const { isStaff, role } = useIsStaff();
   const { data: profile } = useProfile(user?.id);
 
-
   const { data, isLoading, error } = useQuery({
     queryKey: ["my-registrations", user?.id],
     enabled: Boolean(user),
@@ -108,7 +107,6 @@ function DashboardPage() {
           </Link>
         </Card>
       ) : null}
-
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {[

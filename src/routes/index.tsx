@@ -72,8 +72,8 @@ function Home() {
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
               Verifiabul is a property registry built on evidence, not claims. You share the
-              property details and your documents, our team reviews them, and you can follow
-              every step from your account — no guessing, no waiting in the dark.
+              property details and your documents, our team reviews them, and you can follow every
+              step from your account — no guessing, no waiting in the dark.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {user ? (
