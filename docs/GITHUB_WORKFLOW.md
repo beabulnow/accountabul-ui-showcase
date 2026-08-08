@@ -74,12 +74,11 @@ narrow and merge them promptly.
 Do not create, fork, or switch to a different GitHub repository for this
 project. The repository named above is the single canonical home.
 
-## 10. Sync status — verification in progress
+## 10. Sync status — two-way sync verified
 
-Lovable-to-GitHub sync was verified on 2026-08-08 when Lovable exported commit
-`3c79b5c` to this Lovable-created repository. This documentation update is the
-GitHub-to-Lovable verification commit; automatic two-way sync is healthy only
-after this commit appears in the Lovable project history.
+Automatic two-way sync was verified on 2026-08-08. Lovable exported commit
+`3c79b5c` to this repository, and Lovable then ingested GitHub-origin commit
+`65dc98e` from `main`.
 
 Before starting work, confirm the latest `main` commit on both sides. Do not
 create or switch to another repository to work around an integration failure.
