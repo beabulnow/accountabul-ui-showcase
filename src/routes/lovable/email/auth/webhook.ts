@@ -9,7 +9,7 @@ import { EmailChangeEmail } from '@/lib/email-templates/email-change'
 import { ReauthenticationEmail } from '@/lib/email-templates/reauthentication'
 
 // Configuration
-const SITE_NAME = "Accountabul"
+const SITE_NAME = "Verifiabul"
 const SENDER_DOMAIN = "notify.verifiabul.com"
 const ROOT_DOMAIN = "verifiabul.com"
 const FROM_DOMAIN = "verifiabul.com"

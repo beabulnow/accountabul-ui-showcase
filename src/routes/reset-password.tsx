@@ -10,13 +10,13 @@ export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Set a new password — Accountabul Registry" },
+      { title: "Set a new password — Verifiabul Registry" },
       {
         name: "description",
         content:
-          "Choose a new password for your Accountabul Property Verification Registry account.",
+          "Choose a new password for your Verifiabul Property Verification Registry account.",
       },
-      { property: "og:title", content: "Set a new password — Accountabul Registry" },
+      { property: "og:title", content: "Set a new password — Verifiabul Registry" },
       { property: "og:description", content: "Complete your password reset." },
     ],
   }),
@@ -47,7 +47,7 @@ function ResetPasswordPage() {
 
   return (
     <Section className="max-w-lg">
-      <p className="eyebrow">Accountabul Registry</p>
+      <p className="eyebrow">Verifiabul Registry</p>
       <h1 className="mt-3 text-3xl sm:text-4xl">Set a new password</h1>
       <p className="mt-3 text-sm text-muted-foreground">
         Open this page from the reset link in your email. If the link has expired, request a new one

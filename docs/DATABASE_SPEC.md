@@ -1,4 +1,4 @@
-# Accountabul Property Registry — Database Reference and Roadmap
+# Verifiabul Property Registry — Database Reference and Roadmap
 
 **Status:** Living technical reference
 
@@ -6,19 +6,19 @@
 
 **Last updated:** 2026-08-08
 
-**Audience:** Accountabul staff, database reviewers, and engineering contributors
+**Audience:** Verifiabul staff, database reviewers, and engineering contributors
 
 **System of record:** Lovable Cloud / Supabase Postgres
 
 ## 1. Purpose
 
-This document records what the Accountabul Property Verification Registry database currently stores, how records relate, who may access them, and which future blockchain data may belong on chain. Implemented claims map to committed migrations; proposed sections remain roadmap material until separately approved and built.
+This document records what the Verifiabul Property Verification Registry database currently stores, how records relate, who may access them, and which future blockchain data may belong on chain. Implemented claims map to committed migrations; proposed sections remain roadmap material until separately approved and built.
 
 ## 2. Product boundary
 
 The product registers and reviews **property records**. It does not create or transfer legal title, tokenize property value, issue an investment, provide an appraisal, or represent government approval.
 
-When Accountabul later uses the XRP Ledger, it will publish a compact cryptographic proof of an approved record. The user receives an in-app registry receipt, not an NFT or transferable property token. Private information and source documents must never be written to a public blockchain.
+When Verifiabul later uses the XRP Ledger, it will publish a compact cryptographic proof of an approved record. The user receives an in-app registry receipt, not an NFT or transferable property token. Private information and source documents must never be written to a public blockchain.
 
 ## 3. Status labels
 
@@ -487,9 +487,9 @@ For an approved record version:
 
 3. Calculate a SHA-256 hash of the exact canonical bytes.
 
-4. Submit a compact memo-bearing XRPL transaction from an Accountabul-controlled publisher account.
+4. Submit a compact memo-bearing XRPL transaction from an Verifiabul-controlled publisher account.
 
-5. Accountabul pays the network fee; the user needs no wallet.
+5. Verifiabul pays the network fee; the user needs no wallet.
 
 6. Wait until the transaction appears in a validated ledger.
 

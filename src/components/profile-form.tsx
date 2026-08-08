@@ -351,7 +351,7 @@ export function ProfileForm({
             onChange={(event) => set("privacy_accepted", event.target.checked)}
           />
           <label htmlFor="privacy_accepted" className="text-sm text-muted-foreground">
-            I understand that Accountabul stores this private identity information to connect me
+            I understand that Verifiabul stores this private identity information to connect me
             with my property submissions and support registry review. This does not mean my identity
             has been independently KYC-verified.
           </label>

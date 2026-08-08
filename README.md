@@ -1,4 +1,4 @@
-# Accountabul Property Verification Registry
+# Verifiabul Property Verification Registry
 
 A private, early-stage registry for submitting property records, reviewing them with authorized staff, and later publishing a compact record proof to the XRP Ledger. A registry receipt is not a deed, legal title, appraisal, ownership token, or government filing.
 

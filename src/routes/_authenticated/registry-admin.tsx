@@ -6,14 +6,14 @@ import { useIsStaff } from "@/hooks/use-session";
 export const Route = createFileRoute("/_authenticated/registry-admin")({
   head: () => ({
     meta: [
-      { title: "Registry staff workspace — Accountabul" },
+      { title: "Registry staff workspace — Verifiabul" },
       {
         name: "description",
         content:
-          "Internal Accountabul registry workspace for reviewing property record submissions. Staff authorization required.",
+          "Internal Verifiabul registry workspace for reviewing property record submissions. Staff authorization required.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Registry staff workspace — Accountabul" },
+      { property: "og:title", content: "Registry staff workspace — Verifiabul" },
       { property: "og:description", content: "Staff-only registry review workspace." },
     ],
   }),

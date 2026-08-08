@@ -7,13 +7,13 @@ import { useSession } from "@/hooks/use-session";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Accountabul — Property Verification Registry" },
+      { title: "Verifiabul — Property Verification Registry" },
       {
         name: "description",
         content:
-          "Register a property record, have it reviewed by registry staff, and receive a registry receipt that Accountabul can later anchor as a tamper-evident record proof.",
+          "Register a property record, have it reviewed by registry staff, and receive a registry receipt that Verifiabul can later anchor as a tamper-evident record proof.",
       },
-      { property: "og:title", content: "Accountabul — Property Verification Registry" },
+      { property: "og:title", content: "Verifiabul — Property Verification Registry" },
       {
         property: "og:description",
         content:
@@ -33,12 +33,12 @@ const steps = [
   {
     icon: ShieldCheck,
     title: "2 · Staff review",
-    body: "Accountabul reviewers read the submission, ask for anything missing, and record every status change with a date you can see.",
+    body: "Verifiabul reviewers read the submission, ask for anything missing, and record every status change with a date you can see.",
   },
   {
     icon: CheckCircle2,
     title: "3 · Record proof",
-    body: "Once approved, Accountabul can publish a deterministic hash of the record to the XRP Ledger. We pay the network fee — you need no wallet.",
+    body: "Once approved, Verifiabul can publish a deterministic hash of the record to the XRP Ledger. We pay the network fee — you need no wallet.",
   },
 ];
 
@@ -69,9 +69,9 @@ function Home() {
               Register a property record. Have it reviewed. Keep the receipt.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-              Accountabul is an evidence-first registry. You submit a property record, our staff
+              Verifiabul is an evidence-first registry. You submit a property record, our staff
               review what you provided, and every status change is dated and visible. Approved
-              records can later carry a tamper-evident record proof published by Accountabul.
+              records can later carry a tamper-evident record proof published by Verifiabul.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {user ? (
@@ -122,7 +122,7 @@ function Home() {
                 <li>A live status: draft, submitted, under review, needs information, approved.</li>
                 <li>Dated status history and any message from the reviewer.</li>
                 <li>
-                  A record-proof panel that reads <em>Not yet anchored</em> until Accountabul
+                  A record-proof panel that reads <em>Not yet anchored</em> until Verifiabul
                   publishes the hash.
                 </li>
               </ul>

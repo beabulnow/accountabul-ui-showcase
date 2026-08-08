@@ -17,13 +17,13 @@ export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Sign in or create an account — Accountabul Registry" },
+      { title: "Sign in or create an account — Verifiabul Registry" },
       {
         name: "description",
         content:
-          "Sign in to the Accountabul Property Verification Registry, or create an account to register a property record for staff review.",
+          "Sign in to the Verifiabul Property Verification Registry, or create an account to register a property record for staff review.",
       },
-      { property: "og:title", content: "Sign in — Accountabul Registry" },
+      { property: "og:title", content: "Sign in — Verifiabul Registry" },
       {
         property: "og:description",
         content: "Access your property registrations and registry receipts.",
@@ -175,7 +175,7 @@ function AuthPage() {
 
   return (
     <Section className="max-w-lg">
-      <p className="eyebrow">Accountabul Registry</p>
+      <p className="eyebrow">Verifiabul Registry</p>
       <h1 className="mt-3 text-3xl sm:text-4xl">
         {mode === "signup"
           ? "Create your registry account"

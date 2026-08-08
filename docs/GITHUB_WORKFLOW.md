@@ -1,9 +1,9 @@
-# GitHub Workflow — Accountabul Property Verification Registry
+# GitHub Workflow — Verifiabul Property Verification Registry
 
 **Canonical repository:** https://github.com/JibreelMuhammad/accountabul-ui-showcase-4ce276e3
 **Visibility:** private
 **Default branch:** `main`
-**Project:** Accountabul Property Verification Registry
+**Project:** Verifiabul Property Verification Registry
 
 These are the repository operating instructions for this project. They apply to
 Lovable, local development, and any collaborator with push access.
