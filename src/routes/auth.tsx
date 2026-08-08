@@ -72,7 +72,7 @@ function AuthPage() {
       if (session) go();
     });
     return () => sub.subscription.unsubscribe();
-  }, [navigate, resolveRedirect()]);
+  }, [navigate, resolveRedirect]);
 
   // If the Google popup is closed or blocked, its promise never settles. Clear
   // the pending state when the user comes back so the page is never stuck.
