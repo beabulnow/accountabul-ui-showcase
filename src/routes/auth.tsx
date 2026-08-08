@@ -45,18 +45,43 @@ function AuthPage() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [googleBusy, setGoogleBusy] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
-  const safeRedirect =
-    search.redirect && search.redirect.startsWith("/") && !search.redirect.startsWith("//")
-      ? search.redirect
+  const isSafePath = (value: string | null | undefined): value is string =>
+    !!value && value.startsWith("/") && !value.startsWith("//");
+
+  const storedRedirect =
+    typeof window === "undefined" ? null : sessionStorage.getItem("accountabul:redirect");
+
+  const safeRedirect = isSafePath(search.redirect)
+    ? search.redirect
+    : isSafePath(storedRedirect)
+      ? storedRedirect
       : "/dashboard";
 
   useEffect(() => {
+    const go = () => {
+      sessionStorage.removeItem("accountabul:redirect");
+      navigate({ to: safeRedirect, replace: true });
+    };
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: safeRedirect, replace: true });
+      if (data.session) go();
     });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) go();
+    });
+    return () => sub.subscription.unsubscribe();
   }, [navigate, safeRedirect]);
+
+  // If the Google popup is closed or blocked, its promise never settles. Clear
+  // the pending state when the user comes back so the page is never stuck.
+  useEffect(() => {
+    if (!googleBusy) return;
+    const clear = () => setGoogleBusy(false);
+    window.addEventListener("focus", clear);
+    return () => window.removeEventListener("focus", clear);
+  }, [googleBusy]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -112,10 +137,14 @@ function AuthPage() {
 
   async function handleGoogle() {
     setNotice(null);
-    setBusy(true);
+    setGoogleBusy(true);
     try {
+      // The redirect target must be a plain, allow-listed same-origin URL. The
+      // intended destination is kept separately and applied after the session
+      // is confirmed.
+      sessionStorage.setItem("accountabul:redirect", safeRedirect);
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/auth?redirect=${encodeURIComponent(safeRedirect)}`,
+        redirect_uri: `${window.location.origin}/auth`,
       });
       if (result.error) throw new Error(result.error.message ?? "Google sign-in failed");
       if (result.redirected) return;
@@ -126,7 +155,7 @@ function AuthPage() {
       setNotice(message);
       toast.error(message);
     } finally {
-      setBusy(false);
+      setGoogleBusy(false);
     }
   }
 
@@ -150,7 +179,7 @@ function AuthPage() {
           <button
             type="button"
             onClick={handleGoogle}
-            disabled={busy}
+            disabled={googleBusy}
             className="inline-flex items-center justify-center gap-2.5 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface disabled:opacity-60"
           >
             <svg aria-hidden="true" viewBox="0 0 18 18" className="h-4 w-4">
@@ -171,7 +200,7 @@ function AuthPage() {
                 d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.9 11.43 0 9 0A9 9 0 0 0 .94 4.95l3.03 2.33C4.68 5.16 6.66 3.58 9 3.58Z"
               />
             </svg>
-            Continue with Google
+            {googleBusy ? "Opening Google…" : "Continue with Google"}
           </button>
           <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-muted-foreground">
             <span className="h-px flex-1 bg-border" />
