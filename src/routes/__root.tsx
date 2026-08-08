@@ -78,22 +78,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Verifiabul | Property Verification Registry" },
+      { title: "Verifiabul | Property Record Verification" },
       {
         name: "description",
         content:
-          "Submit your property details and documents to Verifiabul, then track the review in your account until our team confirms where the record stands.",
+          "Property record verification through organized evidence, available public record research, and clear review results.",
       },
       { name: "author", content: "Verifiabul" },
       {
         name: "google-site-verification",
         content: "tAv0QuIiPfOigVFbIYoj3YmDEDjzadFBDmAPo0tAwF0",
       },
-      { property: "og:title", content: "Verifiabul | Property Verification Registry" },
+      { property: "og:title", content: "Verifiabul | Property Record Verification" },
       {
         property: "og:description",
         content:
-          "Submit your property details and documents to Verifiabul, then track the review in your account until our team confirms where the record stands.",
+          "Property record verification through organized evidence, available public record research, and clear review results.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

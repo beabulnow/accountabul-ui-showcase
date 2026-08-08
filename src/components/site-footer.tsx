@@ -4,8 +4,8 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-5 py-12">
         <p className="font-display text-xl">Verifiabul</p>
         <p className="mt-2 max-w-md text-sm text-muted-foreground">
-          A property verification registry. Records are submitted by people, reviewed by staff, and
-          can later carry a tamper-evident record proof published by Verifiabul.
+          Property record verification for owners and authorized representatives. Submit the
+          information, support it with evidence, and follow the result from your account.
         </p>
       </div>
       <div className="border-t border-border px-5 py-5">

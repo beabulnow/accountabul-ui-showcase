@@ -10,6 +10,32 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
+function isLegacyServiceRoleKey(value: string): boolean {
+  const payload = value.split(".")[1];
+  if (!payload) return false;
+
+  try {
+    const decoded = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as {
+      role?: unknown;
+    };
+    return decoded.role === "service_role";
+  } catch {
+    return false;
+  }
+}
+
+const browserSupabaseKey =
+  process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ?? process.env["SUPABASE_PUBLISHABLE_KEY"];
+
+if (
+  browserSupabaseKey?.startsWith("sb_secret_") ||
+  (browserSupabaseKey && isLegacyServiceRoleKey(browserSupabaseKey))
+) {
+  throw new Error(
+    "Refusing to expose a Supabase secret or service-role key in the browser bundle. Configure a publishable key instead.",
+  );
+}
+
 // Lovable Cloud provides the publishable backend configuration under the
 // server names. Mirror only those public values into Vite's client namespace
 // so direct-loaded auth routes never fall through to `process.env` in the

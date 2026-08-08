@@ -53,7 +53,7 @@ export function SiteHeader() {
                 to="/register-property"
                 className="hidden rounded-full bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:inline-flex sm:px-3.5 sm:py-2"
               >
-                Register a property
+                Verify a property
               </Link>
               <button
                 type="button"
@@ -83,7 +83,7 @@ export function SiteHeader() {
                 search={{ mode: "signup" }}
                 className="rounded-full bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-opacity hover:opacity-90 sm:px-3.5 sm:py-2"
               >
-                Create account
+                Verify a property
               </Link>
             </>
           )}
