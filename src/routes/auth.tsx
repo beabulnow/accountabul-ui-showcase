@@ -175,7 +175,7 @@ function AuthPage() {
           <button
             type="button"
             onClick={handleGoogle}
-            disabled={busy}
+            disabled={googleBusy}
             className="inline-flex items-center justify-center gap-2.5 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface disabled:opacity-60"
           >
             <svg aria-hidden="true" viewBox="0 0 18 18" className="h-4 w-4">
