@@ -16,24 +16,57 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          avatar_path: string | null
+          bio: string | null
           created_at: string
+          date_of_birth: string | null
           email: string | null
+          first_name: string | null
           full_name: string | null
           id: string
+          last_name: string | null
+          middle_name: string | null
+          phone_e164: string | null
+          phone_verified_at: string | null
+          privacy_accepted_at: string | null
+          privacy_policy_version: string | null
+          profile_completed_at: string | null
           updated_at: string
         }
         Insert: {
+          avatar_path?: string | null
+          bio?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
+          first_name?: string | null
           full_name?: string | null
           id: string
+          last_name?: string | null
+          middle_name?: string | null
+          phone_e164?: string | null
+          phone_verified_at?: string | null
+          privacy_accepted_at?: string | null
+          privacy_policy_version?: string | null
+          profile_completed_at?: string | null
           updated_at?: string
         }
         Update: {
+          avatar_path?: string | null
+          bio?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
+          first_name?: string | null
           full_name?: string | null
           id?: string
+          last_name?: string | null
+          middle_name?: string | null
+          phone_e164?: string | null
+          phone_verified_at?: string | null
+          privacy_accepted_at?: string | null
+          privacy_policy_version?: string | null
+          profile_completed_at?: string | null
           updated_at?: string
         }
         Relationships: []
