@@ -12,7 +12,6 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@babel/core": "^8.0.1",
     "@lovable.dev/cloud-auth-js": "^1.1.2",
     "@supabase/supabase-js": "^2.112.2",
     "@tailwindcss/vite": "^4.2.1",
@@ -20,13 +19,8 @@
     "@tanstack/react-router": "1.170.21",
     "@tanstack/react-start": "1.168.38",
     "@tanstack/router-plugin": "1.168.26",
-    "brace-expansion": "^5.0.9",
     "clsx": "^2.1.1",
-    "esbuild": "^0.28.1",
-    "js-yaml": "^5.2.3",
     "lucide-react": "^0.575.0",
-    "nanoid": "^6.0.1",
-    "postcss": "^8.5.26",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sonner": "^2.0.7",
