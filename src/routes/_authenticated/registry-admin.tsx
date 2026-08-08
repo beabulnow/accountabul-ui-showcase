@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
+import { ProfileAvatar } from "@/components/profile-avatar";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, EmptyState, Section, SectionHeading } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
@@ -16,6 +17,7 @@ import {
   statusLabels,
   type RegistrationStatus,
 } from "@/lib/registry";
+import { profileDisplayName } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated/registry-admin")({
   head: () => ({
@@ -87,7 +89,9 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("profiles")
-        .select("id, email, full_name, created_at")
+        .select(
+          "id, email, full_name, first_name, middle_name, last_name, phone_e164, phone_verified_at, avatar_path, profile_completed_at, created_at",
+        )
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
@@ -100,12 +104,27 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
     return map;
   }, [profiles]);
 
+  const profileById = useMemo(() => {
+    const map = new Map<string, NonNullable<typeof profiles>[number]>();
+    for (const profile of profiles ?? []) map.set(profile.id, profile);
+    return map;
+  }, [profiles]);
+
+  const registrationCountByUser = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const registration of registrations ?? []) {
+      map.set(registration.user_id, (map.get(registration.user_id) ?? 0) + 1);
+    }
+    return map;
+  }, [registrations]);
+
   const filtered = useMemo(() => {
     const term = search.trim().toLowerCase();
     return (registrations ?? []).filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
       if (!term) return true;
       const email = emailById.get(r.user_id) ?? "";
+      const submitterProfile = profileById.get(r.user_id);
       return [
         r.address_line1,
         r.address_line2 ?? "",
@@ -115,12 +134,14 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
         r.parcel_id ?? "",
         r.receipt_code,
         email,
+        profileDisplayName(submitterProfile),
+        submitterProfile?.phone_e164 ?? "",
       ]
         .join(" ")
         .toLowerCase()
         .includes(term);
     });
-  }, [registrations, statusFilter, search, emailById]);
+  }, [registrations, statusFilter, search, emailById, profileById]);
 
   const selected = (registrations ?? []).find((r) => r.id === selectedId) ?? null;
 
@@ -209,11 +230,36 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
           <h2 className="mt-10 text-xl">Registered users ({profiles?.length ?? 0})</h2>
           <ul className="mt-3 grid gap-2">
             {(profiles ?? []).map((p) => (
-              <li key={p.id} className="rounded-xl border border-border bg-card px-4 py-3 text-sm">
-                <p className="truncate font-medium">{p.full_name || "—"}</p>
-                <p className="truncate text-xs text-muted-foreground">
-                  {p.email} · joined {formatDateTime(p.created_at)}
-                </p>
+              <li
+                key={p.id}
+                className="flex items-center gap-3 rounded-xl border border-border bg-card px-4 py-3 text-sm"
+              >
+                <ProfileAvatar
+                  avatarPath={p.avatar_path}
+                  name={profileDisplayName(p)}
+                  className="size-11 text-xs"
+                />
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <p className="truncate font-medium">{profileDisplayName(p)}</p>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[11px] ${
+                        p.profile_completed_at
+                          ? "bg-verified/10 text-verified"
+                          : "bg-caution/10 text-caution"
+                      }`}
+                    >
+                      {p.profile_completed_at ? "Profile complete" : "Profile incomplete"}
+                    </span>
+                  </div>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {p.email} {p.phone_e164 ? `· ${p.phone_e164}` : ""}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {registrationCountByUser.get(p.id) ?? 0} properties · joined{" "}
+                    {formatDateTime(p.created_at)}
+                  </p>
+                </div>
               </li>
             ))}
           </ul>

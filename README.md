@@ -18,15 +18,24 @@ Use `npm ci` for repeatable validation from the committed lockfile. The producti
 
 ## Authentication
 
-Accounts use email + password. Sign up, sign in and password reset all live at
+Accounts use Google or email + password. Sign up, sign in and password reset all live at
 `/auth`; the reset link lands on `/reset-password`. Email confirmation is on by
 default, so a new account is not signed in until the confirmation link is
 clicked — the UI says so explicitly.
 
-Everything under `/dashboard`, `/register-property`, `/registrations/$id` and
-`/registry-admin` sits behind the `_authenticated` route gate and, at the
-database level, behind row-level security scoped to `auth.uid()`. Users can only
-ever read or write their own registrations.
+After either Google or email/password sign-in, accounts with incomplete identity
+information are sent to `/complete-profile`. The one-time onboarding collects
+the account holder's name, date of birth, phone, optional bio and optional
+private profile photo. Returning users can maintain this information at
+`/profile`. Profile completion is not represented as independent KYC
+verification.
+
+Everything under `/dashboard`, `/profile`, `/register-property`,
+`/registrations/$id` and `/registry-admin` sits behind the `_authenticated`
+route gate and, at the database level, behind row-level security scoped to
+`auth.uid()`. Incomplete profiles may only access `/complete-profile` and
+`/profile`. Users can only ever read or write their own profiles, avatars and
+registrations.
 
 ## Admin bootstrap
 

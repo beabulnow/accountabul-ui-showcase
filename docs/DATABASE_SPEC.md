@@ -46,6 +46,28 @@ One application profile for each authenticated account.
 
 | `full_name` | Text | No | User's display name |
 
+| `first_name` | Text | No | Confirmed account-holder first name; required for profile completion |
+
+| `middle_name` | Text | No | Optional middle name |
+
+| `last_name` | Text | No | Confirmed account-holder last name; required for profile completion |
+
+| `date_of_birth` | Date | No | Private account-holder birth date; required for profile completion |
+
+| `phone_e164` | Text | No | Private normalized phone number; required for profile completion |
+
+| `phone_verified_at` | Timestamp with timezone | No | Reserved for a future phone-verification flow |
+
+| `bio` | Text | No | Optional private introduction, up to 500 characters |
+
+| `avatar_path` | Text | No | Owner-scoped path in the private `profile-avatars` Storage bucket |
+
+| `profile_completed_at` | Timestamp with timezone | No | Server-derived profile-completion time |
+
+| `privacy_accepted_at` | Timestamp with timezone | No | Server-written identity-information notice acceptance time |
+
+| `privacy_policy_version` | Text | No | Accepted notice version |
+
 | `created_at` | Timestamp with timezone | Yes | Account-profile creation time |
 
 | `updated_at` | Timestamp with timezone | Yes | Last profile update time |
@@ -54,7 +76,18 @@ Rules:
 
 - A database trigger creates the profile when a Supabase Auth user is created.
 
-- Users may read their own profile and update only `full_name`.
+- Users may read their own profile and update only approved profile-input
+  columns. They cannot write `email`, `id`, `full_name`, staff authorization,
+  phone verification, or profile-completion timestamps.
+
+- A trigger derives `full_name`, records notice acceptance, and sets or clears
+  profile completion from the required fields.
+
+- Profile completion records identity information supplied by the account
+  holder. It must not be presented as independent KYC verification.
+
+- Profile photos live in a private bucket under `{auth.uid()}/avatar`; owners
+  manage only their own object and authorized staff have read-only access.
 
 - Authorized staff may read profiles for registry administration.
 

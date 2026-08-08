@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthenticatedCompleteProfileRouteImport } from './routes/_authenticated/complete-profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRegisterPropertyRouteImport } from './routes/_authenticated/register-property'
 import { Route as AuthenticatedRegistryAdminRouteImport } from './routes/_authenticated/registry-admin'
 import { Route as AuthenticatedRegistrationsIdRouteImport } from './routes/_authenticated/registrations.$id'
@@ -37,9 +39,20 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCompleteProfileRoute =
+  AuthenticatedCompleteProfileRouteImport.update({
+    id: '/complete-profile',
+    path: '/complete-profile',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedRegisterPropertyRoute =
@@ -65,7 +78,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/registry-admin': typeof AuthenticatedRegistryAdminRoute
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
@@ -74,7 +89,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/registry-admin': typeof AuthenticatedRegistryAdminRoute
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
@@ -85,7 +102,9 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/_authenticated/registry-admin': typeof AuthenticatedRegistryAdminRoute
   '/_authenticated/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
@@ -96,7 +115,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/complete-profile'
     | '/dashboard'
+    | '/profile'
     | '/register-property'
     | '/registry-admin'
     | '/registrations/$id'
@@ -105,7 +126,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
+    | '/complete-profile'
     | '/dashboard'
+    | '/profile'
     | '/register-property'
     | '/registry-admin'
     | '/registrations/$id'
@@ -115,7 +138,9 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/reset-password'
+    | '/_authenticated/complete-profile'
     | '/_authenticated/dashboard'
+    | '/_authenticated/profile'
     | '/_authenticated/register-property'
     | '/_authenticated/registry-admin'
     | '/_authenticated/registrations/$id'
@@ -158,11 +183,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/complete-profile': {
+      id: '/_authenticated/complete-profile'
+      path: '/complete-profile'
+      fullPath: '/complete-profile'
+      preLoaderRoute: typeof AuthenticatedCompleteProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/register-property': {
@@ -190,14 +229,18 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedCompleteProfileRoute: typeof AuthenticatedCompleteProfileRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRegisterPropertyRoute: typeof AuthenticatedRegisterPropertyRoute
   AuthenticatedRegistryAdminRoute: typeof AuthenticatedRegistryAdminRoute
   AuthenticatedRegistrationsIdRoute: typeof AuthenticatedRegistrationsIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedCompleteProfileRoute: AuthenticatedCompleteProfileRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRegisterPropertyRoute: AuthenticatedRegisterPropertyRoute,
   AuthenticatedRegistryAdminRoute: AuthenticatedRegistryAdminRoute,
   AuthenticatedRegistrationsIdRoute: AuthenticatedRegistrationsIdRoute,

@@ -1,12 +1,16 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
+import { ProfileAvatar } from "@/components/profile-avatar";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/hooks/use-profile";
 import { useIsStaff, useSession } from "@/hooks/use-session";
+import { profileDisplayName } from "@/lib/profile";
 
 export function SiteHeader() {
   const { user, loading } = useSession();
   const { isStaff } = useIsStaff();
+  const { data: profile } = useProfile(user?.id);
   const navigate = useNavigate();
 
   async function signOut() {
@@ -35,6 +39,12 @@ export function SiteHeader() {
               >
                 Dashboard
               </Link>
+              <Link
+                to="/profile"
+                className="hidden rounded-full px-3 py-2 transition-colors hover:bg-accent sm:inline-flex"
+              >
+                Profile
+              </Link>
               {isStaff ? (
                 <Link
                   to="/registry-admin"
@@ -56,6 +66,13 @@ export function SiteHeader() {
               >
                 Sign out
               </button>
+              <Link to="/profile" aria-label="Open your profile" className="rounded-full">
+                <ProfileAvatar
+                  avatarPath={profile?.avatar_path}
+                  name={profileDisplayName(profile)}
+                  className="size-9 text-xs"
+                />
+              </Link>
             </>
           ) : (
             <>
