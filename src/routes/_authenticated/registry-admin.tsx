@@ -5,11 +5,23 @@ import { toast } from "sonner";
 
 import { ProfileAvatar } from "@/components/profile-avatar";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, EmptyState, Section, SectionHeading } from "@/components/ui-kit";
+import {
+  Card,
+  DetailRow,
+  EmptyState,
+  Section,
+  SectionHeading,
+  inputClass,
+  primaryButtonClass,
+  secondaryButtonClass,
+} from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
+import { StatusHistory } from "@/components/status-history";
+import { useRegistrationHistory, useStaffNotes } from "@/hooks/use-registration";
 import { useIsStaff, useSession } from "@/hooks/use-session";
 import {
   REGISTRATION_STATUSES,
+  STAFF_SETTABLE_STATUSES,
   formatDateTime,
   labelFor,
   propertyTypeOptions,
@@ -18,6 +30,7 @@ import {
   type RegistrationStatus,
 } from "@/lib/registry";
 import { profileDisplayName } from "@/lib/profile";
+import { errorMessage } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/registry-admin")({
   head: () => ({
@@ -35,9 +48,6 @@ export const Route = createFileRoute("/_authenticated/registry-admin")({
   }),
   component: RegistryAdminPage,
 });
-
-const inputClass =
-  "w-full rounded-xl border border-input bg-card px-3.5 py-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30";
 
 function RegistryAdminPage() {
   const { role, isStaff, checking } = useIsStaff();
@@ -98,12 +108,6 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
     },
   });
 
-  const emailById = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const p of profiles ?? []) map.set(p.id, p.email ?? "");
-    return map;
-  }, [profiles]);
-
   const profileById = useMemo(() => {
     const map = new Map<string, NonNullable<typeof profiles>[number]>();
     for (const profile of profiles ?? []) map.set(profile.id, profile);
@@ -123,7 +127,6 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
     return (registrations ?? []).filter((r) => {
       if (statusFilter !== "all" && r.status !== statusFilter) return false;
       if (!term) return true;
-      const email = emailById.get(r.user_id) ?? "";
       const submitterProfile = profileById.get(r.user_id);
       return [
         r.address_line1,
@@ -133,7 +136,7 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
         r.county,
         r.parcel_id ?? "",
         r.receipt_code,
-        email,
+        submitterProfile?.email ?? "",
         profileDisplayName(submitterProfile),
         submitterProfile?.phone_e164 ?? "",
       ]
@@ -141,7 +144,7 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
         .toLowerCase()
         .includes(term);
     });
-  }, [registrations, statusFilter, search, emailById, profileById]);
+  }, [registrations, statusFilter, search, profileById]);
 
   const selected = (registrations ?? []).find((r) => r.id === selectedId) ?? null;
 
@@ -218,7 +221,7 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
                       <StatusChip status={r.status as RegistrationStatus} />
                     </div>
                     <p className="mt-1 truncate text-xs text-muted-foreground">
-                      {r.receipt_code} · {emailById.get(r.user_id) || "unknown submitter"} ·{" "}
+                      {r.receipt_code} · {profileById.get(r.user_id)?.email || "unknown submitter"} ·{" "}
                       {formatDateTime(r.created_at)}
                     </p>
                   </button>
@@ -271,7 +274,7 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
               key={selected.id}
               registration={selected}
               staffUserId={user?.id ?? ""}
-              submitterEmail={emailById.get(selected.user_id) ?? ""}
+              submitterEmail={profileById.get(selected.user_id)?.email ?? ""}
               onChanged={() => {
                 void queryClient.invalidateQueries({ queryKey: ["admin-registrations"] });
               }}
@@ -329,31 +332,8 @@ function SubmissionInspector({
   const [internalNote, setInternalNote] = useState("");
   const [busy, setBusy] = useState(false);
 
-  const { data: notes, refetch: refetchNotes } = useQuery({
-    queryKey: ["staff-notes", registration.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("staff_notes")
-        .select("*")
-        .eq("registration_id", registration.id)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-
-  const { data: history, refetch: refetchHistory } = useQuery({
-    queryKey: ["staff-history", registration.id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("registration_status_history")
-        .select("*")
-        .eq("registration_id", registration.id)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const { data: notes, refetch: refetchNotes } = useStaffNotes(registration.id);
+  const { data: history, refetch: refetchHistory } = useRegistrationHistory(registration.id);
 
   async function applyStatus() {
     setBusy(true);
@@ -365,7 +345,7 @@ function SubmissionInspector({
 
     if (error) {
       setBusy(false);
-      toast.error(error.message);
+      toast.error(errorMessage(error, "Could not update this status"));
       return;
     }
 
@@ -386,7 +366,7 @@ function SubmissionInspector({
     });
     setBusy(false);
     if (error) {
-      toast.error(error.message);
+      toast.error(errorMessage(error, "Could not add this note"));
       return;
     }
     setInternalNote("");
@@ -402,11 +382,13 @@ function SubmissionInspector({
           <StatusChip status={registration.status as RegistrationStatus} />
         </div>
         <dl className="mt-4 grid gap-2 text-sm">
-          <Detail
+          <DetailRow
+            compact
             label="Submitter"
             value={`${registration.submitter_full_name} (${submitterEmail})`}
           />
-          <Detail
+          <DetailRow
+            compact
             label="Relationship"
             value={
               registration.relationship === "other" && registration.relationship_other
@@ -414,21 +396,23 @@ function SubmissionInspector({
                 : labelFor(relationshipOptions, registration.relationship)
             }
           />
-          <Detail
+          <DetailRow
+            compact
             label="Address"
             value={`${registration.address_line1}${
               registration.address_line2 ? `, ${registration.address_line2}` : ""
             }, ${registration.city}, ${registration.state} ${registration.postal_code}`}
           />
-          <Detail label="County" value={registration.county} />
-          <Detail label="Parcel ID" value={registration.parcel_id || "—"} />
-          <Detail
+          <DetailRow compact label="County" value={registration.county} />
+          <DetailRow compact label="Parcel ID" value={registration.parcel_id || "—"} />
+          <DetailRow
+            compact
             label="Property type"
             value={labelFor(propertyTypeOptions, registration.property_type)}
           />
-          <Detail label="Public sources" value={registration.public_source_notes || "—"} />
-          <Detail label="User note" value={registration.user_note || "—"} />
-          <Detail label="Submitted" value={formatDateTime(registration.submitted_at)} />
+          <DetailRow compact label="Public sources" value={registration.public_source_notes || "—"} />
+          <DetailRow compact label="User note" value={registration.user_note || "—"} />
+          <DetailRow compact label="Submitted" value={formatDateTime(registration.submitted_at)} />
         </dl>
       </Card>
 
@@ -440,7 +424,7 @@ function SubmissionInspector({
           value={nextStatus}
           onChange={(e) => setNextStatus(e.target.value as RegistrationStatus)}
         >
-          {REGISTRATION_STATUSES.map((s) => (
+          {STAFF_SETTABLE_STATUSES.map((s) => (
             <option key={s} value={s}>
               {statusLabels[s]}
             </option>
@@ -455,14 +439,15 @@ function SubmissionInspector({
           onChange={(e) => setUserMessage(e.target.value)}
         />
         <p className="text-xs text-muted-foreground">
-          &quot;Anchored&quot; is rejected by the database until a complete validated record proof
-          includes its payload hash, network, transaction hash, ledger index and anchor time.
+          &quot;Anchored&quot; is not settable here: it is written only by the anchoring pipeline
+          once a complete validated record proof exists (payload hash, network, transaction hash,
+          ledger index and anchor time).
         </p>
         <button
           type="button"
           disabled={busy || nextStatus === registration.status}
           onClick={() => void applyStatus()}
-          className="justify-self-start rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+          className={`justify-self-start ${primaryButtonClass}`}
         >
           Apply status
         </button>
@@ -482,7 +467,7 @@ function SubmissionInspector({
           type="button"
           disabled={busy}
           onClick={() => void addNote()}
-          className="justify-self-start rounded-full border border-input px-4 py-2 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-60"
+          className={`justify-self-start ${secondaryButtonClass}`}
         >
           Add internal note
         </button>
@@ -501,27 +486,9 @@ function SubmissionInspector({
 
       <Card className="grid gap-2">
         <h3 className="text-lg">History</h3>
-        <ol className="grid gap-3">
-          {(history ?? []).map((h) => (
-            <li key={h.id} className="border-l-2 border-border pl-3 text-sm">
-              <p className="font-medium">{statusLabels[h.to_status as RegistrationStatus]}</p>
-              <p className="text-xs text-muted-foreground">{formatDateTime(h.created_at)}</p>
-              {h.user_visible_message ? (
-                <p className="mt-1 text-muted-foreground">{h.user_visible_message}</p>
-              ) : null}
-            </li>
-          ))}
-        </ol>
+        <StatusHistory entries={history ?? []} />
       </Card>
     </div>
   );
 }
 
-function Detail({ label, value }: { label: string; value: React.ReactNode }) {
-  return (
-    <div className="grid gap-0.5 sm:grid-cols-[130px_minmax(0,1fr)] sm:gap-3">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 break-words">{value}</dd>
-    </div>
-  );
-}
