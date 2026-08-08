@@ -18,6 +18,7 @@ import { Route as AuthenticatedRegisterPropertyRouteImport } from './routes/_aut
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCompleteProfileRouteImport } from './routes/_authenticated/complete-profile'
+import { Route as AuthenticatedRegistryAdminIndexRouteImport } from './routes/_authenticated/registry-admin.index'
 import { Route as AuthenticatedRegistryAdminQueueRouteImport } from './routes/_authenticated/registry-admin.queue'
 import { Route as AuthenticatedRegistrationsIdRouteImport } from './routes/_authenticated/registrations.$id'
 
@@ -68,6 +69,12 @@ const AuthenticatedCompleteProfileRoute =
     path: '/complete-profile',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRegistryAdminIndexRoute =
+  AuthenticatedRegistryAdminIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedRegistryAdminRoute,
+  } as any)
 const AuthenticatedRegistryAdminQueueRoute =
   AuthenticatedRegistryAdminQueueRouteImport.update({
     id: '/queue',
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
+  '/registry-admin/': typeof AuthenticatedRegistryAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -101,9 +109,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
-  '/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
+  '/registry-admin': typeof AuthenticatedRegistryAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/_authenticated/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
   '/_authenticated/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/_authenticated/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
+  '/_authenticated/registry-admin/': typeof AuthenticatedRegistryAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -132,6 +141,7 @@ export interface FileRouteTypes {
     | '/registry-admin'
     | '/registrations/$id'
     | '/registry-admin/queue'
+    | '/registry-admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -141,9 +151,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/profile'
     | '/register-property'
-    | '/registry-admin'
     | '/registrations/$id'
     | '/registry-admin/queue'
+    | '/registry-admin'
   id:
     | '__root__'
     | '/'
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/_authenticated/registry-admin'
     | '/_authenticated/registrations/$id'
     | '/_authenticated/registry-admin/queue'
+    | '/_authenticated/registry-admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -231,6 +242,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCompleteProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/registry-admin/': {
+      id: '/_authenticated/registry-admin/'
+      path: '/'
+      fullPath: '/registry-admin/'
+      preLoaderRoute: typeof AuthenticatedRegistryAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedRegistryAdminRoute
+    }
     '/_authenticated/registry-admin/queue': {
       id: '/_authenticated/registry-admin/queue'
       path: '/queue'
@@ -250,11 +268,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRegistryAdminRouteChildren {
   AuthenticatedRegistryAdminQueueRoute: typeof AuthenticatedRegistryAdminQueueRoute
+  AuthenticatedRegistryAdminIndexRoute: typeof AuthenticatedRegistryAdminIndexRoute
 }
 
 const AuthenticatedRegistryAdminRouteChildren: AuthenticatedRegistryAdminRouteChildren =
   {
     AuthenticatedRegistryAdminQueueRoute: AuthenticatedRegistryAdminQueueRoute,
+    AuthenticatedRegistryAdminIndexRoute: AuthenticatedRegistryAdminIndexRoute,
   }
 
 const AuthenticatedRegistryAdminRouteWithChildren =
@@ -292,3 +312,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
