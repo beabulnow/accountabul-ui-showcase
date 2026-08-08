@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, EmptyState, Section, SectionHeading, primaryButtonClass } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
-import { useIsStaff } from "@/hooks/use-session";
+import { useIsStaff, useSession } from "@/hooks/use-session";
 import { DOCUMENT_SLOTS, documentSlotLabel } from "@/lib/documents";
 import {
   REGISTRATION_STATUSES,
