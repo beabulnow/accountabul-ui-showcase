@@ -37,7 +37,13 @@ export const profileSchema = z.object({
   }),
 });
 
-export type ProfileFormInput = z.input<typeof profileSchema>;
+/**
+ * Editable form state. The schema requires `privacy_accepted` to be literally
+ * `true`, but the checkbox must be able to hold `false` before submission.
+ */
+export type ProfileFormInput = Omit<z.input<typeof profileSchema>, "privacy_accepted"> & {
+  privacy_accepted: boolean;
+};
 
 export function normalizePhone(value: string) {
   const trimmed = value.trim();
