@@ -8,6 +8,7 @@ import { Section } from "@/components/ui-kit";
 
 const searchSchema = z.object({
   redirect: z.string().optional(),
+  mode: z.enum(["signin", "signup", "forgot"]).optional(),
 });
 
 export const Route = createFileRoute("/auth")({
@@ -38,7 +39,7 @@ const inputClass =
 function AuthPage() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/auth" });
-  const [mode, setMode] = useState<Mode>("signin");
+  const [mode, setMode] = useState<Mode>(search.mode ?? "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
