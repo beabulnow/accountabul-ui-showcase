@@ -266,7 +266,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      review_registration_status: {
+        Args: {
+          _registration_id: string
+          _to_status: Database["public"]["Enums"]["registration_status"]
+          _user_visible_message?: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       property_type:

@@ -1,20 +1,18 @@
-# Accountabul Property Registry — Lovable Database Specification
+# Accountabul Property Registry — Database Reference and Roadmap
 
-**Status:** Living implementation specification  
+**Status:** Living technical reference
 
-**Version:** 0.1  
+**Version:** 0.2
 
-**Last updated:** 2026-08-08  
+**Last updated:** 2026-08-08
 
-**Audience:** Lovable builders, Accountabul staff, database reviewers, and future engineering contributors  
+**Audience:** Accountabul staff, database reviewers, and engineering contributors
 
-**System of record:** Lovable Cloud / Supabase Postgres  
+**System of record:** Lovable Cloud / Supabase Postgres
 
 ## 1. Purpose
 
-This document tells Lovable what the Accountabul Property Verification Registry database must store, how records relate, who may access them, and which future blockchain data belongs on chain.
-
-The first database is already active. This specification is the source of truth for maintaining it and extending it deliberately.
+This document records what the Accountabul Property Verification Registry database currently stores, how records relate, who may access them, and which future blockchain data may belong on chain. Implemented claims map to committed migrations; proposed sections remain roadmap material until separately approved and built.
 
 ## 2. Product boundary
 
@@ -476,55 +474,7 @@ Flare remains a proposed later verification/workflow layer. No Flare tables, con
 
 If added later, Flare and XRPL must have explicit separate responsibilities. A single-chain proof must never be displayed as dual-chain confirmed.
 
-## 11. Lovable implementation rules
-
-1. Treat this document as the database source of truth.
-
-2. Preserve existing data and migrations; never replace or rewrite applied migration history.
-
-3. Create every schema change through a new, descriptive migration.
-
-4. Enable RLS on every new table in an exposed schema before frontend use.
-
-5. Combine `TO authenticated` with owner or staff predicates; authentication alone is not authorization.
-
-6. For updates, use both `USING` and `WITH CHECK`, plus the required select policy.
-
-7. Keep staff roles in `staff_roles`; never trust user-editable metadata for authorization.
-
-8. Put privileged helper functions in a private schema with an explicit safe `search_path` and tightly restricted execute privileges.
-
-9. Never expose service-role credentials or blockchain signing secrets in client code.
-
-10. Keep authoritative statuses and audit/history events server-controlled.
-
-11. Do not create public views unless they use invoker security and pass a privacy review.
-
-12. Verify every migration with role-based tests before marking the task complete.
-
-## 12. Required regression tests
-
-- A signed-out user cannot query application tables.
-
-- User A cannot read or update User B's profile or registration.
-
-- A user cannot change `user_id`, profile email, receipt code, or staff role.
-
-- A user cannot fabricate `approved` or `anchored` status history.
-
-- A user cannot mark a registration `anchored` without a completed validated proof row.
-
-- A reviewer can read assigned registry data and add staff history/notes.
-
-- A non-staff account receives access denied at `/registry-admin` and at the database-policy layer.
-
-- A staff-role change takes effect through the authoritative role table.
-
-- Private documents are not accessible through public storage URLs.
-
-- No migration, log, frontend bundle, or environment variable exposes a service-role key or XRPL signing secret.
-
-## 13. Open decisions
+## 11. Open decisions
 
 - Who may serve as reviewer, administrator, database owner, security owner, and XRPL signing approver? No person is assigned until acceptance is documented.
 
@@ -541,15 +491,3 @@ If added later, Flare and XRPL must have explicit separate responsibilities. A s
 - Will the first blockchain pilot use XRPL testnet only, and what authorizes a mainnet move?
 
 - Is Flare necessary for the MVP, or should it remain a later independent verification layer?
-
-## 14. Immediate next database work
-
-1. Founder creates the first application account.
-
-2. Assign the first `admin` role through the documented server-side bootstrap process.
-
-3. Run an end-to-end test with one non-sensitive test property.
-
-4. Confirm the staff review and correction workflow before adding evidence tables.
-
-5. Define canonical JSON and XRPL testnet publishing requirements in a separate reviewed specification.

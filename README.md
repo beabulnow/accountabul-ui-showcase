@@ -1,25 +1,20 @@
-# Welcome to your Lovable project
+# Accountabul Property Verification Registry
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+A private, early-stage registry for submitting property records, reviewing them with authorized staff, and later publishing a compact record proof to the XRP Ledger. A registry receipt is not a deed, legal title, appraisal, ownership token, or government filing.
 
 ## Development
 
 Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git clone https://github.com/JibreelMuhammad/accountabul-property-registry.git
+cd accountabul-property-registry
+cp .env.example .env
 npm i
 npm run dev
 ```
+
+Use `npm ci` for repeatable validation from the committed lockfile. The production build is `npm run build`; static checks are `npm run lint`.
 
 ## Authentication
 
@@ -42,9 +37,10 @@ SQL that promotes the first admin after they sign up.
 
 ## Docs
 
-- [docs/UI_MIGRATION.md](docs/UI_MIGRATION.md) — routes, components, data model
-  and the remaining XRPL record-proof work.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — current routes, components, data model, and XRPL boundary.
+- [docs/DATABASE_SPEC.md](docs/DATABASE_SPEC.md) — implemented database reference and proposed future model.
 - [docs/ADMIN_BOOTSTRAP.md](docs/ADMIN_BOOTSTRAP.md) — first admin setup.
+- [docs/GITHUB_WORKFLOW.md](docs/GITHUB_WORKFLOW.md) — repository and Lovable synchronization rules.
 
 ## Built with
 
