@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { supabase } from "@/integrations/supabase/client";
+import { isProfileComplete, PROFILE_SELECT } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated")({
   ssr: false,
@@ -12,6 +13,23 @@ export const Route = createFileRoute("/_authenticated")({
     const { data } = await supabase.auth.getSession();
     if (!data.session) {
       throw redirect({ to: "/auth", search: { redirect: location.href } });
+    }
+
+    const profileRoutes = ["/complete-profile", "/profile"];
+    if (!profileRoutes.includes(location.pathname)) {
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select(PROFILE_SELECT)
+        .eq("id", data.session.user.id)
+        .maybeSingle();
+
+      if (error) throw error;
+      if (!isProfileComplete(profile)) {
+        throw redirect({
+          to: "/complete-profile",
+          search: { redirect: location.href },
+        });
+      }
     }
     return { user: data.session.user };
   },
