@@ -385,6 +385,10 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      sync_staff_access: {
+        Args: never
+        Returns: Database["public"]["Enums"]["staff_role"]
+      }
     }
     Enums: {
       property_type:
