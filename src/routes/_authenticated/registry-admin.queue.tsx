@@ -37,45 +37,27 @@ import { errorMessage } from "@/lib/utils";
 export const Route = createFileRoute("/_authenticated/registry-admin/queue")({
   head: () => ({
     meta: [
-      { title: "Registry staff workspace — Accountabul" },
+      { title: "Review queue — Accountabul registry staff" },
       {
         name: "description",
         content:
-          "Internal Accountabul registry workspace for reviewing property record submissions. Staff authorization required.",
+          "Internal review queue for Accountabul property record submissions. Staff authorization required.",
       },
       { name: "robots", content: "noindex, nofollow" },
-      { property: "og:title", content: "Registry staff workspace — Accountabul" },
-      { property: "og:description", content: "Staff-only registry review workspace." },
+      { property: "og:title", content: "Review queue — Accountabul registry staff" },
+      { property: "og:description", content: "Staff-only registry review queue." },
     ],
   }),
-  component: RegistryAdminPage,
+  component: RegistryQueuePage,
 });
 
-function RegistryAdminPage() {
+// The parent /registry-admin layout already gates on staff authorization.
+function RegistryQueuePage() {
   const { role, isStaff, checking } = useIsStaff();
-
-  if (checking) {
-    return (
-      <Section>
-        <p className="text-sm text-muted-foreground">Checking your registry authorization…</p>
-      </Section>
-    );
-  }
-
-  if (!isStaff) {
-    return (
-      <Section className="max-w-xl">
-        <h1 className="text-3xl">Access denied</h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          This workspace is limited to authorized registry staff. Your account does not have a
-          reviewer or admin role assigned.
-        </p>
-      </Section>
-    );
-  }
-
-  return <StaffWorkspace role={role!} />;
+  if (checking || !isStaff) return null;
+  return <StaffWorkspace role={role} />;
 }
+
 
 function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
   const queryClient = useQueryClient();
