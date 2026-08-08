@@ -60,6 +60,7 @@ function DashboardPage() {
   return (
     <Section>
       <SectionHeading
+        as="h1"
         eyebrow="Your account"
         title={profile?.first_name ? `Welcome, ${profile.first_name}` : "Your registry dashboard"}
         description="Manage your profile, register properties, and follow every registry submission from one place."

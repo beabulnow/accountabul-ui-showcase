@@ -15,23 +15,26 @@ export function SectionHeading({
   title,
   description,
   action,
+  as: Heading = "h2",
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   action?: ReactNode;
+  as?: "h1" | "h2";
 }) {
   return (
     <div className="grid gap-4 sm:flex sm:items-end sm:justify-between">
       <div className="min-w-0 max-w-2xl">
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h2 className="mt-2 text-3xl sm:text-4xl">{title}</h2>
+        <Heading className="mt-2 text-3xl sm:text-4xl">{title}</Heading>
         {description ? <p className="mt-3 text-base text-muted-foreground">{description}</p> : null}
       </div>
       {action ? <div className="shrink-0">{action}</div> : null}
     </div>
   );
 }
+
 
 export function Card({ children, className }: { children: ReactNode; className?: string }) {
   return (

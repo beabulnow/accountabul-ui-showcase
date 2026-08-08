@@ -20,9 +20,39 @@ export const Route = createFileRoute("/")({
           "Submit your property information, our team reviews it, and you can follow every step from your account.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://verifiabul.com/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://verifiabul.com/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://verifiabul.com/#website",
+              name: "Verifiabul",
+              url: "https://verifiabul.com/",
+              description:
+                "Property Verification Registry: submit your property information, have it reviewed by our team, and follow the review from your account.",
+              publisher: { "@id": "https://verifiabul.com/#organization" },
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://verifiabul.com/#organization",
+              name: "Verifiabul",
+              url: "https://verifiabul.com/",
+              description:
+                "Verifiabul operates a property verification registry for submitting and reviewing property records.",
+            },
+          ],
+        }),
+      },
+    ],
   }),
+
   component: Home,
 });
 
