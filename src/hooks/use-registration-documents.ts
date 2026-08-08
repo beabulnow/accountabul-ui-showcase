@@ -96,10 +96,7 @@ export async function deleteRegistrationDocument(document: RegistrationDocument)
     .remove([document.storage_path]);
   if (storageError) throw storageError;
 
-  const { error } = await supabase
-    .from("registration_documents")
-    .delete()
-    .eq("id", document.id);
+  const { error } = await supabase.from("registration_documents").delete().eq("id", document.id);
   if (error) throw error;
 }
 

@@ -44,16 +44,29 @@ export function useIsStaff() {
       return;
     }
     setChecking(true);
-    supabase
-      .from("staff_roles")
-      .select("role")
-      .eq("user_id", user.id)
-      .then(({ data }) => {
-        if (!active) return;
-        const roles = (data ?? []).map((r) => r.role);
-        setRole(roles.includes("admin") ? "admin" : roles.includes("reviewer") ? "reviewer" : null);
+    // sync_staff_access grants an allowlisted staff role to the caller's own
+    // account (confirmed email only) and returns the effective role.
+    supabase.rpc("sync_staff_access").then(({ data, error }) => {
+      if (!active) return;
+      if (!error) {
+        setRole(data === "admin" ? "admin" : data === "reviewer" ? "reviewer" : null);
         setChecking(false);
-      });
+        return;
+      }
+      supabase
+        .from("staff_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .then(({ data: rows }) => {
+          if (!active) return;
+          const roles = (rows ?? []).map((r) => r.role);
+          setRole(
+            roles.includes("admin") ? "admin" : roles.includes("reviewer") ? "reviewer" : null,
+          );
+          setChecking(false);
+        });
+    });
+
     return () => {
       active = false;
     };

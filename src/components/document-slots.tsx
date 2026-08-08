@@ -173,7 +173,11 @@ export function RegistrationDocumentSlots({
         const files = bySlot.get(slot.value) ?? [];
         if (!editable && files.length === 0) return null;
         return (
-          <DocumentSlotShell key={slot.value} label={slot.label} hint={editable ? slot.hint : undefined}>
+          <DocumentSlotShell
+            key={slot.value}
+            label={slot.label}
+            hint={editable ? slot.hint : undefined}
+          >
             {editable && onUpload ? (
               <SlotFilePicker
                 slot={slot.value}
@@ -202,7 +206,8 @@ export function RegistrationDocumentSlots({
                       {document.file_name}
                     </button>
                     <span className="shrink-0 text-xs text-muted-foreground">
-                      {formatBytes(Number(document.byte_size))} · {formatDateTime(document.uploaded_at)}
+                      {formatBytes(Number(document.byte_size))} ·{" "}
+                      {formatDateTime(document.uploaded_at)}
                     </span>
                     {editable ? (
                       <button
