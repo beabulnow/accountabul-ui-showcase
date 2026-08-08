@@ -8,15 +8,23 @@ export function useSession() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
-      setSession(next);
+    try {
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, next) => {
+        setSession(next);
+        setLoading(false);
+      });
+      supabase.auth.getSession().then(({ data }) => {
+        setSession(data.session);
+        setLoading(false);
+      });
+      return () => sub.subscription.unsubscribe();
+    } catch (error) {
+      // Backend not reachable (e.g. missing config): stay signed-out instead of blanking the page.
+      console.error(error);
+      setSession(null);
       setLoading(false);
-    });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
-    });
-    return () => sub.subscription.unsubscribe();
+      return;
+    }
   }, []);
 
   return { session, user: session?.user ?? null, loading };
