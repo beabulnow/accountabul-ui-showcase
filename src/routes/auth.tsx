@@ -57,7 +57,20 @@ function AuthPage() {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) navigate({ to: safeRedirect, replace: true });
     });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) navigate({ to: safeRedirect, replace: true });
+    });
+    return () => sub.subscription.unsubscribe();
   }, [navigate, safeRedirect]);
+
+  // If the Google popup is closed or blocked, its promise never settles. Clear
+  // the pending state when the user comes back so the page is never stuck.
+  useEffect(() => {
+    if (!googleBusy) return;
+    const clear = () => setGoogleBusy(false);
+    window.addEventListener("focus", clear);
+    return () => window.removeEventListener("focus", clear);
+  }, [googleBusy]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
