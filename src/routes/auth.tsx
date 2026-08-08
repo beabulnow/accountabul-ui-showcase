@@ -126,10 +126,14 @@ function AuthPage() {
 
   async function handleGoogle() {
     setNotice(null);
-    setBusy(true);
+    setGoogleBusy(true);
     try {
+      // The redirect target must be a plain, allow-listed same-origin URL. The
+      // intended destination is kept separately and applied after the session
+      // is confirmed.
+      sessionStorage.setItem("accountabul:redirect", safeRedirect);
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: `${window.location.origin}/auth?redirect=${encodeURIComponent(safeRedirect)}`,
+        redirect_uri: `${window.location.origin}/auth`,
       });
       if (result.error) throw new Error(result.error.message ?? "Google sign-in failed");
       if (result.redirected) return;
@@ -140,7 +144,7 @@ function AuthPage() {
       setNotice(message);
       toast.error(message);
     } finally {
-      setBusy(false);
+      setGoogleBusy(false);
     }
   }
 
