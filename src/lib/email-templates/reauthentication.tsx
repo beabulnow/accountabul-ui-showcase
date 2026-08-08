@@ -68,3 +68,15 @@ const footer = {
   paddingTop: '18px',
   margin: '32px 0 0',
 }
+const codeStyle = {
+  display: 'inline-block',
+  fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+  fontSize: '24px',
+  letterSpacing: '0.18em',
+  color: '#1d2c33',
+  backgroundColor: '#f4f6f2',
+  border: '1px solid #e4e7e1',
+  borderRadius: '10px',
+  padding: '14px 20px',
+  margin: '0 0 22px',
+}
