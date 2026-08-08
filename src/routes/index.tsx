@@ -55,6 +55,8 @@ const isNotList = [
 ];
 
 function Home() {
+  const { user } = useSession();
+
   return (
     <div>
       <div className="relative overflow-hidden border-b border-border bg-surface">
