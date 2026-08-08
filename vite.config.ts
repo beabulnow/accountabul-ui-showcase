@@ -6,6 +6,17 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// Lovable Cloud provides the publishable backend configuration under the
+// server names. Mirror only those public values into Vite's client namespace
+// so direct-loaded auth routes never fall through to `process.env` in the
+// browser (where `process` does not exist).
+if (!process.env["VITE_SUPABASE_URL"] && process.env["SUPABASE_URL"]) {
+  process.env["VITE_SUPABASE_URL"] = process.env["SUPABASE_URL"];
+}
+if (!process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] && process.env["SUPABASE_PUBLISHABLE_KEY"]) {
+  process.env["VITE_SUPABASE_PUBLISHABLE_KEY"] = process.env["SUPABASE_PUBLISHABLE_KEY"];
+}
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
