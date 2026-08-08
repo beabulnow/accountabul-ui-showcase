@@ -85,6 +85,31 @@ function RegistrationDetailPage() {
 
   const anchor = Array.isArray(row.record_anchors) ? row.record_anchors[0] : row.record_anchors;
   const status = row.status as RegistrationStatus;
+  const documentsEditable =
+    status === "draft" || status === "needs_information" || status === "submitted";
+
+  async function handleUpload(slot: RegistrationDocumentType, files: FileList) {
+    if (!row) return;
+    const accepted: File[] = [];
+    for (const file of Array.from(files)) {
+      const problem = validateDocumentFile(file);
+      if (problem) {
+        toast.error(problem);
+        continue;
+      }
+      accepted.push(file);
+    }
+    if (accepted.length === 0) return;
+
+    const { uploaded, failures } = await uploadRegistrationDocuments({
+      userId: row.user_id,
+      registrationId: row.id,
+      documents: { [slot]: accepted },
+    });
+    for (const failure of failures) toast.error(`${failure.fileName}: ${failure.message}`);
+    if (uploaded > 0) toast.success(`${uploaded} document${uploaded === 1 ? "" : "s"} added`);
+  }
+
 
   return (
     <Section className="max-w-3xl">
