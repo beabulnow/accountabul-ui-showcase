@@ -9,20 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedRegistryAdminRouteImport } from './routes/_authenticated/registry-admin'
-import { Route as AuthenticatedRegisterPropertyRouteImport } from './routes/_authenticated/register-property'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as AuthenticatedCompleteProfileRouteImport } from './routes/_authenticated/complete-profile'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedRegisterPropertyRouteImport } from './routes/_authenticated/register-property'
+import { Route as AuthenticatedRegistryAdminRouteImport } from './routes/_authenticated/registry-admin'
 import { Route as AuthenticatedRegistrationsIdRouteImport } from './routes/_authenticated/registrations.$id'
 
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -30,41 +34,37 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
-  id: '/_authenticated',
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthenticatedRegistryAdminRoute =
-  AuthenticatedRegistryAdminRouteImport.update({
-    id: '/registry-admin',
-    path: '/registry-admin',
+const AuthenticatedCompleteProfileRoute =
+  AuthenticatedCompleteProfileRouteImport.update({
+    id: '/complete-profile',
+    path: '/complete-profile',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRegisterPropertyRoute =
   AuthenticatedRegisterPropertyRouteImport.update({
     id: '/register-property',
     path: '/register-property',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
-const AuthenticatedCompleteProfileRoute =
-  AuthenticatedCompleteProfileRouteImport.update({
-    id: '/complete-profile',
-    path: '/complete-profile',
+const AuthenticatedRegistryAdminRoute =
+  AuthenticatedRegistryAdminRouteImport.update({
+    id: '/registry-admin',
+    path: '/registry-admin',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedRegistrationsIdRoute =
@@ -155,18 +155,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -176,32 +169,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/registry-admin': {
-      id: '/_authenticated/registry-admin'
-      path: '/registry-admin'
-      fullPath: '/registry-admin'
-      preLoaderRoute: typeof AuthenticatedRegistryAdminRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/register-property': {
-      id: '/_authenticated/register-property'
-      path: '/register-property'
-      fullPath: '/register-property'
-      preLoaderRoute: typeof AuthenticatedRegisterPropertyRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+    '/_authenticated/complete-profile': {
+      id: '/_authenticated/complete-profile'
+      path: '/complete-profile'
+      fullPath: '/complete-profile'
+      preLoaderRoute: typeof AuthenticatedCompleteProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -211,11 +197,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/complete-profile': {
-      id: '/_authenticated/complete-profile'
-      path: '/complete-profile'
-      fullPath: '/complete-profile'
-      preLoaderRoute: typeof AuthenticatedCompleteProfileRouteImport
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/register-property': {
+      id: '/_authenticated/register-property'
+      path: '/register-property'
+      fullPath: '/register-property'
+      preLoaderRoute: typeof AuthenticatedRegisterPropertyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/registry-admin': {
+      id: '/_authenticated/registry-admin'
+      path: '/registry-admin'
+      fullPath: '/registry-admin'
+      preLoaderRoute: typeof AuthenticatedRegistryAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/registrations/$id': {
