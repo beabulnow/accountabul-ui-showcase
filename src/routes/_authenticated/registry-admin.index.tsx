@@ -205,14 +205,78 @@ function RegistryAdminHome() {
   if (checking || !isStaff) return null;
 
   const completedProfiles = (profiles ?? []).filter((p) => p.profile_completed_at).length;
+  const myProfile = user ? profileById.get(user.id) : undefined;
+  const myName =
+    myProfile?.full_name ??
+    [myProfile?.first_name, myProfile?.last_name].filter(Boolean).join(" ") ??
+    null;
+  const displayName = myName || myProfile?.email || user?.email || "reviewer";
+  const myLastReview = (myReviews ?? [])[0];
 
   return (
     <Section>
       <SectionHeading
         eyebrow="Business portal"
-        title="Registry operations overview"
-        description="What the registry is holding right now: submission volume, the review workload waiting on staff, evidence coverage and the latest review activity."
+        title={`Welcome back, ${displayName}`}
+        description="Your personal registry portal: what you have reviewed, plus the current state of the registry across the whole team."
       />
+
+      <Card className="mt-8">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0">
+            <p className="eyebrow">Signed in as</p>
+            <p className="mt-1 truncate text-lg">{displayName}</p>
+            <p className="truncate text-sm text-muted-foreground">
+              {myProfile?.email ?? user?.email} · {role === "admin" ? "Administrator" : "Reviewer"}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-6 text-sm">
+            <div>
+              <p className="text-muted-foreground">Your decisions</p>
+              <p className="text-2xl tabular-nums">{myReviews?.length ?? 0}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Your notes</p>
+              <p className="text-2xl tabular-nums">{myNotes?.length ?? 0}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Last decision</p>
+              <p className="text-sm">
+                {myLastReview ? formatDateTime(myLastReview.created_at) : "—"}
+              </p>
+            </div>
+          </div>
+        </div>
+        {(myReviews ?? []).length > 0 ? (
+          <ul className="mt-5 grid gap-2">
+            {(myReviews ?? []).slice(0, 5).map((event) => (
+              <li
+                key={event.id}
+                className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm"
+              >
+                <p className="truncate">
+                  {registrationById.get(event.registration_id)?.receipt_code ?? "Record"} ·{" "}
+                  {event.from_status
+                    ? `${statusLabels[event.from_status as RegistrationStatus]} → `
+                    : ""}
+                  {statusLabels[event.to_status as RegistrationStatus]}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {formatDateTime(event.created_at)}
+                  {event.user_visible_message ? ` · “${event.user_visible_message}”` : ""}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-5 text-sm text-muted-foreground">
+            You have not recorded a review decision yet. Open the review queue to take the next
+            submission.
+          </p>
+        )}
+      </Card>
+
+
 
       {isLoading ? (
         <p className="mt-8 text-sm text-muted-foreground">Loading registry data…</p>
