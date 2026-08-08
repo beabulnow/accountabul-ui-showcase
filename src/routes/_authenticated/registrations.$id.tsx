@@ -109,7 +109,7 @@ function RegistrationDetailPage() {
         <h2 className="text-xl">Submitted details</h2>
         <dl className="mt-3">
           <DetailRow label="Submitter" value={row.submitter_full_name} />
-          <Row
+          <DetailRow
             label="Relationship"
             value={
               row.relationship === "other" && row.relationship_other
