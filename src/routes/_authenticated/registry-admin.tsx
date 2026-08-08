@@ -310,29 +310,22 @@ function SubmissionInspector({
   });
 
   async function applyStatus() {
+    if (nextStatus === registration.status) return;
     setBusy(true);
-    const from = registration.status as RegistrationStatus;
-    const { error } = await supabase
-      .from("property_registrations")
-      .update({ status: nextStatus })
-      .eq("id", registration.id);
+
+    const { error } = await supabase.rpc("review_registration_status", {
+      _registration_id: registration.id,
+      _to_status: nextStatus,
+      _user_visible_message: userMessage.trim() || undefined,
+    });
+
+    setBusy(false);
 
     if (error) {
-      setBusy(false);
       toast.error(error.message);
       return;
     }
 
-    await supabase.from("registration_status_history").insert({
-      registration_id: registration.id,
-      from_status: from,
-      to_status: nextStatus,
-      changed_by: staffUserId,
-      is_user_visible: true,
-      user_visible_message: userMessage.trim() || null,
-    });
-
-    setBusy(false);
     setUserMessage("");
     toast.success(`Status set to ${statusLabels[nextStatus]}`);
     onChanged();
