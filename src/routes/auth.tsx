@@ -61,9 +61,15 @@ function AuthPage() {
   }, [search.redirect]);
 
   useEffect(() => {
+    let done = false;
     const go = () => {
+      if (done) return;
+      done = true;
+      const target = resolveRedirect();
       sessionStorage.removeItem("accountabul:redirect");
-      navigate({ to: resolveRedirect(), replace: true });
+      // Full navigation: the OAuth popup writes the session from a different
+      // execution context, and a hard load guarantees every client picks it up.
+      window.location.replace(target);
     };
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) go();
@@ -73,6 +79,7 @@ function AuthPage() {
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate, resolveRedirect]);
+
 
   // If the Google popup is closed or blocked, its promise never settles. Clear
   // the pending state when the user comes back so the page is never stuck.
@@ -148,8 +155,19 @@ function AuthPage() {
       });
       if (result.error) throw new Error(result.error.message ?? "Google sign-in failed");
       if (result.redirected) return;
-      toast.success("Signed in");
-      navigate({ to: resolveRedirect(), replace: true });
+      // Confirm the session actually persisted before leaving the page — a
+      // silent storage failure would otherwise land the user on a guarded
+      // route that immediately bounces back here.
+      const { data } = await supabase.auth.getSession();
+      if (!data.session) {
+        throw new Error(
+          "Google signed you in, but the session could not be saved in this browser. Try again outside private browsing, or use email and password.",
+        );
+      }
+      const target = resolveRedirect();
+      sessionStorage.removeItem("accountabul:redirect");
+      window.location.replace(target);
+
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
       setNotice(message);
