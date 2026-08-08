@@ -80,7 +80,6 @@ function AuthPage() {
     return () => sub.subscription.unsubscribe();
   }, [navigate, resolveRedirect]);
 
-
   // If the Google popup is closed or blocked, its promise never settles. Clear
   // the pending state when the user comes back so the page is never stuck.
   useEffect(() => {
@@ -167,7 +166,6 @@ function AuthPage() {
       const target = resolveRedirect();
       sessionStorage.removeItem("accountabul:redirect");
       window.location.replace(target);
-
     } catch (err) {
       const message = err instanceof Error ? err.message : "Google sign-in failed";
       setNotice(message);
