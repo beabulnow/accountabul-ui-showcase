@@ -1,12 +1,17 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { errorMessage } from "@/lib/utils";
 import { Card, DetailRow, Section } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { StatusHistory } from "@/components/status-history";
+import { RegistrationDocumentSlots } from "@/components/document-slots";
 import { useRegistrationHistory } from "@/hooks/use-registration";
+import { uploadRegistrationDocuments } from "@/hooks/use-registration-documents";
+import { validateDocumentFile, type RegistrationDocumentType } from "@/lib/documents";
+
 import {
   formatDateTime,
   labelFor,
