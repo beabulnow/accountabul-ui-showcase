@@ -16,57 +16,24 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
-          avatar_path: string | null
-          bio: string | null
           created_at: string
-          date_of_birth: string | null
           email: string | null
-          first_name: string | null
           full_name: string | null
           id: string
-          last_name: string | null
-          middle_name: string | null
-          phone_e164: string | null
-          phone_verified_at: string | null
-          privacy_accepted_at: string | null
-          privacy_policy_version: string | null
-          profile_completed_at: string | null
           updated_at: string
         }
         Insert: {
-          avatar_path?: string | null
-          bio?: string | null
           created_at?: string
-          date_of_birth?: string | null
           email?: string | null
-          first_name?: string | null
           full_name?: string | null
           id: string
-          last_name?: string | null
-          middle_name?: string | null
-          phone_e164?: string | null
-          phone_verified_at?: string | null
-          privacy_accepted_at?: string | null
-          privacy_policy_version?: string | null
-          profile_completed_at?: string | null
           updated_at?: string
         }
         Update: {
-          avatar_path?: string | null
-          bio?: string | null
           created_at?: string
-          date_of_birth?: string | null
           email?: string | null
-          first_name?: string | null
           full_name?: string | null
           id?: string
-          last_name?: string | null
-          middle_name?: string | null
-          phone_e164?: string | null
-          phone_verified_at?: string | null
-          privacy_accepted_at?: string | null
-          privacy_policy_version?: string | null
-          profile_completed_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -305,7 +272,38 @@ export type Database = {
           _to_status: Database["public"]["Enums"]["registration_status"]
           _user_visible_message?: string
         }
-        Returns: undefined
+        Returns: {
+          address_line1: string
+          address_line2: string | null
+          affirm_accurate: boolean
+          affirm_authorized: boolean
+          affirm_not_title: boolean
+          city: string
+          county: string
+          created_at: string
+          id: string
+          normalized_address: string | null
+          parcel_id: string | null
+          postal_code: string
+          property_type: Database["public"]["Enums"]["property_type"]
+          public_source_notes: string | null
+          receipt_code: string
+          relationship: Database["public"]["Enums"]["submitter_relationship"]
+          relationship_other: string | null
+          state: string
+          status: Database["public"]["Enums"]["registration_status"]
+          submitted_at: string | null
+          submitter_full_name: string
+          updated_at: string
+          user_id: string
+          user_note: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "property_registrations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
     }
     Enums: {
