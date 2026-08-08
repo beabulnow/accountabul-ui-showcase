@@ -17,6 +17,8 @@ import {
 } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { StatusHistory } from "@/components/status-history";
+import { RegistrationDocumentSlots } from "@/components/document-slots";
+
 import { useRegistrationHistory, useStaffNotes } from "@/hooks/use-registration";
 import { useIsStaff, useSession } from "@/hooks/use-session";
 import {
@@ -487,6 +489,15 @@ function SubmissionInspector({
           ))}
         </ul>
       </Card>
+
+      <Card className="grid gap-2">
+        <h3 className="text-lg">Supporting documents</h3>
+        <RegistrationDocumentSlots
+          registrationId={registration.id}
+          emptyLabel="No documents were attached to this submission."
+        />
+      </Card>
+
 
       <Card className="grid gap-2">
         <h3 className="text-lg">History</h3>

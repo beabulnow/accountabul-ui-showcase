@@ -1,12 +1,17 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { errorMessage } from "@/lib/utils";
 import { Card, DetailRow, Section } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { StatusHistory } from "@/components/status-history";
+import { RegistrationDocumentSlots } from "@/components/document-slots";
 import { useRegistrationHistory } from "@/hooks/use-registration";
+import { uploadRegistrationDocuments } from "@/hooks/use-registration-documents";
+import { validateDocumentFile, type RegistrationDocumentType } from "@/lib/documents";
+
 import {
   formatDateTime,
   labelFor,
@@ -85,6 +90,31 @@ function RegistrationDetailPage() {
 
   const anchor = Array.isArray(row.record_anchors) ? row.record_anchors[0] : row.record_anchors;
   const status = row.status as RegistrationStatus;
+  const documentsEditable =
+    status === "draft" || status === "needs_information" || status === "submitted";
+
+  async function handleUpload(slot: RegistrationDocumentType, files: FileList) {
+    if (!row) return;
+    const accepted: File[] = [];
+    for (const file of Array.from(files)) {
+      const problem = validateDocumentFile(file);
+      if (problem) {
+        toast.error(problem);
+        continue;
+      }
+      accepted.push(file);
+    }
+    if (accepted.length === 0) return;
+
+    const { uploaded, failures } = await uploadRegistrationDocuments({
+      userId: row.user_id,
+      registrationId: row.id,
+      documents: { [slot]: accepted },
+    });
+    for (const failure of failures) toast.error(`${failure.fileName}: ${failure.message}`);
+    if (uploaded > 0) toast.success(`${uploaded} document${uploaded === 1 ? "" : "s"} added`);
+  }
+
 
   return (
     <Section className="max-w-3xl">
@@ -152,6 +182,24 @@ function RegistrationDetailPage() {
           )}
         </div>
       </Card>
+
+      <Card className="mt-6">
+        <h2 className="text-xl">Supporting documents</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {documentsEditable
+            ? "Add or remove evidence while this record is still open for edits."
+            : "Documents attached to this submission."}
+        </p>
+        <div className="mt-4">
+          <RegistrationDocumentSlots
+            registrationId={row.id}
+            userId={row.user_id}
+            editable={documentsEditable}
+            onUpload={handleUpload}
+          />
+        </div>
+      </Card>
+
 
       <Card className="mt-6">
         <h2 className="text-xl">Status history</h2>

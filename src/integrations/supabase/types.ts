@@ -196,6 +196,53 @@ export type Database = {
           },
         ]
       }
+      registration_documents: {
+        Row: {
+          byte_size: number
+          created_at: string
+          document_type: Database["public"]["Enums"]["registration_document_type"]
+          file_name: string
+          id: string
+          mime_type: string
+          registration_id: string
+          storage_path: string
+          uploaded_at: string
+          user_id: string
+        }
+        Insert: {
+          byte_size: number
+          created_at?: string
+          document_type: Database["public"]["Enums"]["registration_document_type"]
+          file_name: string
+          id?: string
+          mime_type: string
+          registration_id: string
+          storage_path: string
+          uploaded_at?: string
+          user_id: string
+        }
+        Update: {
+          byte_size?: number
+          created_at?: string
+          document_type?: Database["public"]["Enums"]["registration_document_type"]
+          file_name?: string
+          id?: string
+          mime_type?: string
+          registration_id?: string
+          storage_path?: string
+          uploaded_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registration_documents_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "property_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       registration_status_history: {
         Row: {
           changed_by: string | null
@@ -349,6 +396,15 @@ export type Database = {
         | "commercial"
         | "mixed_use"
         | "other"
+      registration_document_type:
+        | "deed_title"
+        | "tax_statement"
+        | "mortgage_statement"
+        | "insurance_declaration"
+        | "utility_occupancy"
+        | "photo_id"
+        | "authority_document"
+        | "other"
       registration_status:
         | "draft"
         | "submitted"
@@ -499,6 +555,16 @@ export const Constants = {
         "land",
         "commercial",
         "mixed_use",
+        "other",
+      ],
+      registration_document_type: [
+        "deed_title",
+        "tax_statement",
+        "mortgage_statement",
+        "insurance_declaration",
+        "utility_occupancy",
+        "photo_id",
+        "authority_document",
         "other",
       ],
       registration_status: [

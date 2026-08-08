@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
+import { PendingDocumentSlots } from "@/components/document-slots";
 import {
   Card,
   Field,
@@ -15,6 +16,8 @@ import {
 } from "@/components/ui-kit";
 import { useProfile } from "@/hooks/use-profile";
 import { useSession } from "@/hooks/use-session";
+import { uploadRegistrationDocuments } from "@/hooks/use-registration-documents";
+import { countPendingDocuments, type PendingDocuments } from "@/lib/documents";
 import { profileDisplayName } from "@/lib/profile";
 import { errorMessage } from "@/lib/utils";
 import {
@@ -24,6 +27,7 @@ import {
   relationshipOptions,
   type RegistrationInput,
 } from "@/lib/registry";
+
 
 export const Route = createFileRoute("/_authenticated/register-property")({
   head: () => ({
@@ -46,8 +50,11 @@ function RegisterPropertyPage() {
   const { user } = useSession();
   const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
   const [form, setForm] = useState<RegistrationInput>(emptyRegistration);
+  const [documents, setDocuments] = useState<PendingDocuments>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const documentCount = countPendingDocuments(documents);
 
   useEffect(() => {
     if (!profile) return;
@@ -80,6 +87,13 @@ function RegisterPropertyPage() {
         toast.error("All three affirmations are required before submitting");
         return;
       }
+      if (documentCount === 0) {
+        setErrors({
+          documents: "Attach at least one supporting document before submitting for review.",
+        });
+        toast.error("At least one supporting document is required to submit");
+        return;
+      }
     }
 
     setBusy(true);
@@ -109,10 +123,26 @@ function RegisterPropertyPage() {
     // The initial status history event is written server-side by a database
     // trigger so clients cannot fabricate history entries.
 
+    // Documents upload after the row exists so every object carries a real
+    // registration id. A failed file is reported; the saved record stands.
+    if (documentCount > 0) {
+      setUploading(true);
+      const { failures } = await uploadRegistrationDocuments({
+        userId: user.id,
+        registrationId: data.id,
+        documents,
+      });
+      setUploading(false);
+      for (const failure of failures) {
+        toast.error(`${failure.fileName}: ${failure.message}`);
+      }
+    }
+
     setBusy(false);
     toast.success(intent === "submit" ? "Submitted for review" : "Draft saved");
     navigate({ to: "/registrations/$id", params: { id: data.id } });
   }
+
 
   return (
     <Section className="max-w-3xl">
@@ -307,6 +337,23 @@ function RegisterPropertyPage() {
           </Field>
         </Card>
 
+        <Card className="grid gap-4">
+          <div>
+            <h2 className="text-xl">Supporting documents</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Each evidence type has its own slot so reviewers receive a pre-sorted file. At least
+              one document is required to submit for review; drafts can be saved without any.
+            </p>
+          </div>
+          <PendingDocumentSlots value={documents} onChange={setDocuments} disabled={busy} />
+          {errors["documents"] ? (
+            <p role="alert" className="text-xs text-destructive">
+              {errors["documents"]}
+            </p>
+          ) : null}
+        </Card>
+
+
         <Card className="grid gap-3">
           <h2 className="text-xl">Affirmations</h2>
           <p className="text-sm text-muted-foreground">
@@ -352,8 +399,9 @@ function RegisterPropertyPage() {
             disabled={busy || profileLoading || !form.submitter_full_name}
             className={primaryButtonClass}
           >
-            {busy ? "Working…" : "Submit for review"}
+            {uploading ? "Uploading documents…" : busy ? "Working…" : "Submit for review"}
           </button>
+
           <button
             type="button"
             disabled={busy || profileLoading || !form.submitter_full_name}
