@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_authenticated/complete-profile")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Complete your profile — Verifiabul Registry" },
+      { title: "Complete your profile | Verifiabul" },
       {
         name: "description",
         content:

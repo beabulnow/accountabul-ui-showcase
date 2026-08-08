@@ -17,13 +17,13 @@ export const Route = createFileRoute("/auth")({
   validateSearch: searchSchema,
   head: () => ({
     meta: [
-      { title: "Sign in or create an account — Verifiabul Registry" },
+      { title: "Sign in or create an account | Verifiabul" },
       {
         name: "description",
         content:
           "Sign in to the Verifiabul Property Verification Registry, or create an account to register a property record for staff review.",
       },
-      { property: "og:title", content: "Sign in — Verifiabul Registry" },
+      { property: "og:title", content: "Sign in or create an account | Verifiabul" },
       {
         property: "og:description",
         content: "Access your property registrations and registry receipts.",

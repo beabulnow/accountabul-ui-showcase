@@ -24,13 +24,13 @@ import {
 export const Route = createFileRoute("/_authenticated/registrations/$id")({
   head: () => ({
     meta: [
-      { title: "Registry receipt — Verifiabul Registry" },
+      { title: "Registry receipt | Verifiabul" },
       {
         name: "description",
         content:
           "View your Verifiabul registry receipt: submitted property details, review status history and record-proof state.",
       },
-      { property: "og:title", content: "Registry receipt — Verifiabul Registry" },
+      { property: "og:title", content: "Registry receipt | Verifiabul" },
       { property: "og:description", content: "Your property registration receipt and status." },
     ],
   }),
