@@ -14,13 +14,13 @@ import { useIsStaff, useSession } from "@/hooks/use-session";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Your registrations — Verifiabul Registry" },
+      { title: "Your registrations | Verifiabul" },
       {
         name: "description",
         content:
           "Track the property records you have registered with Verifiabul, their review status and their registry receipts.",
       },
-      { property: "og:title", content: "Your registrations — Verifiabul Registry" },
+      { property: "og:title", content: "Your registrations | Verifiabul" },
       { property: "og:description", content: "Your property registry dashboard." },
     ],
   }),

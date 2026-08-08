@@ -10,13 +10,13 @@ export const Route = createFileRoute("/reset-password")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Set a new password — Verifiabul Registry" },
+      { title: "Set a new password | Verifiabul" },
       {
         name: "description",
         content:
           "Choose a new password for your Verifiabul Property Verification Registry account.",
       },
-      { property: "og:title", content: "Set a new password — Verifiabul Registry" },
+      { property: "og:title", content: "Set a new password | Verifiabul" },
       { property: "og:description", content: "Complete your password reset." },
     ],
   }),

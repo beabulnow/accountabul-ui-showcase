@@ -7,17 +7,17 @@ import { useSession } from "@/hooks/use-session";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Verifiabul — Property Verification Registry" },
+      { title: "Verifiabul | Property Verification Registry" },
       {
         name: "description",
         content:
-          "Submit your property information and have it reviewed by our team. You can follow the review from your account and see exactly where it stands.",
+          "Submit your property details and documents to Verifiabul, then track the review in your account until our team confirms where the record stands.",
       },
-      { property: "og:title", content: "Verifiabul — Property Verification Registry" },
+      { property: "og:title", content: "Verifiabul | Property Verification Registry" },
       {
         property: "og:description",
         content:
-          "Submit your property information, our team reviews it, and you can follow every step from your account.",
+          "Submit your property details and documents to Verifiabul, then track the review in your account until our team confirms where the record stands.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://verifiabul.com/" },

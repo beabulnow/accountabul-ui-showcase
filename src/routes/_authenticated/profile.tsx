@@ -6,7 +6,7 @@ import { Section, SectionHeading } from "@/components/ui-kit";
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
-      { title: "Your profile — Verifiabul Registry" },
+      { title: "Your profile | Verifiabul" },
       { name: "description", content: "Review and update your Verifiabul registry profile." },
       { name: "robots", content: "noindex, nofollow" },
     ],
