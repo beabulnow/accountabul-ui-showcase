@@ -2,10 +2,11 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
-import { useSession } from "@/hooks/use-session";
+import { useIsStaff, useSession } from "@/hooks/use-session";
 
 export function SiteHeader() {
   const { user, loading } = useSession();
+  const { isStaff } = useIsStaff();
   const navigate = useNavigate();
 
   async function signOut() {
