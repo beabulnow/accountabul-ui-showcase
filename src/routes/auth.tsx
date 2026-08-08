@@ -61,11 +61,15 @@ function AuthPage() {
       : "/dashboard";
 
   useEffect(() => {
+    const go = () => {
+      sessionStorage.removeItem("accountabul:redirect");
+      navigate({ to: safeRedirect, replace: true });
+    };
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate({ to: safeRedirect, replace: true });
+      if (data.session) go();
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) navigate({ to: safeRedirect, replace: true });
+      if (session) go();
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate, safeRedirect]);
