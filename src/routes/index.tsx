@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, FileSearch, ShieldCheck, XCircle } from "lucide-react";
 
 import { Card, Section, SectionHeading } from "@/components/ui-kit";
+import { useSession } from "@/hooks/use-session";
 
 export const Route = createFileRoute("/")({
   head: () => ({
