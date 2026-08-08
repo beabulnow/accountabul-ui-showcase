@@ -34,7 +34,7 @@ import {
 import { profileDisplayName } from "@/lib/profile";
 import { errorMessage } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/registry-admin")({
+export const Route = createFileRoute("/_authenticated/registry-admin/queue")({
   head: () => ({
     meta: [
       { title: "Registry staff workspace — Accountabul" },
