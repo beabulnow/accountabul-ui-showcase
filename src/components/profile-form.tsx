@@ -19,6 +19,16 @@ import {
 } from "@/lib/profile";
 import { errorMessage } from "@/lib/utils";
 
+const emptyForm: ProfileFormInput = {
+  first_name: "",
+  middle_name: "",
+  last_name: "",
+  date_of_birth: "",
+  phone: "",
+  bio: "",
+  privacy_accepted: false,
+};
+
 function namePartsFromMetadata(metadata: Record<string, unknown> | undefined) {
   const given = typeof metadata?.given_name === "string" ? metadata.given_name.trim() : "";
   const family = typeof metadata?.family_name === "string" ? metadata.family_name.trim() : "";

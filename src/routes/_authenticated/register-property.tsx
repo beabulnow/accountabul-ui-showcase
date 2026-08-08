@@ -358,7 +358,7 @@ function RegisterPropertyPage() {
             type="button"
             disabled={busy || profileLoading || !form.submitter_full_name}
             onClick={() => void save("draft")}
-            className="inline-flex items-center justify-center rounded-full border border-input bg-background px-5 py-2.5 text-sm font-medium transition-colors hover:bg-accent disabled:opacity-60"
+            className={secondaryButtonClass}
           >
             Save draft
           </button>
