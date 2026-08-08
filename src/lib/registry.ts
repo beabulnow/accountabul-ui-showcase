@@ -89,7 +89,22 @@ export const registrationSchema = z.object({
   affirm_accurate: z.boolean(),
   affirm_authorized: z.boolean(),
   affirm_not_title: z.boolean(),
+}).superRefine((value, ctx) => {
+  if (value.relationship === "other" && !value.relationship_other?.trim()) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["relationship_other"],
+      message: "Describe your relationship to this property",
+    });
+  }
 });
+
+/** Statuses a reviewer can set by hand. `anchored` is written only by the
+ * anchoring pipeline, which must supply a complete validated on-chain proof;
+ * offering it in the UI would surface an action the database always rejects. */
+export const STAFF_SETTABLE_STATUSES = REGISTRATION_STATUSES.filter(
+  (status) => status !== "anchored",
+);
 
 export type RegistrationInput = z.infer<typeof registrationSchema>;
 
