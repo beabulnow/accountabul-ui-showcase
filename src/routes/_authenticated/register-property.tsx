@@ -337,6 +337,23 @@ function RegisterPropertyPage() {
           </Field>
         </Card>
 
+        <Card className="grid gap-4">
+          <div>
+            <h2 className="text-xl">Supporting documents</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Each evidence type has its own slot so reviewers receive a pre-sorted file. At least
+              one document is required to submit for review; drafts can be saved without any.
+            </p>
+          </div>
+          <PendingDocumentSlots value={documents} onChange={setDocuments} disabled={busy} />
+          {errors["documents"] ? (
+            <p role="alert" className="text-xs text-destructive">
+              {errors["documents"]}
+            </p>
+          ) : null}
+        </Card>
+
+
         <Card className="grid gap-3">
           <h2 className="text-xl">Affirmations</h2>
           <p className="text-sm text-muted-foreground">
