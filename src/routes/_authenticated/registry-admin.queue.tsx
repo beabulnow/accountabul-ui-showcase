@@ -54,9 +54,10 @@ export const Route = createFileRoute("/_authenticated/registry-admin/queue")({
 // The parent /registry-admin layout already gates on staff authorization.
 function RegistryQueuePage() {
   const { role, isStaff, checking } = useIsStaff();
-  if (checking || !isStaff) return null;
+  if (checking || !isStaff || !role) return null;
   return <StaffWorkspace role={role} />;
 }
+
 
 
 function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
