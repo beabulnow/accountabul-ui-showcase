@@ -154,6 +154,24 @@ function RegistrationDetailPage() {
       </Card>
 
       <Card className="mt-6">
+        <h2 className="text-xl">Supporting documents</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {documentsEditable
+            ? "Add or remove evidence while this record is still open for edits."
+            : "Documents attached to this submission."}
+        </p>
+        <div className="mt-4">
+          <RegistrationDocumentSlots
+            registrationId={row.id}
+            userId={row.user_id}
+            editable={documentsEditable}
+            onUpload={handleUpload}
+          />
+        </div>
+      </Card>
+
+
+      <Card className="mt-6">
         <h2 className="text-xl">Status history</h2>
         <div className="mt-4">
           <StatusHistory entries={history ?? []} />
