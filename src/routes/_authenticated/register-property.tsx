@@ -28,7 +28,6 @@ import {
   type RegistrationInput,
 } from "@/lib/registry";
 
-
 export const Route = createFileRoute("/_authenticated/register-property")({
   head: () => ({
     meta: [
@@ -142,7 +141,6 @@ function RegisterPropertyPage() {
     toast.success(intent === "submit" ? "Submitted for review" : "Draft saved");
     navigate({ to: "/registrations/$id", params: { id: data.id } });
   }
-
 
   return (
     <Section className="max-w-3xl">
@@ -352,7 +350,6 @@ function RegisterPropertyPage() {
             </p>
           ) : null}
         </Card>
-
 
         <Card className="grid gap-3">
           <h2 className="text-xl">Affirmations</h2>

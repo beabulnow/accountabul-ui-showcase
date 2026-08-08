@@ -115,7 +115,6 @@ function RegistrationDetailPage() {
     if (uploaded > 0) toast.success(`${uploaded} document${uploaded === 1 ? "" : "s"} added`);
   }
 
-
   return (
     <Section className="max-w-3xl">
       <Link to="/dashboard" className="text-sm text-muted-foreground underline underline-offset-4">
@@ -199,7 +198,6 @@ function RegistrationDetailPage() {
           />
         </div>
       </Card>
-
 
       <Card className="mt-6">
         <h2 className="text-xl">Status history</h2>

@@ -188,10 +188,16 @@ function RegistryAdminHome() {
       ) : (
         <>
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Metric label="Total records" value={stats.total} hint="Every submission, drafts included" />
+            <Metric
+              label="Total records"
+              value={stats.total}
+              hint="Every submission, drafts included"
+            />
             <Metric
               label="Waiting on staff"
-              value={(stats.byStatus.get("submitted") ?? 0) + (stats.byStatus.get("under_review") ?? 0)}
+              value={
+                (stats.byStatus.get("submitted") ?? 0) + (stats.byStatus.get("under_review") ?? 0)
+              }
               hint={
                 stats.oldestDays === null
                   ? "Nothing in the queue"
@@ -288,15 +294,18 @@ function RegistryAdminHome() {
               <Card>
                 <h2 className="text-xl">Accounts</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  {profiles?.length ?? 0} registered {profiles?.length === 1 ? "account" : "accounts"}{" "}
-                  · {completedProfiles} with a completed verification profile.
+                  {profiles?.length ?? 0} registered{" "}
+                  {profiles?.length === 1 ? "account" : "accounts"} · {completedProfiles} with a
+                  completed verification profile.
                 </p>
               </Card>
 
               <Card>
                 <h2 className="text-xl">Recent review activity</h2>
                 {(activity ?? []).length === 0 ? (
-                  <p className="mt-2 text-sm text-muted-foreground">No status changes recorded yet.</p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    No status changes recorded yet.
+                  </p>
                 ) : (
                   <ul className="mt-4 grid gap-2">
                     {(activity ?? []).map((event) => (

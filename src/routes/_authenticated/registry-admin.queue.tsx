@@ -58,8 +58,6 @@ function RegistryQueuePage() {
   return <StaffWorkspace role={role} />;
 }
 
-
-
 function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
   const queryClient = useQueryClient();
   const { user } = useSession();
@@ -480,7 +478,6 @@ function SubmissionInspector({
           emptyLabel="No documents were attached to this submission."
         />
       </Card>
-
 
       <Card className="grid gap-2">
         <h3 className="text-lg">History</h3>
