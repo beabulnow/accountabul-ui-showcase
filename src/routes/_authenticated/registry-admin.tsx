@@ -17,6 +17,8 @@ import {
 } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { StatusHistory } from "@/components/status-history";
+import { RegistrationDocumentSlots } from "@/components/document-slots";
+
 import { useRegistrationHistory, useStaffNotes } from "@/hooks/use-registration";
 import { useIsStaff, useSession } from "@/hooks/use-session";
 import {
