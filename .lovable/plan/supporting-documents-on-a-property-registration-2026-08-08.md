@@ -61,4 +61,6 @@ On `/registry-admin`, reviewers see every attached document grouped by slot with
 
 ## Out of scope
 
-No OCR, no automatic document classification, no virus scanning, no anchoring of document hashes. Documents are evidence for human review only.
+No OCR, no automatic document classification, no virus scanning, no anchoring of document hashes. Documents are evidence for human review only. do not change or introduce code that changes any files out side of this
+
+&nbsp;
