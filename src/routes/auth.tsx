@@ -51,14 +51,14 @@ function AuthPage() {
   const isSafePath = (value: string | null | undefined): value is string =>
     !!value && value.startsWith("/") && !value.startsWith("//");
 
-  const storedRedirect =
-    typeof window === "undefined" ? null : sessionStorage.getItem("accountabul:redirect");
-
-  const safeRedirect = isSafePath(search.redirect)
-    ? search.redirect
-    : isSafePath(storedRedirect)
-      ? storedRedirect
-      : "/dashboard";
+  // Read at call time, never during render: touching sessionStorage while
+  // rendering makes the server and client disagree and breaks hydration.
+  const resolveRedirect = useCallback(() => {
+    if (isSafePath(search.redirect)) return search.redirect;
+    const stored =
+      typeof window === "undefined" ? null : sessionStorage.getItem("accountabul:redirect");
+    return isSafePath(stored) ? stored : "/dashboard";
+  }, [search.redirect]);
 
   useEffect(() => {
     const go = () => {
