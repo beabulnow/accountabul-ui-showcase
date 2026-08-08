@@ -11,14 +11,16 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Register a property record, have it reviewed by registry staff, and receive a registry receipt that Verifiabul can later anchor as a tamper-evident record proof.",
+          "Submit your property information and have it reviewed by our team. You can follow the review from your account and see exactly where it stands.",
       },
       { property: "og:title", content: "Verifiabul — Property Verification Registry" },
       {
         property: "og:description",
         content:
-          "Register a property record, get it reviewed, and receive a tamper-evident registry receipt.",
+          "Submit your property information, our team reviews it, and you can follow every step from your account.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Home,
@@ -27,31 +29,31 @@ export const Route = createFileRoute("/")({
 const steps = [
   {
     icon: FileSearch,
-    title: "1 · Register the record",
-    body: "Submit the property address, jurisdiction, parcel reference and any public sources a reviewer can check. Save a draft first if you're not ready.",
+    title: "1 · Tell us about the property",
+    body: "Add the address, where it's located, the parcel or lot number, and how you're connected to it. You can save a draft and finish later.",
   },
   {
     icon: ShieldCheck,
-    title: "2 · Staff review",
-    body: "Verifiabul reviewers read the submission, ask for anything missing, and record every status change with a date you can see.",
+    title: "2 · Upload your documents",
+    body: "Attach things like a deed, tax statement, or utility bill. Each document has its own upload slot, so nothing gets lost or mixed up.",
   },
   {
     icon: CheckCircle2,
-    title: "3 · Record proof",
-    body: "Once approved, Verifiabul can publish a deterministic hash of the record to the XRP Ledger. We pay the network fee — you need no wallet.",
+    title: "3 · We review and respond",
+    body: "Our team checks what you sent, asks for anything missing, and updates the status. You'll see the decision and the date it was made.",
   },
 ];
 
 const isList = [
-  "A registry of property records submitted by people who identify their relationship to the property.",
-  "A documented staff review workflow with visible statuses and dated history.",
-  "A registry receipt held in your account, with an optional tamper-evident record proof.",
+  "A place to submit property information and supporting documents for review.",
+  "A real person on our team reading what you sent and responding.",
+  "A clear status and dated history you can check any time from your account.",
 ];
 
 const isNotList = [
   "Not legal title, a deed, or proof of ownership.",
   "Not title insurance, an appraisal, or a valuation.",
-  "Not property tokenization — no token, NFT, or transferable asset is issued.",
+  "Not a sale, transfer, or listing of the property.",
   "Not a government filing or government approval of any kind.",
 ];
 
@@ -66,12 +68,12 @@ function Home() {
           <div className="min-w-0">
             <p className="eyebrow">Property Verification Registry</p>
             <h1 className="mt-4 text-4xl leading-[1.08] sm:text-5xl lg:text-6xl">
-              Register a property record. Have it reviewed. Keep the receipt.
+              Submit your property. We'll review it and tell you where it stands.
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
-              Verifiabul is an evidence-first registry. You submit a property record, our staff
-              review what you provided, and every status change is dated and visible. Approved
-              records can later carry a tamper-evident record proof published by Verifiabul.
+              Verifiabul is a property registry built on evidence, not claims. You share the
+              property details and your documents, our team reviews them, and you can follow
+              every step from your account — no guessing, no waiting in the dark.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {user ? (
@@ -108,23 +110,22 @@ function Home() {
               )}
             </div>
             <p className="mt-4 text-xs text-muted-foreground">
-              No wallet required. No blockchain fees for you. Registration is not title or proof of
-              ownership.
+              Free to submit. Submitting a property here is not legal title or proof of ownership.
             </p>
           </div>
 
           <div className="min-w-0">
             <Card className="bg-card">
-              <p className="eyebrow">Registry receipt</p>
+              <p className="eyebrow">Your account</p>
               <p className="mt-3 font-display text-2xl">What you get</p>
               <ul className="mt-4 grid gap-3 text-sm text-muted-foreground">
-                <li>A human-readable registry receipt code for each submission.</li>
-                <li>A live status: draft, submitted, under review, needs information, approved.</li>
-                <li>Dated status history and any message from the reviewer.</li>
+                <li>A reference number for every property you submit.</li>
                 <li>
-                  A record-proof panel that reads <em>Not yet anchored</em> until Verifiabul
-                  publishes the hash.
+                  A plain status at a glance: draft, submitted, under review, needs information, or
+                  approved.
                 </li>
+                <li>A dated history of what changed, plus any message from the reviewer.</li>
+                <li>Your uploaded documents kept together in one private place.</li>
               </ul>
             </Card>
           </div>
@@ -134,8 +135,8 @@ function Home() {
       <Section>
         <SectionHeading
           eyebrow="How it works"
-          title="Three steps, no leaps of faith"
-          description="A calm workflow that replaces persuasion with documentation."
+          title="Three steps, start to finish"
+          description="No jargon, no surprises — you always know what happens next."
         />
         <div className="mt-8 grid gap-5 md:grid-cols-3">
           {steps.map((s) => (
