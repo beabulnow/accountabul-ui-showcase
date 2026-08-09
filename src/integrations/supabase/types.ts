@@ -341,11 +341,173 @@ export type Database = {
         }
         Relationships: []
       }
+      verification_checks: {
+        Row: {
+          check_kind: Database["public"]["Enums"]["verification_check_kind"]
+          checked_at: string | null
+          checked_by: string | null
+          created_at: string
+          id: string
+          outcome: Database["public"]["Enums"]["verification_check_outcome"]
+          public_summary: string | null
+          report_id: string
+          updated_at: string
+        }
+        Insert: {
+          check_kind: Database["public"]["Enums"]["verification_check_kind"]
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          id?: string
+          outcome?: Database["public"]["Enums"]["verification_check_outcome"]
+          public_summary?: string | null
+          report_id: string
+          updated_at?: string
+        }
+        Update: {
+          check_kind?: Database["public"]["Enums"]["verification_check_kind"]
+          checked_at?: string | null
+          checked_by?: string | null
+          created_at?: string
+          id?: string
+          outcome?: Database["public"]["Enums"]["verification_check_outcome"]
+          public_summary?: string | null
+          report_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_checks_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "verification_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      verification_reports: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          methodology_version: string
+          public_summary: string | null
+          published_at: string | null
+          registration_id: string
+          report_code: string
+          requested_at: string
+          review_started_at: string | null
+          reviewer_id: string | null
+          status: Database["public"]["Enums"]["verification_report_status"]
+          updated_at: string
+          valid_until: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          methodology_version?: string
+          public_summary?: string | null
+          published_at?: string | null
+          registration_id: string
+          report_code?: string
+          requested_at?: string
+          review_started_at?: string | null
+          reviewer_id?: string | null
+          status?: Database["public"]["Enums"]["verification_report_status"]
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          methodology_version?: string
+          public_summary?: string | null
+          published_at?: string | null
+          registration_id?: string
+          report_code?: string
+          requested_at?: string
+          review_started_at?: string | null
+          reviewer_id?: string | null
+          status?: Database["public"]["Enums"]["verification_report_status"]
+          updated_at?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_reports_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: true
+            referencedRelation: "property_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      verification_sources: {
+        Row: {
+          check_id: string
+          content_hash: string | null
+          created_at: string
+          created_by: string
+          id: string
+          jurisdiction: string | null
+          record_reference: string | null
+          retrieved_at: string
+          source_name: string
+          source_url: string | null
+          staff_note: string | null
+        }
+        Insert: {
+          check_id: string
+          content_hash?: string | null
+          created_at?: string
+          created_by: string
+          id?: string
+          jurisdiction?: string | null
+          record_reference?: string | null
+          retrieved_at?: string
+          source_name: string
+          source_url?: string | null
+          staff_note?: string | null
+        }
+        Update: {
+          check_id?: string
+          content_hash?: string | null
+          created_at?: string
+          created_by?: string
+          id?: string
+          jurisdiction?: string | null
+          record_reference?: string | null
+          retrieved_at?: string
+          source_name?: string
+          source_url?: string | null
+          staff_note?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verification_sources_check_id_fkey"
+            columns: ["check_id"]
+            isOneToOne: false
+            referencedRelation: "verification_checks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      publish_verification_report: {
+        Args: {
+          _outcome: Database["public"]["Enums"]["verification_report_status"]
+          _public_summary: string
+          _report_id: string
+          _valid_until?: string
+        }
+        Returns: undefined
+      }
       review_registration_status: {
         Args: {
           _registration_id: string
@@ -384,6 +546,13 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      set_verification_report_progress: {
+        Args: {
+          _report_id: string
+          _status: Database["public"]["Enums"]["verification_report_status"]
+        }
+        Returns: undefined
       }
       sync_staff_access: {
         Args: never
@@ -424,6 +593,31 @@ export type Database = {
         | "authorized_representative"
         | "property_professional"
         | "other"
+      verification_check_kind:
+        | "identity"
+        | "ownership"
+        | "property_record"
+        | "deed_title"
+        | "tax"
+        | "lien"
+        | "encumbrance"
+        | "document_authenticity"
+        | "address"
+        | "other"
+      verification_check_outcome:
+        | "pending"
+        | "passed"
+        | "failed"
+        | "inconclusive"
+        | "not_applicable"
+      verification_report_status:
+        | "queued"
+        | "in_review"
+        | "needs_information"
+        | "verified"
+        | "not_verified"
+        | "inconclusive"
+        | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -587,6 +781,34 @@ export const Constants = {
         "authorized_representative",
         "property_professional",
         "other",
+      ],
+      verification_check_kind: [
+        "identity",
+        "ownership",
+        "property_record",
+        "deed_title",
+        "tax",
+        "lien",
+        "encumbrance",
+        "document_authenticity",
+        "address",
+        "other",
+      ],
+      verification_check_outcome: [
+        "pending",
+        "passed",
+        "failed",
+        "inconclusive",
+        "not_applicable",
+      ],
+      verification_report_status: [
+        "queued",
+        "in_review",
+        "needs_information",
+        "verified",
+        "not_verified",
+        "inconclusive",
+        "expired",
       ],
     },
   },
