@@ -499,14 +499,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      review_registration_status: {
-        Args: {
-          _registration_id: string
-          _to_status: Database["public"]["Enums"]["registration_status"]
-          _user_visible_message?: string
-        }
-        Returns: undefined
-      }
       publish_verification_report: {
         Args: {
           _outcome: Database["public"]["Enums"]["verification_report_status"]
@@ -515,6 +507,45 @@ export type Database = {
           _valid_until?: string
         }
         Returns: undefined
+      }
+      review_registration_status: {
+        Args: {
+          _registration_id: string
+          _to_status: Database["public"]["Enums"]["registration_status"]
+          _user_visible_message?: string
+        }
+        Returns: {
+          address_line1: string
+          address_line2: string | null
+          affirm_accurate: boolean
+          affirm_authorized: boolean
+          affirm_not_title: boolean
+          city: string
+          county: string
+          created_at: string
+          id: string
+          normalized_address: string | null
+          parcel_id: string | null
+          postal_code: string
+          property_type: Database["public"]["Enums"]["property_type"]
+          public_source_notes: string | null
+          receipt_code: string
+          relationship: Database["public"]["Enums"]["submitter_relationship"]
+          relationship_other: string | null
+          state: string
+          status: Database["public"]["Enums"]["registration_status"]
+          submitted_at: string | null
+          submitter_full_name: string
+          updated_at: string
+          user_id: string
+          user_note: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "property_registrations"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       set_verification_report_progress: {
         Args: {
