@@ -172,6 +172,9 @@ export const registrationSchema = z
   .object({
     submitter_full_name: z.string().trim().min(2, "Enter your full name").max(120),
     relationship: z.enum(["owner", "authorized_representative", "property_professional", "other"]),
+    relationship_title: z
+      .string()
+      .min(1, "Select the title that describes your role for this property"),
     relationship_other: z.string().trim().max(160).optional().or(z.literal("")),
     address_line1: z.string().trim().min(3, "Enter the street address").max(200),
     address_line2: z.string().trim().max(200).optional().or(z.literal("")),
