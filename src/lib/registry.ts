@@ -203,11 +203,11 @@ export const registrationSchema = z
     affirm_not_title: z.boolean(),
   })
   .superRefine((value, ctx) => {
-    if (value.relationship === "other" && !value.relationship_other?.trim()) {
+    if (value.relationship_title === "other" && !value.relationship_other?.trim()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["relationship_other"],
-        message: "Describe your relationship to this property",
+        message: "Describe your title or relationship to this property",
       });
     }
   });
@@ -224,6 +224,7 @@ export type RegistrationInput = z.infer<typeof registrationSchema>;
 export const emptyRegistration: RegistrationInput = {
   submitter_full_name: "",
   relationship: "owner",
+  relationship_title: "individual_owner",
   relationship_other: "",
   address_line1: "",
   address_line2: "",
