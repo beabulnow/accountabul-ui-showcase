@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Camera, CheckCircle2, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -61,6 +61,7 @@ export function ProfileForm({
   const { user } = useSession();
   const { data: profile, isLoading, error } = useProfile(user?.id);
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const initializedFor = useRef<string | null>(null);
   const [form, setForm] = useState<ProfileFormInput>(emptyForm);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -176,6 +177,7 @@ export function ProfileForm({
       } else {
         setAvatarFile(null);
         setRemoveAvatar(false);
+        await navigate({ to: "/dashboard" });
       }
     } catch (saveError) {
       toast.error(errorMessage(saveError, "Could not save your profile"));
