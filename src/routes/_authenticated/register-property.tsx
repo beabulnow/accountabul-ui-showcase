@@ -24,7 +24,9 @@ import {
   emptyRegistration,
   propertyTypeOptions,
   registrationSchema,
-  relationshipOptions,
+  relationshipTitleGroups,
+  relationshipTitleLabel,
+  relationshipTitleOptions,
   type RegistrationInput,
 } from "@/lib/registry";
 
@@ -96,9 +98,13 @@ function RegisterPropertyPage() {
     }
 
     setBusy(true);
+    const { relationship_title, ...fields } = parsed.data;
     const payload = {
-      ...parsed.data,
-      relationship_other: parsed.data.relationship_other || null,
+      ...fields,
+      relationship_other:
+        relationship_title === "other"
+          ? parsed.data.relationship_other || null
+          : relationshipTitleLabel(relationship_title),
       address_line2: parsed.data.address_line2 || null,
       parcel_id: parsed.data.parcel_id || null,
       public_source_notes: parsed.data.public_source_notes || null,
@@ -187,25 +193,41 @@ function RegisterPropertyPage() {
               {errors["submitter_full_name"]}
             </p>
           ) : null}
-          <Field label="Relationship to the property" htmlFor="relationship">
+          <Field
+            label="Your title for this property"
+            htmlFor="relationship_title"
+            hint="Pick the title that describes your legal role. Only licensed professionals should choose a license title."
+            error={errors["relationship_title"]}
+          >
             <select
-              id="relationship"
+              id="relationship_title"
               className={inputClass}
-              value={form.relationship}
-              onChange={(e) =>
-                set("relationship", e.target.value as RegistrationInput["relationship"])
-              }
+              value={form.relationship_title}
+              onChange={(e) => {
+                const next = relationshipTitleOptions.find((t) => t.value === e.target.value);
+                if (!next) return;
+                setForm((prev) => ({
+                  ...prev,
+                  relationship_title: next.value,
+                  relationship: next.relationship,
+                  relationship_other: next.value === "other" ? prev.relationship_other : "",
+                }));
+              }}
             >
-              {relationshipOptions.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
+              {relationshipTitleGroups.map((group) => (
+                <optgroup key={group.value} label={group.label}>
+                  {group.titles.map((title) => (
+                    <option key={title.value} value={title.value}>
+                      {title.label}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </Field>
-          {form.relationship === "other" ? (
+          {form.relationship_title === "other" ? (
             <Field
-              label="Describe your relationship"
+              label="Describe your title"
               htmlFor="relationship_other"
               error={errors["relationship_other"]}
             >
@@ -218,6 +240,7 @@ function RegisterPropertyPage() {
             </Field>
           ) : null}
         </Card>
+
 
         <Card className="grid gap-4">
           <h2 className="text-xl">Property location</h2>

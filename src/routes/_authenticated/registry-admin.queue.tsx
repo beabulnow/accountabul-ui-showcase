@@ -27,7 +27,7 @@ import {
   formatDateTime,
   labelFor,
   propertyTypeOptions,
-  relationshipOptions,
+  relationshipDisplay,
   statusLabels,
   type RegistrationStatus,
 } from "@/lib/registry";
@@ -372,13 +372,10 @@ function SubmissionInspector({
           />
           <DetailRow
             compact
-            label="Relationship"
-            value={
-              registration.relationship === "other" && registration.relationship_other
-                ? `Other — ${registration.relationship_other}`
-                : labelFor(relationshipOptions, registration.relationship)
-            }
+            label="Title"
+            value={relationshipDisplay(registration.relationship, registration.relationship_other)}
           />
+
           <DetailRow
             compact
             label="Address"

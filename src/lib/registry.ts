@@ -38,9 +38,117 @@ export const statusHelp: Record<RegistrationStatus, string> = {
 export const relationshipOptions = [
   { value: "owner", label: "Owner" },
   { value: "authorized_representative", label: "Authorized representative" },
-  { value: "property_professional", label: "Property professional" },
+  { value: "property_professional", label: "Licensed real estate professional" },
   { value: "other", label: "Other" },
 ] as const;
+
+/**
+ * The specific title a submitter holds in relation to the property. Each title
+ * maps to one of the four `submitter_relationship` database categories, so the
+ * stored enum stays unchanged while the person selects an accurate title.
+ */
+export const relationshipTitleOptions = [
+  // Owner
+  { value: "individual_owner", label: "Individual owner", relationship: "owner" },
+  { value: "co_owner", label: "Co-owner / joint owner", relationship: "owner" },
+  { value: "trustee_owner", label: "Trustee of the owning trust", relationship: "owner" },
+  {
+    value: "entity_owner",
+    label: "Owner through a company (LLC member, partner, or officer)",
+    relationship: "owner",
+  },
+  { value: "heir_owner", label: "Heir or beneficiary of the owner", relationship: "owner" },
+
+  // Authorized representative
+  {
+    value: "attorney_of_record",
+    label: "Attorney of record for the owner",
+    relationship: "authorized_representative",
+  },
+  {
+    value: "power_of_attorney",
+    label: "Power of attorney holder",
+    relationship: "authorized_representative",
+  },
+  {
+    value: "executor",
+    label: "Executor or administrator of the estate",
+    relationship: "authorized_representative",
+  },
+  {
+    value: "guardian",
+    label: "Guardian or conservator of the owner",
+    relationship: "authorized_representative",
+  },
+  {
+    value: "corporate_officer",
+    label: "Officer or authorized signer for the owning company",
+    relationship: "authorized_representative",
+  },
+  {
+    value: "property_manager",
+    label: "Property manager acting for the owner",
+    relationship: "authorized_representative",
+  },
+
+  // Licensed real estate professional
+  {
+    value: "licensed_broker",
+    label: "Licensed real estate broker",
+    relationship: "property_professional",
+  },
+  {
+    value: "licensed_salesperson",
+    label: "Licensed real estate salesperson or agent",
+    relationship: "property_professional",
+  },
+  {
+    value: "designated_managing_broker",
+    label: "Designated or managing broker of the brokerage",
+    relationship: "property_professional",
+  },
+  {
+    value: "real_estate_attorney",
+    label: "Real estate attorney handling the transaction",
+    relationship: "property_professional",
+  },
+  {
+    value: "title_closing_agent",
+    label: "Title or closing agent of record",
+    relationship: "property_professional",
+  },
+  {
+    value: "licensed_appraiser",
+    label: "Licensed real estate appraiser",
+    relationship: "property_professional",
+  },
+
+  // Other
+  { value: "other", label: "Other (describe your title)", relationship: "other" },
+] as const;
+
+export type RelationshipTitle = (typeof relationshipTitleOptions)[number]["value"];
+
+export const relationshipTitleGroups = relationshipOptions.map((group) => ({
+  ...group,
+  titles: relationshipTitleOptions.filter((title) => title.relationship === group.value),
+}));
+
+export function relationshipTitleLabel(value: string | null | undefined) {
+  return relationshipTitleOptions.find((title) => title.value === value)?.label ?? null;
+}
+
+/** Display string for a saved registration: the specific title when one was
+ * captured, otherwise the broader relationship category. */
+export function relationshipDisplay(
+  relationship: string | null | undefined,
+  relationshipOther: string | null | undefined,
+) {
+  const title = relationshipOther?.trim();
+  if (title) return title;
+  return labelFor(relationshipOptions, relationship);
+}
+
 
 export const propertyTypeOptions = [
   { value: "single_family", label: "Single family" },
@@ -64,6 +172,9 @@ export const registrationSchema = z
   .object({
     submitter_full_name: z.string().trim().min(2, "Enter your full name").max(120),
     relationship: z.enum(["owner", "authorized_representative", "property_professional", "other"]),
+    relationship_title: z
+      .string()
+      .min(1, "Select the title that describes your role for this property"),
     relationship_other: z.string().trim().max(160).optional().or(z.literal("")),
     address_line1: z.string().trim().min(3, "Enter the street address").max(200),
     address_line2: z.string().trim().max(200).optional().or(z.literal("")),
@@ -92,11 +203,11 @@ export const registrationSchema = z
     affirm_not_title: z.boolean(),
   })
   .superRefine((value, ctx) => {
-    if (value.relationship === "other" && !value.relationship_other?.trim()) {
+    if (value.relationship_title === "other" && !value.relationship_other?.trim()) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["relationship_other"],
-        message: "Describe your relationship to this property",
+        message: "Describe your title or relationship to this property",
       });
     }
   });
@@ -113,6 +224,7 @@ export type RegistrationInput = z.infer<typeof registrationSchema>;
 export const emptyRegistration: RegistrationInput = {
   submitter_full_name: "",
   relationship: "owner",
+  relationship_title: "individual_owner",
   relationship_other: "",
   address_line1: "",
   address_line2: "",
