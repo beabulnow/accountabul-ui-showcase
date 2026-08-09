@@ -16,7 +16,7 @@ import {
   formatDateTime,
   labelFor,
   propertyTypeOptions,
-  relationshipOptions,
+  relationshipDisplay,
   statusHelp,
   type RegistrationStatus,
 } from "@/lib/registry";
@@ -139,13 +139,10 @@ function RegistrationDetailPage() {
         <dl className="mt-3">
           <DetailRow label="Submitter" value={row.submitter_full_name} />
           <DetailRow
-            label="Relationship"
-            value={
-              row.relationship === "other" && row.relationship_other
-                ? `Other — ${row.relationship_other}`
-                : labelFor(relationshipOptions, row.relationship)
-            }
+            label="Title"
+            value={relationshipDisplay(row.relationship, row.relationship_other)}
           />
+
           <DetailRow
             label="Property type"
             value={labelFor(propertyTypeOptions, row.property_type)}
