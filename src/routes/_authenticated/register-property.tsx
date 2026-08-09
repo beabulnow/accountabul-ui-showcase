@@ -24,7 +24,9 @@ import {
   emptyRegistration,
   propertyTypeOptions,
   registrationSchema,
-  relationshipOptions,
+  relationshipTitleGroups,
+  relationshipTitleLabel,
+  relationshipTitleOptions,
   type RegistrationInput,
 } from "@/lib/registry";
 
