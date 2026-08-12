@@ -112,6 +112,7 @@ function RegisterPropertyPage() {
       const missing = !form.affirm_accurate || !form.affirm_authorized || !form.affirm_not_title;
       if (missing) {
         setErrors({ affirmations: "All three affirmations are required before submitting." });
+        setStep(4);
         toast.error("All three affirmations are required before submitting");
         return;
       }
@@ -119,9 +120,11 @@ function RegisterPropertyPage() {
         setErrors({
           documents: "Attach at least one supporting document before submitting for review.",
         });
+        setStep(3);
         toast.error("At least one supporting document is required to submit");
         return;
       }
+
     }
 
     setBusy(true);
