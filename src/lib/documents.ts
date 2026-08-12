@@ -131,9 +131,6 @@ export function validateDocumentFile(file: File, slot?: RegistrationDocumentType
       ? `${file.name}: the photos card takes images only (JPG, PNG, HEIC or WEBP)`
       : `${file.name}: only PDF, JPG, PNG, HEIC and WEBP files are accepted`;
   }
-  if (!imagesOnly && slot && slot !== "other" && file.type.startsWith("image/") === false) {
-    // PDFs are fine everywhere else; nothing further to check here.
-  }
   if (file.size > DOCUMENT_MAX_BYTES) {
     return `${file.name}: files must be ${formatBytes(DOCUMENT_MAX_BYTES)} or smaller`;
   }
