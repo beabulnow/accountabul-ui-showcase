@@ -591,6 +591,8 @@ function RegisterPropertyPage() {
         </div>
 
       </form>
+      </div>
     </Section>
+
   );
 }
