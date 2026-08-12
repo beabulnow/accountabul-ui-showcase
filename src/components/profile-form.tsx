@@ -177,7 +177,7 @@ export function ProfileForm({
       } else {
         setAvatarFile(null);
         setRemoveAvatar(false);
-        await navigate({ to: "/dashboard" });
+        await navigate({ to: safeRedirect(redirectTo) as "/dashboard" });
       }
     } catch (saveError) {
       toast.error(errorMessage(saveError, "Could not save your profile"));

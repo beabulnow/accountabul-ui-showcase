@@ -4,6 +4,9 @@ import { ProfileForm } from "@/components/profile-form";
 import { Section, SectionHeading } from "@/components/ui-kit";
 
 export const Route = createFileRoute("/_authenticated/profile")({
+  validateSearch: (search: Record<string, unknown>): { returnTo?: string } =>
+    typeof search["returnTo"] === "string" ? { returnTo: search["returnTo"] } : {},
+
   head: () => ({
     meta: [
       { title: "Your profile | Verifiabul" },
@@ -15,6 +18,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
 });
 
 function ProfilePage() {
+  const { returnTo } = Route.useSearch();
   return (
     <Section className="max-w-3xl">
       <SectionHeading
@@ -23,7 +27,7 @@ function ProfilePage() {
         title="Profile and identity information"
         description="Keep the information connected to your property registrations accurate and current."
       />
-      <ProfileForm mode="edit" />
+      <ProfileForm mode="edit" redirectTo={returnTo ?? null} />
     </Section>
   );
 }
