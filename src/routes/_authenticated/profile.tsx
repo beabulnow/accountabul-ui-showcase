@@ -4,9 +4,9 @@ import { ProfileForm } from "@/components/profile-form";
 import { Section, SectionHeading } from "@/components/ui-kit";
 
 export const Route = createFileRoute("/_authenticated/profile")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    returnTo: typeof search["returnTo"] === "string" ? (search["returnTo"] as string) : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { returnTo?: string } =>
+    typeof search["returnTo"] === "string" ? { returnTo: search["returnTo"] } : {},
+
   head: () => ({
     meta: [
       { title: "Your profile | Verifiabul" },
