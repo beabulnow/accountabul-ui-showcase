@@ -46,14 +46,36 @@ export const Route = createFileRoute("/_authenticated/register-property")({
   component: RegisterPropertyPage,
 });
 
+const STEPS = [
+  { title: "About you", fields: ["submitter_full_name", "relationship_title", "relationship_other"] },
+  {
+    title: "Property location",
+    fields: [
+      "address_line1",
+      "address_line2",
+      "city",
+      "state",
+      "postal_code",
+      "county",
+      "parcel_id",
+      "property_type",
+    ],
+  },
+  { title: "Supporting context", fields: ["public_source_notes", "user_note"] },
+  { title: "Supporting documents", fields: ["documents"] },
+  { title: "Affirmations", fields: ["affirmations"] },
+] as const;
+
 function RegisterPropertyPage() {
   const navigate = useNavigate();
   const { user } = useSession();
   const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
+  const [step, setStep] = useState(0);
   const [form, setForm] = useState<RegistrationInput>(emptyRegistration);
   const [documents, setDocuments] = useState<PendingDocuments>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+
   const [uploading, setUploading] = useState(false);
   const documentCount = countPendingDocuments(documents);
 
