@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { safeMultiline, safeText } from "@/lib/sanitize";
+
 export const REGISTRATION_STATUSES = [
   "draft",
   "submitted",
@@ -177,22 +179,28 @@ export function labelFor(
 
 export const registrationSchema = z
   .object({
-    submitter_full_name: z.string().trim().min(2, "Enter your full name").max(120),
+    submitter_full_name: safeText(120).refine(
+      (value) => value.length >= 2,
+      "Enter your full name",
+    ),
     relationship: z.enum(["owner", "authorized_representative", "property_professional", "other"]),
     relationship_title: z
       .string()
       .min(1, "Select the title that describes your role for this property"),
-    relationship_other: z.string().trim().max(160).optional().or(z.literal("")),
-    address_line1: z.string().trim().min(3, "Enter the street address").max(200),
-    address_line2: z.string().trim().max(200).optional().or(z.literal("")),
-    city: z.string().trim().min(2, "Enter the city").max(120),
-    state: z.string().trim().min(2, "Enter the state").max(60),
+    relationship_other: safeText(160).optional(),
+    address_line1: safeText(200).refine((value) => value.length >= 3, "Enter the street address"),
+    address_line2: safeText(200).optional(),
+    city: safeText(120).refine((value) => value.length >= 2, "Enter the city"),
+    state: safeText(60).refine((value) => value.length >= 2, "Enter the state"),
     postal_code: z
       .string()
       .trim()
       .regex(/^[0-9]{5}(-[0-9]{4})?$/, "Enter a 5 or 9 digit ZIP code"),
-    county: z.string().trim().min(2, "Enter the county or jurisdiction").max(120),
-    parcel_id: z.string().trim().max(80).optional().or(z.literal("")),
+    county: safeText(120).refine(
+      (value) => value.length >= 2,
+      "Enter the county or jurisdiction",
+    ),
+    parcel_id: safeText(80).optional(),
     property_type: z.enum([
       "single_family",
       "multi_family",
@@ -203,8 +211,8 @@ export const registrationSchema = z
       "mixed_use",
       "other",
     ]),
-    public_source_notes: z.string().trim().max(4000).optional().or(z.literal("")),
-    user_note: z.string().trim().max(4000).optional().or(z.literal("")),
+    public_source_notes: safeMultiline(4000).optional(),
+    user_note: safeMultiline(4000).optional(),
     affirm_accurate: z.boolean(),
     affirm_authorized: z.boolean(),
     affirm_not_title: z.boolean(),

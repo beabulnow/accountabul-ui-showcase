@@ -177,3 +177,10 @@
   font-weight: 600;
   color: var(--color-muted-foreground);
 }
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

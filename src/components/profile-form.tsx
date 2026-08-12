@@ -4,6 +4,8 @@ import { Camera, CheckCircle2, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { DateWheel } from "@/components/date-wheel";
+import { PhoneInput } from "@/components/phone-input";
 import { ProfileAvatar } from "@/components/profile-avatar";
 import { Card, Field, inputClass, primaryButtonClass } from "@/components/ui-kit";
 import { useProfile } from "@/hooks/use-profile";
@@ -17,6 +19,7 @@ import {
   profileSchema,
   type ProfileFormInput,
 } from "@/lib/profile";
+import { splitE164, toE164 } from "@/lib/phone";
 import { errorMessage } from "@/lib/utils";
 
 const emptyForm: ProfileFormInput = {
@@ -287,33 +290,28 @@ export function ProfileForm({
           <Field
             label="Date of birth"
             htmlFor="date_of_birth"
-            hint="Used to distinguish and identify account holders."
+            hint="Scroll each wheel to set the month, day and year."
             error={errors.date_of_birth}
           >
-            <input
+            <DateWheel
               id="date_of_birth"
-              type="date"
-              autoComplete="bday"
-              max={new Date().toISOString().slice(0, 10)}
-              className={inputClass}
               value={form.date_of_birth}
-              onChange={(event) => set("date_of_birth", event.target.value)}
+              onChange={(next) => set("date_of_birth", next)}
             />
           </Field>
           <Field
             label="Phone number"
             htmlFor="phone"
-            hint="US numbers can be entered normally; other numbers should include the country code."
+            hint="Pick your country code, then enter the number — digits only."
             error={errors.phone}
           >
-            <input
+            <PhoneInput
               id="phone"
-              type="tel"
-              autoComplete="tel"
-              className={inputClass}
-              placeholder="(314) 555-0123"
-              value={form.phone}
-              onChange={(event) => set("phone", event.target.value)}
+              dialCode={splitE164(form.phone).dialCode}
+              nationalNumber={splitE164(form.phone).nationalNumber}
+              onChange={({ dialCode, nationalNumber }) =>
+                set("phone", toE164(dialCode, nationalNumber))
+              }
             />
           </Field>
         </div>
