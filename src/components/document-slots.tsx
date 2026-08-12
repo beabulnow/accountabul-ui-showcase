@@ -103,7 +103,9 @@ export function PendingDocumentSlots({
           ) : null}
         </DocumentSlotShell>
       ))}
+      </div>
     </div>
+
   );
 }
 
