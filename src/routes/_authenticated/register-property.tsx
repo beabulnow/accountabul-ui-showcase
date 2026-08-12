@@ -66,12 +66,26 @@ const STEPS = [
   { title: "Affirmations", fields: ["affirmations"] },
 ] as const;
 
+/** Draft text fields survive a detour to the profile page (files cannot be
+ * serialized, so attachments are re-selected on return). */
+const DRAFT_KEY = "verifiabul:register-property-draft";
+
+function readDraft(): { step: number; form: RegistrationInput } | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(DRAFT_KEY);
+    return raw ? (JSON.parse(raw) as { step: number; form: RegistrationInput }) : null;
+  } catch {
+    return null;
+  }
+}
+
 function RegisterPropertyPage() {
   const navigate = useNavigate();
   const { user } = useSession();
   const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState<RegistrationInput>(emptyRegistration);
+  const [step, setStep] = useState(() => readDraft()?.step ?? 0);
+  const [form, setForm] = useState<RegistrationInput>(() => readDraft()?.form ?? emptyRegistration);
   const [documents, setDocuments] = useState<PendingDocuments>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -86,6 +100,14 @@ function RegisterPropertyPage() {
       previous.submitter_full_name ? previous : { ...previous, submitter_full_name: name },
     );
   }, [profile]);
+
+  useEffect(() => {
+    try {
+      window.sessionStorage.setItem(DRAFT_KEY, JSON.stringify({ step, form }));
+    } catch {
+      // Session storage is unavailable (private mode); the wizard still works.
+    }
+  }, [step, form]);
 
   function set<K extends keyof RegistrationInput>(key: K, value: RegistrationInput[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -174,6 +196,11 @@ function RegisterPropertyPage() {
     }
 
     setBusy(false);
+    try {
+      window.sessionStorage.removeItem(DRAFT_KEY);
+    } catch {
+      // Nothing to clean up when session storage is unavailable.
+    }
     toast.success(intent === "submit" ? "Submitted for review" : "Draft saved");
     navigate({ to: "/registrations/$id", params: { id: data.id } });
   }
@@ -205,7 +232,7 @@ function RegisterPropertyPage() {
   }
 
   const isLast = step === STEPS.length - 1;
-  const percent = Math.round(((step + 1) / STEPS.length) * 100);
+  const percent = Math.round((step / STEPS.length) * 100);
 
   return (
     <Section className="max-w-3xl">
@@ -282,7 +309,11 @@ function RegisterPropertyPage() {
                 Your confirmed profile name will be saved with this registration.
               </p>
             </div>
-            <Link to="/profile" className="text-sm underline underline-offset-4">
+            <Link
+              to="/profile"
+              search={{ returnTo: "/register-property" }}
+              className="text-sm underline underline-offset-4"
+            >
               Edit profile
             </Link>
           </div>
