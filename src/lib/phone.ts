@@ -78,3 +78,11 @@ export function phoneProblem(dialCode: string, nationalNumber: string) {
   }
   return null;
 }
+
+/** Formats a stored E.164 value for display, e.g. +1 (314) 445-4511. */
+export function formatE164(value: string | null | undefined) {
+  if (!value) return "";
+  const { dialCode, nationalNumber } = splitE164(value);
+  if (!nationalNumber) return value;
+  return `${dialCode} ${formatNationalNumber(nationalNumber, countryByDialCode(dialCode))}`;
+}
