@@ -100,9 +100,14 @@ function RegisterPropertyPage() {
       const next: Record<string, string> = {};
       for (const issue of parsed.error.issues) next[String(issue.path[0])] = issue.message;
       setErrors(next);
+      const firstStep = STEPS.findIndex((s) =>
+        (s.fields as readonly string[]).some((field) => field in next),
+      );
+      if (firstStep >= 0) setStep(firstStep);
       toast.error("Please correct the highlighted fields");
       return;
     }
+
     if (intent === "submit") {
       const missing = !form.affirm_accurate || !form.affirm_authorized || !form.affirm_not_title;
       if (missing) {
