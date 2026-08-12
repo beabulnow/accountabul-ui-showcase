@@ -171,7 +171,7 @@ function RegisterPropertyPage() {
   }
 
   function goNext() {
-    const stepFields = STEPS[step]?.fields ?? [];
+    const stepFields: readonly string[] = STEPS[step]?.fields ?? [];
     const parsed = registrationSchema.safeParse(form);
     if (!parsed.success) {
       const next: Record<string, string> = {};
