@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-import { secondaryButtonClass } from "@/components/ui-kit";
 import {
   deleteRegistrationDocument,
   signedDocumentUrl,
@@ -377,9 +376,6 @@ function SlotFilePicker({
         <span className="font-medium text-foreground">Drag files here</span>
         <span className="text-xs">or click to browse</span>
       </button>
-      <span className="sr-only">
-        <span className={secondaryButtonClass}>Add files</span>
-      </span>
     </>
   );
 }
