@@ -235,49 +235,52 @@ function RegisterPropertyPage() {
   const percent = Math.round((step / STEPS.length) * 100);
 
   return (
-    <Section className="max-w-3xl">
-      <SectionHeading
-        as="h1"
-        eyebrow="Registry submission"
-        title="Register a property record"
-        description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."
-      />
-
-      <div className="mt-8 grid gap-3">
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="text-sm font-medium">
-            Step {step + 1} of {STEPS.length}: {STEPS[step]?.title}
-          </p>
-          <p className="text-xs text-muted-foreground">{percent}% complete</p>
-        </div>
-        <div
-          role="progressbar"
-          aria-valuenow={percent}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label="Registration progress"
-          className="h-2 w-full overflow-hidden rounded-full bg-muted"
-        >
-          <div
-            className="h-full rounded-full bg-primary transition-all duration-300"
-            style={{ width: `${percent}%` }}
+    <Section className="max-w-6xl py-8 sm:py-10">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <div className="lg:sticky lg:top-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="Registry submission"
+            title="Register a property record"
+            description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."
           />
-        </div>
-        <ol className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-          {STEPS.map((s, index) => (
-            <li
-              key={s.title}
-              className={index === step ? "font-medium text-foreground" : undefined}
-              aria-current={index === step ? "step" : undefined}
+
+          <div className="mt-6 grid gap-3">
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-sm font-medium">
+                Step {step + 1} of {STEPS.length}
+              </p>
+              <p className="text-xs text-muted-foreground">{percent}% complete</p>
+            </div>
+            <div
+              role="progressbar"
+              aria-valuenow={percent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Registration progress"
+              className="h-2 w-full overflow-hidden rounded-full bg-muted"
             >
-              {index + 1}. {s.title}
-            </li>
-          ))}
-        </ol>
-      </div>
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-300"
+                style={{ width: `${percent}%` }}
+              />
+            </div>
+            <ol className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground lg:grid lg:gap-1.5 lg:text-sm">
+              {STEPS.map((s, index) => (
+                <li
+                  key={s.title}
+                  className={index === step ? "font-medium text-foreground" : undefined}
+                  aria-current={index === step ? "step" : undefined}
+                >
+                  {index + 1}. {s.title}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
 
       <form
-        className="mt-6 grid gap-6"
+        className="grid content-start gap-5"
         onSubmit={(e) => {
           e.preventDefault();
           if (!isLast) {
@@ -288,6 +291,7 @@ function RegisterPropertyPage() {
         }}
         noValidate
       >
+
         {step === 0 ? (
         <Card className="grid gap-4">
 
