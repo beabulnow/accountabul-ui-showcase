@@ -186,9 +186,11 @@ function DashboardPage() {
                         </div>
                         <div className="flex shrink-0 flex-wrap items-center gap-2 sm:justify-end">
                           <StatusChip status={row.status as RegistrationStatus} />
-                          <span className="text-xs text-muted-foreground">
-                            {anchor?.xrpl_tx_hash ? "Record proof published" : "Not yet anchored"}
-                          </span>
+                          {anchor?.xrpl_tx_hash ? (
+                            <span className="text-xs text-muted-foreground">
+                              Record proof published
+                            </span>
+                          ) : null}
                         </div>
                       </Link>
                     </Card>

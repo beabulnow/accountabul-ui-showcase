@@ -8,6 +8,7 @@ import { Card, DetailRow, Section } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { StatusHistory } from "@/components/status-history";
 import { RegistrationDocumentSlots } from "@/components/document-slots";
+import { CorrectionReview } from "@/components/correction-review";
 import { useRegistrationHistory } from "@/hooks/use-registration";
 import { uploadRegistrationDocuments } from "@/hooks/use-registration-documents";
 import { validateDocumentFile, type RegistrationDocumentType } from "@/lib/documents";
@@ -97,7 +98,7 @@ function RegistrationDetailPage() {
     if (!row) return;
     const accepted: File[] = [];
     for (const file of Array.from(files)) {
-      const problem = validateDocumentFile(file);
+      const problem = validateDocumentFile(file, slot);
       if (problem) {
         toast.error(problem);
         continue;
@@ -133,6 +134,8 @@ function RegistrationDetailPage() {
         {row.city}, {row.state} {row.postal_code} · {row.county} County/jurisdiction
       </p>
       <p className="mt-4 max-w-xl text-sm text-muted-foreground">{statusHelp[status]}</p>
+
+      <CorrectionReview registrationId={row.id} />
 
       <Card className="mt-8">
         <h2 className="text-xl">Submitted details</h2>
@@ -172,8 +175,8 @@ function RegistrationDetailPage() {
             </dl>
           ) : (
             <p className="rounded-xl border border-dashed border-border bg-surface px-4 py-6 text-sm text-muted-foreground">
-              Not yet anchored. The payload hash, network, transaction hash, validated ledger index
-              and anchored timestamp will appear here once a record proof is published.
+              A record proof is published once review is complete. When it is, the proof details
+              appear here automatically — there is nothing for you to do.
             </p>
           )}
         </div>
