@@ -1,6 +1,6 @@
-# Verifiabul — Next Build Spec (for Codex handoff)
+# Verifiabul — Next Build Spec (Codex handoff)
 
-Scope: registration wizard polish, document intake hardening, a verification/correction round-trip, dashboard restructure, and on-chain record language. No implementation in this pass — this document is the driver.
+Scope: registration wizard polish, document intake hardening, a verification/correction round-trip, dashboard restructure, and on-chain record language. This document is the driver — no implementation is assumed to have happened yet.
 
 ---
 
@@ -25,11 +25,13 @@ Data model additions (new migration, no changes to existing columns):
 - Access rules: owner can read their own correction rounds and write only the response fields; staff can create rounds and read all.
 
 UI:
+
 - Staff review screen gains a "Propose corrections" editor prefilled with the submitted values; only changed fields are stored as a diff.
 - User sees a **Confirm your verified record** screen: field-by-field diff, original struck through, corrected value highlighted, plus staff rationale. Two actions: `Confirm and finalize`, `Something is wrong`.
 - Confirmation is the event that makes a record anchorable. Nothing anchors without it.
 
 Intelligence engine hook (design now, wire later):
+
 - Corrections are written by a single server function so a human reviewer and an automated engine share the same entry point.
 - Add `source` on the correction row (`staff` | `engine`) and `confidence` per changed field so engine output can be reviewed before it is sent.
 
