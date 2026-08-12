@@ -10,6 +10,8 @@ const tone: Record<RegistrationStatus, string> = {
   anchoring: "border-primary/30 bg-primary/10 text-primary",
   anchored: "border-verified/50 bg-verified/20 text-verified-foreground",
   rejected: "border-destructive/40 bg-destructive/10 text-destructive",
+  correction_sent: "border-caution/40 bg-caution/15 text-caution-foreground",
+  confirmed_by_user: "border-verified/40 bg-verified/15 text-verified-foreground",
 };
 
 export function StatusChip({

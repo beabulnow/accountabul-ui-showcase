@@ -353,9 +353,9 @@ export function ProfileForm({
             onChange={(event) => set("privacy_accepted", event.target.checked)}
           />
           <label htmlFor="privacy_accepted" className="text-sm text-muted-foreground">
-            I understand that Verifiabul stores this private identity information to connect me with
-            my property submissions and support registry review. This does not mean my identity has
-            been independently KYC-verified.
+            I agree that Verifiabul can use these contact details to connect me with my property
+            submissions and keep me updated on review. We don't collect or store ID documents, and
+            this isn't an identity verification check.
           </label>
         </div>
         {errors.privacy_accepted ? (

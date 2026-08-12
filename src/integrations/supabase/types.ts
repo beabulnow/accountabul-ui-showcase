@@ -196,6 +196,65 @@ export type Database = {
           },
         ]
       }
+      registration_corrections: {
+        Row: {
+          corrected_fields: Json
+          created_at: string
+          created_by: string | null
+          dispute_note: string | null
+          field_confidence: Json | null
+          id: string
+          registration_id: string
+          responded_at: string | null
+          response: Database["public"]["Enums"]["correction_response"] | null
+          round: number
+          sent_at: string | null
+          source: Database["public"]["Enums"]["correction_source"]
+          staff_rationale: string | null
+          updated_at: string
+        }
+        Insert: {
+          corrected_fields?: Json
+          created_at?: string
+          created_by?: string | null
+          dispute_note?: string | null
+          field_confidence?: Json | null
+          id?: string
+          registration_id: string
+          responded_at?: string | null
+          response?: Database["public"]["Enums"]["correction_response"] | null
+          round?: number
+          sent_at?: string | null
+          source?: Database["public"]["Enums"]["correction_source"]
+          staff_rationale?: string | null
+          updated_at?: string
+        }
+        Update: {
+          corrected_fields?: Json
+          created_at?: string
+          created_by?: string | null
+          dispute_note?: string | null
+          field_confidence?: Json | null
+          id?: string
+          registration_id?: string
+          responded_at?: string | null
+          response?: Database["public"]["Enums"]["correction_response"] | null
+          round?: number
+          sent_at?: string | null
+          source?: Database["public"]["Enums"]["correction_source"]
+          staff_rationale?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "registration_corrections_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "property_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       registration_documents: {
         Row: {
           byte_size: number
@@ -560,6 +619,8 @@ export type Database = {
       }
     }
     Enums: {
+      correction_response: "confirmed" | "disputed"
+      correction_source: "staff" | "engine"
       property_type:
         | "single_family"
         | "multi_family"
@@ -578,6 +639,7 @@ export type Database = {
         | "photo_id"
         | "authority_document"
         | "other"
+        | "property_photo"
       registration_status:
         | "draft"
         | "submitted"
@@ -587,6 +649,8 @@ export type Database = {
         | "anchoring"
         | "anchored"
         | "rejected"
+        | "correction_sent"
+        | "confirmed_by_user"
       staff_role: "admin" | "reviewer"
       submitter_relationship:
         | "owner"
@@ -745,6 +809,8 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      correction_response: ["confirmed", "disputed"],
+      correction_source: ["staff", "engine"],
       property_type: [
         "single_family",
         "multi_family",
@@ -764,6 +830,7 @@ export const Constants = {
         "photo_id",
         "authority_document",
         "other",
+        "property_photo",
       ],
       registration_status: [
         "draft",
@@ -774,6 +841,8 @@ export const Constants = {
         "anchoring",
         "anchored",
         "rejected",
+        "correction_sent",
+        "confirmed_by_user",
       ],
       staff_role: ["admin", "reviewer"],
       submitter_relationship: [

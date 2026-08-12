@@ -472,7 +472,7 @@ function RegisterPropertyPage() {
         <Card className="grid gap-4">
 
           <h2 className="text-xl">Supporting context</h2>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4">
           <Field
             label="Public source or reference notes (optional)"
             htmlFor="public_source_notes"
@@ -481,7 +481,7 @@ function RegisterPropertyPage() {
           >
             <textarea
               id="public_source_notes"
-              rows={5}
+              rows={6}
               className={inputClass}
               value={form.public_source_notes ?? ""}
               onChange={(e) => set("public_source_notes", e.target.value)}
@@ -494,7 +494,7 @@ function RegisterPropertyPage() {
           >
             <textarea
               id="user_note"
-              rows={5}
+              rows={6}
               className={inputClass}
               value={form.user_note ?? ""}
               onChange={(e) => set("user_note", e.target.value)}
