@@ -9,6 +9,8 @@ export const REGISTRATION_STATUSES = [
   "anchoring",
   "anchored",
   "rejected",
+  "correction_sent",
+  "confirmed_by_user",
 ] as const;
 
 export type RegistrationStatus = (typeof REGISTRATION_STATUSES)[number];
@@ -22,6 +24,8 @@ export const statusLabels: Record<RegistrationStatus, string> = {
   anchoring: "Anchoring",
   anchored: "Anchored",
   rejected: "Rejected",
+  correction_sent: "Needs your confirmation",
+  confirmed_by_user: "Confirmed by you",
 };
 
 export const statusHelp: Record<RegistrationStatus, string> = {
@@ -33,6 +37,9 @@ export const statusHelp: Record<RegistrationStatus, string> = {
   anchoring: "A record proof is being prepared and published.",
   anchored: "A tamper-evident record proof has been published and validated.",
   rejected: "This record could not be accepted into the registry.",
+  correction_sent:
+    "We checked your details and suggested a few corrections. Review them and confirm or tell us what's wrong.",
+  confirmed_by_user: "You confirmed the reviewed details. The registry team is finalising this record.",
 };
 
 export const relationshipOptions = [
