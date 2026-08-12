@@ -379,6 +379,7 @@ function RegisterPropertyPage() {
         <Card className="grid gap-4">
 
           <h2 className="text-xl">Property location</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Address line 1" htmlFor="address_line1" error={errors["address_line1"]}>
             <input
               id="address_line1"
@@ -397,6 +398,8 @@ function RegisterPropertyPage() {
               onChange={(e) => set("address_line2", e.target.value)}
             />
           </Field>
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="City" htmlFor="city" error={errors["city"]}>
               <input
