@@ -481,7 +481,7 @@ function RegisterPropertyPage() {
           >
             <textarea
               id="public_source_notes"
-              rows={5}
+              rows={6}
               className={inputClass}
               value={form.public_source_notes ?? ""}
               onChange={(e) => set("public_source_notes", e.target.value)}
