@@ -67,9 +67,11 @@ export function PendingDocumentSlots({
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-3">
       <p className="text-xs text-muted-foreground">{acceptedSummary}</p>
+      <div className="grid gap-3 md:grid-cols-2">
       {DOCUMENT_SLOTS.map((slot) => (
+
         <DocumentSlotShell key={slot.value} label={slot.label} hint={slot.hint}>
           <SlotFilePicker
             slot={slot.value}
