@@ -492,15 +492,28 @@ function RegisterPropertyPage() {
             </p>
           ) : null}
         </Card>
+        ) : null}
 
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="submit"
-            disabled={busy || profileLoading || !form.submitter_full_name}
-            className={primaryButtonClass}
-          >
-            {uploading ? "Uploading documents…" : busy ? "Working…" : "Submit for review"}
-          </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {step > 0 ? (
+            <button type="button" onClick={goBack} className={secondaryButtonClass}>
+              Back
+            </button>
+          ) : null}
+
+          {!isLast ? (
+            <button type="submit" className={primaryButtonClass}>
+              Continue
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={busy || profileLoading || !form.submitter_full_name}
+              className={primaryButtonClass}
+            >
+              {uploading ? "Uploading documents…" : busy ? "Working…" : "Submit for review"}
+            </button>
+          )}
 
           <button
             type="button"
@@ -511,6 +524,7 @@ function RegisterPropertyPage() {
             Save draft
           </button>
         </div>
+
       </form>
     </Section>
   );
