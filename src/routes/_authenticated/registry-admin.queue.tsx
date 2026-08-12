@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { formatE164 } from "@/lib/phone";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -239,7 +240,7 @@ function StaffWorkspace({ role }: { role: "admin" | "reviewer" }) {
                     </span>
                   </div>
                   <p className="truncate text-xs text-muted-foreground">
-                    {p.email} {p.phone_e164 ? `· ${p.phone_e164}` : ""}
+                    {p.email} {p.phone_e164 ? `· ${formatE164(p.phone_e164)}` : ""}
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {registrationCountByUser.get(p.id) ?? 0} properties · joined{" "}
