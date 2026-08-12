@@ -235,49 +235,52 @@ function RegisterPropertyPage() {
   const percent = Math.round((step / STEPS.length) * 100);
 
   return (
-    <Section className="max-w-3xl">
-      <SectionHeading
-        as="h1"
-        eyebrow="Registry submission"
-        title="Register a property record"
-        description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."
-      />
-
-      <div className="mt-8 grid gap-3">
-        <div className="flex items-baseline justify-between gap-3">
-          <p className="text-sm font-medium">
-            Step {step + 1} of {STEPS.length}: {STEPS[step]?.title}
-          </p>
-          <p className="text-xs text-muted-foreground">{percent}% complete</p>
-        </div>
-        <div
-          role="progressbar"
-          aria-valuenow={percent}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label="Registration progress"
-          className="h-2 w-full overflow-hidden rounded-full bg-muted"
-        >
-          <div
-            className="h-full rounded-full bg-primary transition-all duration-300"
-            style={{ width: `${percent}%` }}
+    <Section className="max-w-6xl py-8 sm:py-10">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,280px)_minmax(0,1fr)] lg:items-start lg:gap-12">
+        <div className="lg:sticky lg:top-8">
+          <SectionHeading
+            as="h1"
+            eyebrow="Registry submission"
+            title="Register a property record"
+            description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."
           />
-        </div>
-        <ol className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-          {STEPS.map((s, index) => (
-            <li
-              key={s.title}
-              className={index === step ? "font-medium text-foreground" : undefined}
-              aria-current={index === step ? "step" : undefined}
+
+          <div className="mt-6 grid gap-3">
+            <div className="flex items-baseline justify-between gap-3">
+              <p className="text-sm font-medium">
+                Step {step + 1} of {STEPS.length}
+              </p>
+              <p className="text-xs text-muted-foreground">{percent}% complete</p>
+            </div>
+            <div
+              role="progressbar"
+              aria-valuenow={percent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Registration progress"
+              className="h-2 w-full overflow-hidden rounded-full bg-muted"
             >
-              {index + 1}. {s.title}
-            </li>
-          ))}
-        </ol>
-      </div>
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-300"
+                style={{ width: `${percent}%` }}
+              />
+            </div>
+            <ol className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground lg:grid lg:gap-1.5 lg:text-sm">
+              {STEPS.map((s, index) => (
+                <li
+                  key={s.title}
+                  className={index === step ? "font-medium text-foreground" : undefined}
+                  aria-current={index === step ? "step" : undefined}
+                >
+                  {index + 1}. {s.title}
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
 
       <form
-        className="mt-6 grid gap-6"
+        className="grid content-start gap-5"
         onSubmit={(e) => {
           e.preventDefault();
           if (!isLast) {
@@ -288,6 +291,7 @@ function RegisterPropertyPage() {
         }}
         noValidate
       >
+
         {step === 0 ? (
         <Card className="grid gap-4">
 
@@ -375,6 +379,7 @@ function RegisterPropertyPage() {
         <Card className="grid gap-4">
 
           <h2 className="text-xl">Property location</h2>
+          <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Address line 1" htmlFor="address_line1" error={errors["address_line1"]}>
             <input
               id="address_line1"
@@ -393,6 +398,8 @@ function RegisterPropertyPage() {
               onChange={(e) => set("address_line2", e.target.value)}
             />
           </Field>
+          </div>
+
           <div className="grid gap-4 sm:grid-cols-3">
             <Field label="City" htmlFor="city" error={errors["city"]}>
               <input
@@ -423,7 +430,7 @@ function RegisterPropertyPage() {
               />
             </Field>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
             <Field label="County or jurisdiction" htmlFor="county" error={errors["county"]}>
               <input
                 id="county"
@@ -440,23 +447,24 @@ function RegisterPropertyPage() {
                 onChange={(e) => set("parcel_id", e.target.value)}
               />
             </Field>
+            <Field label="Property type" htmlFor="property_type">
+              <select
+                id="property_type"
+                className={inputClass}
+                value={form.property_type}
+                onChange={(e) =>
+                  set("property_type", e.target.value as RegistrationInput["property_type"])
+                }
+              >
+                {propertyTypeOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </Field>
           </div>
-          <Field label="Property type" htmlFor="property_type">
-            <select
-              id="property_type"
-              className={inputClass}
-              value={form.property_type}
-              onChange={(e) =>
-                set("property_type", e.target.value as RegistrationInput["property_type"])
-              }
-            >
-              {propertyTypeOptions.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </Field>
+
         </Card>
         ) : null}
 
@@ -464,6 +472,7 @@ function RegisterPropertyPage() {
         <Card className="grid gap-4">
 
           <h2 className="text-xl">Supporting context</h2>
+          <div className="grid gap-4 lg:grid-cols-2">
           <Field
             label="Public source or reference notes (optional)"
             htmlFor="public_source_notes"
@@ -472,7 +481,7 @@ function RegisterPropertyPage() {
           >
             <textarea
               id="public_source_notes"
-              rows={4}
+              rows={5}
               className={inputClass}
               value={form.public_source_notes ?? ""}
               onChange={(e) => set("public_source_notes", e.target.value)}
@@ -485,12 +494,14 @@ function RegisterPropertyPage() {
           >
             <textarea
               id="user_note"
-              rows={3}
+              rows={5}
               className={inputClass}
               value={form.user_note ?? ""}
               onChange={(e) => set("user_note", e.target.value)}
             />
           </Field>
+          </div>
+
         </Card>
         ) : null}
 
@@ -587,6 +598,8 @@ function RegisterPropertyPage() {
         </div>
 
       </form>
+      </div>
     </Section>
+
   );
 }
