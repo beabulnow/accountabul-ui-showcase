@@ -430,7 +430,7 @@ function RegisterPropertyPage() {
               />
             </Field>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
             <Field label="County or jurisdiction" htmlFor="county" error={errors["county"]}>
               <input
                 id="county"
@@ -447,23 +447,24 @@ function RegisterPropertyPage() {
                 onChange={(e) => set("parcel_id", e.target.value)}
               />
             </Field>
+            <Field label="Property type" htmlFor="property_type">
+              <select
+                id="property_type"
+                className={inputClass}
+                value={form.property_type}
+                onChange={(e) =>
+                  set("property_type", e.target.value as RegistrationInput["property_type"])
+                }
+              >
+                {propertyTypeOptions.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </Field>
           </div>
-          <Field label="Property type" htmlFor="property_type">
-            <select
-              id="property_type"
-              className={inputClass}
-              value={form.property_type}
-              onChange={(e) =>
-                set("property_type", e.target.value as RegistrationInput["property_type"])
-              }
-            >
-              {propertyTypeOptions.map((o) => (
-                <option key={o.value} value={o.value}>
-                  {o.label}
-                </option>
-              ))}
-            </select>
-          </Field>
+
         </Card>
         ) : null}
 
