@@ -472,7 +472,7 @@ function RegisterPropertyPage() {
         <Card className="grid gap-4">
 
           <h2 className="text-xl">Supporting context</h2>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-4">
           <Field
             label="Public source or reference notes (optional)"
             htmlFor="public_source_notes"
