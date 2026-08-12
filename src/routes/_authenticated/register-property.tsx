@@ -148,6 +148,35 @@ function RegisterPropertyPage() {
     navigate({ to: "/registrations/$id", params: { id: data.id } });
   }
 
+  function goNext() {
+    const stepFields = STEPS[step]?.fields ?? [];
+    const parsed = registrationSchema.safeParse(form);
+    if (!parsed.success) {
+      const next: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0]);
+        if (stepFields.includes(key)) next[key] = issue.message;
+      }
+      if (Object.keys(next).length > 0) {
+        setErrors(next);
+        toast.error("Please correct the highlighted fields");
+        return;
+      }
+    }
+    setErrors({});
+    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goBack() {
+    setErrors({});
+    setStep((s) => Math.max(s - 1, 0));
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  const isLast = step === STEPS.length - 1;
+  const percent = Math.round(((step + 1) / STEPS.length) * 100);
+
   return (
     <Section className="max-w-3xl">
       <SectionHeading
@@ -157,15 +186,54 @@ function RegisterPropertyPage() {
         description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."
       />
 
+      <div className="mt-8 grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-sm font-medium">
+            Step {step + 1} of {STEPS.length}: {STEPS[step]?.title}
+          </p>
+          <p className="text-xs text-muted-foreground">{percent}% complete</p>
+        </div>
+        <div
+          role="progressbar"
+          aria-valuenow={percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Registration progress"
+          className="h-2 w-full overflow-hidden rounded-full bg-muted"
+        >
+          <div
+            className="h-full rounded-full bg-primary transition-all duration-300"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+        <ol className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          {STEPS.map((s, index) => (
+            <li
+              key={s.title}
+              className={index === step ? "font-medium text-foreground" : undefined}
+              aria-current={index === step ? "step" : undefined}
+            >
+              {index + 1}. {s.title}
+            </li>
+          ))}
+        </ol>
+      </div>
+
       <form
-        className="mt-8 grid gap-6"
+        className="mt-6 grid gap-6"
         onSubmit={(e) => {
           e.preventDefault();
+          if (!isLast) {
+            goNext();
+            return;
+          }
           void save("submit");
         }}
         noValidate
       >
+        {step === 0 ? (
         <Card className="grid gap-4">
+
           <h2 className="text-xl">About you</h2>
           <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface px-4 py-4">
             <ProfileAvatar
