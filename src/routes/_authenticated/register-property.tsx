@@ -431,8 +431,11 @@ function RegisterPropertyPage() {
             />
           </Field>
         </Card>
+        ) : null}
 
+        {step === 3 ? (
         <Card className="grid gap-4">
+
           <div>
             <h2 className="text-xl">Supporting documents</h2>
             <p className="mt-1 text-sm text-muted-foreground">
