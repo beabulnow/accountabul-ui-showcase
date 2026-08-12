@@ -308,9 +308,11 @@ function RegisterPropertyPage() {
             </Field>
           ) : null}
         </Card>
+        ) : null}
 
-
+        {step === 1 ? (
         <Card className="grid gap-4">
+
           <h2 className="text-xl">Property location</h2>
           <Field label="Address line 1" htmlFor="address_line1" error={errors["address_line1"]}>
             <input
