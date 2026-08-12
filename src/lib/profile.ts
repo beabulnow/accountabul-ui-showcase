@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 import type { Tables } from "@/integrations/supabase/types";
+import { phoneProblem, splitE164 } from "@/lib/phone";
+import { safeMultiline, safeText } from "@/lib/sanitize";
 
 export const PROFILE_NOTICE_VERSION = "profile-notice-v1";
 export const PROFILE_AVATAR_BUCKET = "profile-avatars";
