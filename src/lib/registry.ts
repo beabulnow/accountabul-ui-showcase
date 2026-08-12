@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { safeMultiline, safeText } from "@/lib/sanitize";
+
 export const REGISTRATION_STATUSES = [
   "draft",
   "submitted",
@@ -209,8 +211,8 @@ export const registrationSchema = z
       "mixed_use",
       "other",
     ]),
-    public_source_notes: z.string().trim().max(4000).optional().or(z.literal("")),
-    user_note: z.string().trim().max(4000).optional().or(z.literal("")),
+    public_source_notes: safeMultiline(4000).optional(),
+    user_note: safeMultiline(4000).optional(),
     affirm_accurate: z.boolean(),
     affirm_authorized: z.boolean(),
     affirm_not_title: z.boolean(),
