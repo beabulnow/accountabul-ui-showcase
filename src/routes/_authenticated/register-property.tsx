@@ -494,7 +494,7 @@ function RegisterPropertyPage() {
           >
             <textarea
               id="user_note"
-              rows={5}
+              rows={6}
               className={inputClass}
               value={form.user_note ?? ""}
               onChange={(e) => set("user_note", e.target.value)}
