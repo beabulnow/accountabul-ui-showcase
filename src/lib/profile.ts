@@ -12,26 +12,28 @@ export const PROFILE_SELECT =
 export type Profile = Tables<"profiles">;
 
 export const profileSchema = z.object({
-  first_name: z.string().trim().min(1, "Enter your first name").max(80),
-  middle_name: z.string().trim().max(80).optional().or(z.literal("")),
-  last_name: z.string().trim().min(1, "Enter your last name").max(80),
+  first_name: safeText(80).refine((value) => value.length > 0, "Enter your first name"),
+  middle_name: safeText(80).optional(),
+  last_name: safeText(80).refine((value) => value.length > 0, "Enter your last name"),
   date_of_birth: z
     .string()
-    .min(1, "Enter your date of birth")
-    .refine((value) => !Number.isNaN(Date.parse(`${value}T00:00:00`)), "Enter a valid date")
+    .min(1, "Choose your date of birth")
+    .refine((value) => /^\d{4}-\d{2}-\d{2}$/.test(value), "Choose a valid date")
+    .refine((value) => !Number.isNaN(Date.parse(`${value}T00:00:00`)), "Choose a valid date")
     .refine(
       (value) => value <= new Date().toISOString().slice(0, 10),
       "Date cannot be in the future",
     ),
   phone: z
     .string()
-    .trim()
-    .min(1, "Enter your phone number")
+    .max(24)
     .transform(normalizePhone)
-    .refine((value) => /^\+[1-9][0-9]{7,14}$/.test(value), {
-      message: "Enter a valid phone number with country code",
+    .superRefine((value, ctx) => {
+      const { dialCode, nationalNumber } = splitE164(value);
+      const problem = phoneProblem(dialCode, nationalNumber);
+      if (problem) ctx.addIssue({ code: z.ZodIssueCode.custom, message: problem });
     }),
-  bio: z.string().trim().max(500, "Bio must be 500 characters or fewer").optional(),
+  bio: safeMultiline(500).optional(),
   privacy_accepted: z.literal(true, {
     errorMap: () => ({ message: "Confirm the identity-information notice to continue" }),
   }),
