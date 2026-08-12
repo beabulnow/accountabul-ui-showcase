@@ -50,27 +50,62 @@ export const DOCUMENT_SLOTS = [
   },
 ] as const satisfies readonly { value: RegistrationDocumentType; label: string; hint: string }[];
 
-export const ACCEPTED_DOCUMENT_MIME_TYPES = [
-  "application/pdf",
+/** Photos live in their own wide card at the end of the documents step. */
+export const PHOTO_SLOT = {
+  value: "property_photo",
+  label: "Photos of the property",
+  hint: "Exterior, street view, and any detail worth showing. Images only.",
+} as const satisfies { value: RegistrationDocumentType; label: string; hint: string };
+
+export const ALL_DOCUMENT_SLOTS = [...DOCUMENT_SLOTS, PHOTO_SLOT] as const;
+
+export const ACCEPTED_IMAGE_MIME_TYPES = [
   "image/jpeg",
   "image/png",
   "image/heic",
   "image/heif",
+  "image/webp",
+] as const;
+
+export const ACCEPTED_DOCUMENT_MIME_TYPES = [
+  "application/pdf",
+  ...ACCEPTED_IMAGE_MIME_TYPES,
 ] as const;
 
 /** Some browsers report an empty type for .heic — fall back to the extension. */
-const ACCEPTED_EXTENSIONS = [".pdf", ".jpg", ".jpeg", ".png", ".heic", ".heif"];
+const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".heic", ".heif", ".webp"];
+const DOCUMENT_EXTENSIONS = [".pdf", ...IMAGE_EXTENSIONS];
 
 export const DOCUMENT_ACCEPT_ATTRIBUTE = [
   ...ACCEPTED_DOCUMENT_MIME_TYPES,
-  ...ACCEPTED_EXTENSIONS,
+  ...DOCUMENT_EXTENSIONS,
+].join(",");
+
+export const IMAGE_ACCEPT_ATTRIBUTE = [
+  ...ACCEPTED_IMAGE_MIME_TYPES,
+  ...IMAGE_EXTENSIONS,
 ].join(",");
 
 export const DOCUMENT_MAX_BYTES = 15 * 1024 * 1024;
 export const DOCUMENT_MAX_FILES_PER_SLOT = 8;
+export const PHOTO_MAX_FILES = 12;
+export const DOCUMENT_MAX_FILES_PER_REGISTRATION = 40;
+
+/** Photo slots take images only; every other slot also accepts a PDF scan. */
+export function slotAcceptsImagesOnly(slot: RegistrationDocumentType) {
+  return slot === PHOTO_SLOT.value;
+}
+
+export function slotAcceptAttribute(slot: RegistrationDocumentType) {
+  return slotAcceptsImagesOnly(slot) ? IMAGE_ACCEPT_ATTRIBUTE : DOCUMENT_ACCEPT_ATTRIBUTE;
+}
+
+export function slotFileLimit(slot: RegistrationDocumentType) {
+  return slotAcceptsImagesOnly(slot) ? PHOTO_MAX_FILES : DOCUMENT_MAX_FILES_PER_SLOT;
+}
 
 export function documentSlotLabel(value: RegistrationDocumentType) {
-  return DOCUMENT_SLOTS.find((slot) => slot.value === value)?.label ?? "Document";
+  return ALL_DOCUMENT_SLOTS.find((slot) => slot.value === value)?.label ?? "Document";
 }
 
 export function formatBytes(bytes: number) {
