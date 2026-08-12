@@ -450,8 +450,11 @@ function RegisterPropertyPage() {
             </p>
           ) : null}
         </Card>
+        ) : null}
 
+        {step === 4 ? (
         <Card className="grid gap-3">
+
           <h2 className="text-xl">Affirmations</h2>
           <p className="text-sm text-muted-foreground">
             All three are required before a record can be submitted for review.
