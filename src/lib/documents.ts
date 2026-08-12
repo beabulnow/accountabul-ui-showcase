@@ -114,13 +114,25 @@ export function formatBytes(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-/** Returns an error message when the file cannot be accepted, otherwise null. */
-export function validateDocumentFile(file: File): string | null {
+/** Returns an error message when the file cannot be accepted, otherwise null.
+ * `slot` narrows the rule: photo cards take images only, so a PDF dropped on
+ * the photos card is rejected with a message that names the right card. */
+export function validateDocumentFile(file: File, slot?: RegistrationDocumentType): string | null {
   const name = file.name.toLowerCase();
-  const typeOk = (ACCEPTED_DOCUMENT_MIME_TYPES as readonly string[]).includes(file.type);
-  const extensionOk = ACCEPTED_EXTENSIONS.some((extension) => name.endsWith(extension));
+  const imagesOnly = slot ? slotAcceptsImagesOnly(slot) : false;
+  const mimeTypes: readonly string[] = imagesOnly
+    ? ACCEPTED_IMAGE_MIME_TYPES
+    : ACCEPTED_DOCUMENT_MIME_TYPES;
+  const extensions = imagesOnly ? IMAGE_EXTENSIONS : DOCUMENT_EXTENSIONS;
+  const typeOk = mimeTypes.includes(file.type);
+  const extensionOk = extensions.some((extension) => name.endsWith(extension));
   if (!typeOk && !extensionOk) {
-    return `${file.name}: only PDF, JPG, PNG and HEIC files are accepted`;
+    return imagesOnly
+      ? `${file.name}: the photos card takes images only (JPG, PNG, HEIC or WEBP)`
+      : `${file.name}: only PDF, JPG, PNG, HEIC and WEBP files are accepted`;
+  }
+  if (!imagesOnly && slot && slot !== "other" && file.type.startsWith("image/") === false) {
+    // PDFs are fine everywhere else; nothing further to check here.
   }
   if (file.size > DOCUMENT_MAX_BYTES) {
     return `${file.name}: files must be ${formatBytes(DOCUMENT_MAX_BYTES)} or smaller`;
