@@ -28,9 +28,10 @@ export function PhoneInput({
 
   return (
     <div className="flex gap-2">
+      <div className="w-32 flex-none">
       <select
         aria-label="Country calling code"
-        className={`${inputClass} w-32 shrink-0`}
+        className={inputClass}
         value={country.dialCode}
         disabled={disabled}
         onChange={(event) => {
@@ -47,6 +48,8 @@ export function PhoneInput({
           </option>
         ))}
       </select>
+      </div>
+      <div className="min-w-0 flex-1">
       <input
         id={id}
         type="tel"
@@ -62,6 +65,7 @@ export function PhoneInput({
           onChange({ dialCode: country.dialCode, nationalNumber: digits });
         }}
       />
+      </div>
     </div>
   );
 }
