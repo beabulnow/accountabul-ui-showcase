@@ -397,8 +397,11 @@ function RegisterPropertyPage() {
             </select>
           </Field>
         </Card>
+        ) : null}
 
+        {step === 2 ? (
         <Card className="grid gap-4">
+
           <h2 className="text-xl">Supporting context</h2>
           <Field
             label="Public source or reference notes (optional)"
