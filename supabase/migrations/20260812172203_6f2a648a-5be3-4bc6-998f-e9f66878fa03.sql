@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION app_private.enforce_staff_allowlist() FROM PUBLIC, anon, authenticated;
