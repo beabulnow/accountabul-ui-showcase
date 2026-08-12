@@ -46,14 +46,36 @@ export const Route = createFileRoute("/_authenticated/register-property")({
   component: RegisterPropertyPage,
 });
 
+const STEPS = [
+  { title: "About you", fields: ["submitter_full_name", "relationship_title", "relationship_other"] },
+  {
+    title: "Property location",
+    fields: [
+      "address_line1",
+      "address_line2",
+      "city",
+      "state",
+      "postal_code",
+      "county",
+      "parcel_id",
+      "property_type",
+    ],
+  },
+  { title: "Supporting context", fields: ["public_source_notes", "user_note"] },
+  { title: "Supporting documents", fields: ["documents"] },
+  { title: "Affirmations", fields: ["affirmations"] },
+] as const;
+
 function RegisterPropertyPage() {
   const navigate = useNavigate();
   const { user } = useSession();
   const { data: profile, isLoading: profileLoading } = useProfile(user?.id);
+  const [step, setStep] = useState(0);
   const [form, setForm] = useState<RegistrationInput>(emptyRegistration);
   const [documents, setDocuments] = useState<PendingDocuments>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
+
   const [uploading, setUploading] = useState(false);
   const documentCount = countPendingDocuments(documents);
 
@@ -78,13 +100,19 @@ function RegisterPropertyPage() {
       const next: Record<string, string> = {};
       for (const issue of parsed.error.issues) next[String(issue.path[0])] = issue.message;
       setErrors(next);
+      const firstStep = STEPS.findIndex((s) =>
+        (s.fields as readonly string[]).some((field) => field in next),
+      );
+      if (firstStep >= 0) setStep(firstStep);
       toast.error("Please correct the highlighted fields");
       return;
     }
+
     if (intent === "submit") {
       const missing = !form.affirm_accurate || !form.affirm_authorized || !form.affirm_not_title;
       if (missing) {
         setErrors({ affirmations: "All three affirmations are required before submitting." });
+        setStep(4);
         toast.error("All three affirmations are required before submitting");
         return;
       }
@@ -92,9 +120,11 @@ function RegisterPropertyPage() {
         setErrors({
           documents: "Attach at least one supporting document before submitting for review.",
         });
+        setStep(3);
         toast.error("At least one supporting document is required to submit");
         return;
       }
+
     }
 
     setBusy(true);
@@ -148,6 +178,35 @@ function RegisterPropertyPage() {
     navigate({ to: "/registrations/$id", params: { id: data.id } });
   }
 
+  function goNext() {
+    const stepFields: readonly string[] = STEPS[step]?.fields ?? [];
+    const parsed = registrationSchema.safeParse(form);
+    if (!parsed.success) {
+      const next: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        const key = String(issue.path[0]);
+        if (stepFields.includes(key)) next[key] = issue.message;
+      }
+      if (Object.keys(next).length > 0) {
+        setErrors(next);
+        toast.error("Please correct the highlighted fields");
+        return;
+      }
+    }
+    setErrors({});
+    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goBack() {
+    setErrors({});
+    setStep((s) => Math.max(s - 1, 0));
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  const isLast = step === STEPS.length - 1;
+  const percent = Math.round(((step + 1) / STEPS.length) * 100);
+
   return (
     <Section className="max-w-3xl">
       <SectionHeading
@@ -157,15 +216,54 @@ function RegisterPropertyPage() {
         description="This creates a registry record for staff review. It is not title, a deed, an appraisal, or proof of ownership."
       />
 
+      <div className="mt-8 grid gap-3">
+        <div className="flex items-baseline justify-between gap-3">
+          <p className="text-sm font-medium">
+            Step {step + 1} of {STEPS.length}: {STEPS[step]?.title}
+          </p>
+          <p className="text-xs text-muted-foreground">{percent}% complete</p>
+        </div>
+        <div
+          role="progressbar"
+          aria-valuenow={percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Registration progress"
+          className="h-2 w-full overflow-hidden rounded-full bg-muted"
+        >
+          <div
+            className="h-full rounded-full bg-primary transition-all duration-300"
+            style={{ width: `${percent}%` }}
+          />
+        </div>
+        <ol className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+          {STEPS.map((s, index) => (
+            <li
+              key={s.title}
+              className={index === step ? "font-medium text-foreground" : undefined}
+              aria-current={index === step ? "step" : undefined}
+            >
+              {index + 1}. {s.title}
+            </li>
+          ))}
+        </ol>
+      </div>
+
       <form
-        className="mt-8 grid gap-6"
+        className="mt-6 grid gap-6"
         onSubmit={(e) => {
           e.preventDefault();
+          if (!isLast) {
+            goNext();
+            return;
+          }
           void save("submit");
         }}
         noValidate
       >
+        {step === 0 ? (
         <Card className="grid gap-4">
+
           <h2 className="text-xl">About you</h2>
           <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface px-4 py-4">
             <ProfileAvatar
@@ -240,9 +338,11 @@ function RegisterPropertyPage() {
             </Field>
           ) : null}
         </Card>
+        ) : null}
 
-
+        {step === 1 ? (
         <Card className="grid gap-4">
+
           <h2 className="text-xl">Property location</h2>
           <Field label="Address line 1" htmlFor="address_line1" error={errors["address_line1"]}>
             <input
@@ -327,8 +427,11 @@ function RegisterPropertyPage() {
             </select>
           </Field>
         </Card>
+        ) : null}
 
+        {step === 2 ? (
         <Card className="grid gap-4">
+
           <h2 className="text-xl">Supporting context</h2>
           <Field
             label="Public source or reference notes (optional)"
@@ -358,8 +461,11 @@ function RegisterPropertyPage() {
             />
           </Field>
         </Card>
+        ) : null}
 
+        {step === 3 ? (
         <Card className="grid gap-4">
+
           <div>
             <h2 className="text-xl">Supporting documents</h2>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -374,8 +480,11 @@ function RegisterPropertyPage() {
             </p>
           ) : null}
         </Card>
+        ) : null}
 
+        {step === 4 ? (
         <Card className="grid gap-3">
+
           <h2 className="text-xl">Affirmations</h2>
           <p className="text-sm text-muted-foreground">
             All three are required before a record can be submitted for review.
@@ -413,15 +522,28 @@ function RegisterPropertyPage() {
             </p>
           ) : null}
         </Card>
+        ) : null}
 
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="submit"
-            disabled={busy || profileLoading || !form.submitter_full_name}
-            className={primaryButtonClass}
-          >
-            {uploading ? "Uploading documents…" : busy ? "Working…" : "Submit for review"}
-          </button>
+        <div className="flex flex-wrap items-center gap-3">
+          {step > 0 ? (
+            <button type="button" onClick={goBack} className={secondaryButtonClass}>
+              Back
+            </button>
+          ) : null}
+
+          {!isLast ? (
+            <button type="submit" className={primaryButtonClass}>
+              Continue
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={busy || profileLoading || !form.submitter_full_name}
+              className={primaryButtonClass}
+            >
+              {uploading ? "Uploading documents…" : busy ? "Working…" : "Submit for review"}
+            </button>
+          )}
 
           <button
             type="button"
@@ -432,6 +554,7 @@ function RegisterPropertyPage() {
             Save draft
           </button>
         </div>
+
       </form>
     </Section>
   );
