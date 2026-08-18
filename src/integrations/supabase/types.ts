@@ -14,12 +14,179 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_consents: {
+        Row: {
+          app_id: string
+          created_at: string
+          granted_at: string | null
+          id: string
+          revoked_at: string | null
+          scopes: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          app_id: string
+          created_at?: string
+          granted_at?: string | null
+          id?: string
+          revoked_at?: string | null
+          scopes?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          app_id?: string
+          created_at?: string
+          granted_at?: string | null
+          id?: string
+          revoked_at?: string | null
+          scopes?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_consents_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "ecosystem_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consent_events: {
+        Row: {
+          action: string
+          app_id: string | null
+          created_at: string
+          id: string
+          scopes: string[] | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          app_id?: string | null
+          created_at?: string
+          id?: string
+          scopes?: string[] | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          app_id?: string | null
+          created_at?: string
+          id?: string
+          scopes?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consent_events_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "ecosystem_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ecosystem_apps: {
+        Row: {
+          client_secret_hash: string | null
+          created_at: string
+          description: string | null
+          home_url: string | null
+          id: string
+          is_active: boolean
+          is_first_party: boolean
+          name: string
+          redirect_urls: string[]
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          client_secret_hash?: string | null
+          created_at?: string
+          description?: string | null
+          home_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_first_party?: boolean
+          name: string
+          redirect_urls?: string[]
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          client_secret_hash?: string | null
+          created_at?: string
+          description?: string | null
+          home_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_first_party?: boolean
+          name?: string
+          redirect_urls?: string[]
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      identity_auth_codes: {
+        Row: {
+          app_id: string
+          code_hash: string
+          consumed_at: string | null
+          created_at: string
+          expires_at: string
+          id: string
+          redirect_uri: string
+          scopes: string[]
+          user_id: string
+        }
+        Insert: {
+          app_id: string
+          code_hash: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at: string
+          id?: string
+          redirect_uri: string
+          scopes?: string[]
+          user_id: string
+        }
+        Update: {
+          app_id?: string
+          code_hash?: string
+          consumed_at?: string | null
+          created_at?: string
+          expires_at?: string
+          id?: string
+          redirect_uri?: string
+          scopes?: string[]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "identity_auth_codes_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "ecosystem_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_path: string | null
           bio: string | null
           created_at: string
           date_of_birth: string | null
+          ecosystem_consent_at: string | null
+          ecosystem_consent_version: string | null
           email: string | null
           first_name: string | null
           full_name: string | null
@@ -38,6 +205,8 @@ export type Database = {
           bio?: string | null
           created_at?: string
           date_of_birth?: string | null
+          ecosystem_consent_at?: string | null
+          ecosystem_consent_version?: string | null
           email?: string | null
           first_name?: string | null
           full_name?: string | null
@@ -56,6 +225,8 @@ export type Database = {
           bio?: string | null
           created_at?: string
           date_of_birth?: string | null
+          ecosystem_consent_at?: string | null
+          ecosystem_consent_version?: string | null
           email?: string | null
           first_name?: string | null
           full_name?: string | null
