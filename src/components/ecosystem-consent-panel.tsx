@@ -9,7 +9,7 @@ import {
   isConsentActive,
   type EcosystemApp,
 } from "@/lib/ecosystem";
-import { Card, primaryButtonClass, secondaryButtonClass } from "@/components/ui-kit";
+import { Card, CardTitle, Muted, primaryButtonClass, secondaryButtonClass } from "@/components/ui-kit";
 import { cn } from "@/lib/utils";
 
 export function EcosystemConsentPanel({
@@ -70,23 +70,23 @@ export function EcosystemConsentPanel({
 
   return (
     <div className="grid gap-5">
-      <Card className="bg-secondary/40">
+      <Card tone="notice">
         <div className="flex items-start gap-3">
           <ShieldCheck className="mt-0.5 size-5 shrink-0 text-primary" aria-hidden />
           <div className="grid gap-2">
-            <p className="font-display text-xl">Welcome to the Verifiabul ecosystem</p>
-            <p className="text-sm text-muted-foreground">
+            <CardTitle>Welcome to the Verifiabul ecosystem</CardTitle>
+            <Muted>
               One profile works across every Verifiabul app. When you sign in somewhere else in the
               family, we can pass along a small set of basic profile details so you never have to
               fill them in twice. You choose which apps receive them, and you can change your mind
               at any time.
-            </p>
+            </Muted>
           </div>
         </div>
       </Card>
 
       <Card>
-        <p className="text-sm font-medium">What we share</p>
+        <CardTitle>What we share</CardTitle>
         <ul className="mt-3 grid gap-3 sm:grid-cols-2">
           {SHARED_FIELD_COPY.map((field) => (
             <li key={field.scope} className="flex items-start gap-2.5">
@@ -106,7 +106,7 @@ export function EcosystemConsentPanel({
       </Card>
 
       <Card>
-        <p className="text-sm font-medium">Choose the apps that can use your profile</p>
+        <CardTitle>Choose the apps that can use your profile</CardTitle>
         <p className="mt-1 text-xs text-muted-foreground">
           These are all Verifiabul apps. Untick one and it stops receiving your profile.
         </p>
@@ -123,7 +123,7 @@ export function EcosystemConsentPanel({
                   <label
                     className={cn(
                       "flex cursor-pointer items-start gap-3 rounded-xl border border-border p-3.5 transition-colors",
-                      checked ? "bg-secondary/50" : "hover:bg-accent/60",
+                      checked ? "bg-inset" : "hover:bg-inset/70",
                       locked && "cursor-default",
                     )}
                   >
