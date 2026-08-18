@@ -4,7 +4,7 @@ import { BadgeCheck, Clock3, FilePlus2, Files, Link2, ShieldCheck, UserRound } f
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
-import { Card, EmptyState, Section, SectionHeading } from "@/components/ui-kit";
+import { Card, CardTitle, EmptyState, Section, SectionHeading } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { formatDate, statusHelp, type RegistrationStatus } from "@/lib/registry";
 import { profileDisplayName } from "@/lib/profile";
@@ -93,9 +93,12 @@ function DashboardPage() {
       </Card>
 
       {isStaff ? (
-        <Card className="mt-4 flex flex-col gap-3 border-primary/30 sm:flex-row sm:items-center sm:justify-between">
+        <Card
+          tone="highlight"
+          className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+        >
           <div className="min-w-0">
-            <p className="font-display text-lg">Registry staff access</p>
+            <CardTitle>Registry staff access</CardTitle>
             <p className="text-sm text-muted-foreground">
               Your account is authorized as {role}. Open the business portal to review submissions.
             </p>

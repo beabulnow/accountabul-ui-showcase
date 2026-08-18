@@ -90,7 +90,7 @@ export function CorrectionReview({ registrationId }: { registrationId: string })
   }
 
   return (
-    <Card className="mt-6 border-caution/40">
+    <Card tone="notice" className="mt-6">
       <h2 className="text-xl">Review our corrections</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         {correction.source === "engine"

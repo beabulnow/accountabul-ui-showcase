@@ -402,7 +402,7 @@ function SubmissionInspector({
       </Card>
 
       <Card className="grid gap-3">
-        <h3 className="text-lg">Change status</h3>
+        <h3 className="text-xl">Change status</h3>
         <select
           aria-label="New status"
           className={inputClass}
@@ -439,7 +439,7 @@ function SubmissionInspector({
       </Card>
 
       <Card className="grid gap-3">
-        <h3 className="text-lg">Internal notes</h3>
+        <h3 className="text-xl">Internal notes</h3>
         <p className="text-xs text-muted-foreground">Never visible to the submitter.</p>
         <textarea
           aria-label="Internal note"
@@ -470,7 +470,7 @@ function SubmissionInspector({
       </Card>
 
       <Card className="grid gap-2">
-        <h3 className="text-lg">Supporting documents</h3>
+        <h3 className="text-xl">Supporting documents</h3>
         <RegistrationDocumentSlots
           registrationId={registration.id}
           emptyLabel="No documents were attached to this submission."
@@ -478,7 +478,7 @@ function SubmissionInspector({
       </Card>
 
       <Card className="grid gap-2">
-        <h3 className="text-lg">History</h3>
+        <h3 className="text-xl">History</h3>
         <StatusHistory entries={history ?? []} />
       </Card>
     </div>
