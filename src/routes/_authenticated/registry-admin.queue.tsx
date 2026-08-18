@@ -460,7 +460,7 @@ function SubmissionInspector({
           {(notes ?? []).map((n) => (
             <li
               key={n.id}
-              className="rounded-xl border border-border bg-surface px-3.5 py-3 text-sm"
+              className="rounded-xl border border-border bg-inset px-3.5 py-3 text-sm"
             >
               <p className="whitespace-pre-wrap">{n.body}</p>
               <p className="mt-1 text-xs text-muted-foreground">{formatDateTime(n.created_at)}</p>

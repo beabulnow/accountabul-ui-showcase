@@ -106,7 +106,7 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "grid place-items-center gap-3 rounded-2xl border border-dashed border-border bg-card/50 px-6 py-14 text-center",
+        "grid place-items-center gap-3 rounded-2xl border border-dashed border-border bg-inset px-6 py-14 text-center",
         className,
       )}
     >

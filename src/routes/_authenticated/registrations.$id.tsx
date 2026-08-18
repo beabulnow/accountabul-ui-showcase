@@ -174,7 +174,7 @@ function RegistrationDetailPage() {
               <DetailRow label="Anchored at" value={formatDateTime(anchor.anchored_at)} />
             </dl>
           ) : (
-            <p className="rounded-xl border border-dashed border-border bg-surface px-4 py-6 text-sm text-muted-foreground">
+            <p className="rounded-xl border border-dashed border-border bg-inset px-4 py-6 text-sm text-muted-foreground">
               A record proof is published once review is complete. When it is, the proof details
               appear here automatically — there is nothing for you to do.
             </p>

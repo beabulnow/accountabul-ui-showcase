@@ -251,7 +251,7 @@ function RegistryAdminHome() {
             {(myReviews ?? []).slice(0, 5).map((event) => (
               <li
                 key={event.id}
-                className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm"
+                className="rounded-xl border border-border bg-inset px-3.5 py-2.5 text-sm"
               >
                 <p className="truncate">
                   {registrationById.get(event.registration_id)?.receipt_code ?? "Record"} ·{" "}
@@ -316,7 +316,7 @@ function RegistryAdminHome() {
                 {REGISTRATION_STATUSES.map((status) => (
                   <li
                     key={status}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-border bg-inset px-3.5 py-2.5 text-sm"
                   >
                     <StatusChip status={status} />
                     <span className="tabular-nums">{stats.byStatus.get(status) ?? 0}</span>
@@ -341,7 +341,7 @@ function RegistryAdminHome() {
                   {stats.queue.slice(0, 6).map((row) => (
                     <li
                       key={row.id}
-                      className="rounded-xl border border-border bg-surface px-3.5 py-3 text-sm"
+                      className="rounded-xl border border-border bg-inset px-3.5 py-3 text-sm"
                     >
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-medium">{row.receipt_code}</span>
@@ -371,7 +371,7 @@ function RegistryAdminHome() {
                 {DOCUMENT_SLOTS.map((slot) => (
                   <li
                     key={slot.value}
-                    className="flex items-center justify-between gap-3 rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-border bg-inset px-3.5 py-2.5 text-sm"
                   >
                     <span className="min-w-0 truncate">{documentSlotLabel(slot.value)}</span>
                     <span className="tabular-nums text-muted-foreground">
@@ -403,7 +403,7 @@ function RegistryAdminHome() {
                     {(activity ?? []).map((event) => (
                       <li
                         key={event.id}
-                        className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm"
+                        className="rounded-xl border border-border bg-inset px-3.5 py-2.5 text-sm"
                       >
                         <p className="truncate">
                           {registrationById.get(event.registration_id)?.receipt_code ?? "Record"} ·{" "}
@@ -432,7 +432,7 @@ function RegistryAdminHome() {
                     {(staff ?? []).map((member) => (
                       <li
                         key={member.id}
-                        className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm"
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-inset px-3.5 py-2.5 text-sm"
                       >
                         <span className="min-w-0 truncate">
                           {profileById.get(member.user_id)?.email ?? member.user_id}
