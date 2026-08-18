@@ -51,3 +51,7 @@ They can revisit consent any time from their profile page: see which apps have a
 1. Phase A — tables, consent screen, connected-apps management inside this app.
 2. Phase B — `/connect` handoff, profile exchange endpoint, integration doc.
 3. Onboard the second app against the doc and verify end to end.
+4. check requirements make sure each is complete 
+5. loop and verify all changes landed 
+6. loop for a QA on the UI 
+7. &nbsp;
