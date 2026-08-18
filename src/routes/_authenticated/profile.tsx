@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { ConnectedApps } from "@/components/connected-apps";
 import { ProfileForm } from "@/components/profile-form";
 import { Section, SectionHeading } from "@/components/ui-kit";
 
@@ -28,6 +29,9 @@ function ProfilePage() {
         description="Keep the information connected to your property registrations accurate and current."
       />
       <ProfileForm mode="edit" redirectTo={returnTo ?? null} />
+      <div className="mt-10">
+        <ConnectedApps />
+      </div>
     </Section>
   );
 }

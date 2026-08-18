@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 import { supabase } from "@/integrations/supabase/client";
+import { ECOSYSTEM_CONSENT_VERSION } from "@/lib/ecosystem";
 import { isProfileComplete, PROFILE_SELECT } from "@/lib/profile";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -27,6 +28,17 @@ export const Route = createFileRoute("/_authenticated")({
       if (!isProfileComplete(profile)) {
         throw redirect({
           to: "/complete-profile",
+          search: { redirect: location.href },
+        });
+      }
+
+      // First run: show the ecosystem sharing notice before anything else.
+      if (
+        location.pathname !== "/ecosystem-consent" &&
+        profile?.ecosystem_consent_version !== ECOSYSTEM_CONSENT_VERSION
+      ) {
+        throw redirect({
+          to: "/ecosystem-consent",
           search: { redirect: location.href },
         });
       }
