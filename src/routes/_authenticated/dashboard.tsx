@@ -4,7 +4,7 @@ import { BadgeCheck, Clock3, FilePlus2, Files, Link2, ShieldCheck, UserRound } f
 
 import { supabase } from "@/integrations/supabase/client";
 import { ProfileAvatar } from "@/components/profile-avatar";
-import { Card, CardTitle, EmptyState, Section, SectionHeading } from "@/components/ui-kit";
+import { Card, CardTitle, EmptyState, Eyebrow, Section, SectionHeading } from "@/components/ui-kit";
 import { StatusChip } from "@/components/status-chip";
 import { formatDate, statusHelp, type RegistrationStatus } from "@/lib/registry";
 import { profileDisplayName } from "@/lib/profile";
@@ -122,7 +122,7 @@ function DashboardPage() {
         ].map((stat) => (
           <Card key={stat.label} className="p-4">
             <div className="flex items-center justify-between gap-3">
-              <p className="text-xs text-muted-foreground">{stat.label}</p>
+              <Eyebrow>{stat.label}</Eyebrow>
               <stat.icon className="size-4 text-muted-foreground" />
             </div>
             <p className="mt-2 font-display text-3xl">{stat.value}</p>
