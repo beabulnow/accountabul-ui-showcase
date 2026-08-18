@@ -17,6 +17,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRegistryAdminRouteImport } from './routes/_authenticated/registry-admin'
 import { Route as AuthenticatedRegisterPropertyRouteImport } from './routes/_authenticated/register-property'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedEcosystemConsentRouteImport } from './routes/_authenticated/ecosystem-consent'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCompleteProfileRouteImport } from './routes/_authenticated/complete-profile'
 import { Route as AuthenticatedRegistryAdminIndexRouteImport } from './routes/_authenticated/registry-admin.index'
@@ -66,6 +67,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEcosystemConsentRoute =
+  AuthenticatedEcosystemConsentRouteImport.update({
+    id: '/ecosystem-consent',
+    path: '/ecosystem-consent',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -113,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ecosystem-consent': typeof AuthenticatedEcosystemConsentRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
@@ -129,6 +137,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ecosystem-consent': typeof AuthenticatedEcosystemConsentRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
@@ -146,6 +155,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/ecosystem-consent': typeof AuthenticatedEcosystemConsentRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/_authenticated/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/complete-profile'
     | '/dashboard'
+    | '/ecosystem-consent'
     | '/profile'
     | '/register-property'
     | '/registry-admin'
@@ -180,6 +191,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/complete-profile'
     | '/dashboard'
+    | '/ecosystem-consent'
     | '/profile'
     | '/register-property'
     | '/registrations/$id'
@@ -196,6 +208,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/complete-profile'
     | '/_authenticated/dashboard'
+    | '/_authenticated/ecosystem-consent'
     | '/_authenticated/profile'
     | '/_authenticated/register-property'
     | '/_authenticated/registry-admin'
@@ -274,6 +287,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ecosystem-consent': {
+      id: '/_authenticated/ecosystem-consent'
+      path: '/ecosystem-consent'
+      fullPath: '/ecosystem-consent'
+      preLoaderRoute: typeof AuthenticatedEcosystemConsentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -345,6 +365,7 @@ const AuthenticatedRegistryAdminRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCompleteProfileRoute: typeof AuthenticatedCompleteProfileRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEcosystemConsentRoute: typeof AuthenticatedEcosystemConsentRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRegisterPropertyRoute: typeof AuthenticatedRegisterPropertyRoute
   AuthenticatedRegistryAdminRoute: typeof AuthenticatedRegistryAdminRouteWithChildren
@@ -354,6 +375,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCompleteProfileRoute: AuthenticatedCompleteProfileRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEcosystemConsentRoute: AuthenticatedEcosystemConsentRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRegisterPropertyRoute: AuthenticatedRegisterPropertyRoute,
   AuthenticatedRegistryAdminRoute: AuthenticatedRegistryAdminRouteWithChildren,
