@@ -25,6 +25,7 @@ import { Route as AuthenticatedRegistryAdminQueueRouteImport } from './routes/_a
 import { Route as AuthenticatedRegistrationsIdRouteImport } from './routes/_authenticated/registrations.$id'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicIdentityProfileRouteImport } from './routes/api/public/identity/profile'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -112,6 +113,12 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicIdentityProfileRoute =
+  ApiPublicIdentityProfileRouteImport.update({
+    id: '/api/public/identity/profile',
+    path: '/api/public/identity/profile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
   '/registry-admin/': typeof AuthenticatedRegistryAdminIndexRoute
+  '/api/public/identity/profile': typeof ApiPublicIdentityProfileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -143,6 +151,7 @@ export interface FileRoutesByTo {
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
   '/registry-admin': typeof AuthenticatedRegistryAdminIndexRoute
+  '/api/public/identity/profile': typeof ApiPublicIdentityProfileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -162,6 +171,7 @@ export interface FileRoutesById {
   '/_authenticated/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/_authenticated/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
   '/_authenticated/registry-admin/': typeof AuthenticatedRegistryAdminIndexRoute
+  '/api/public/identity/profile': typeof ApiPublicIdentityProfileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/registrations/$id'
     | '/registry-admin/queue'
     | '/registry-admin/'
+    | '/api/public/identity/profile'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -197,6 +208,7 @@ export interface FileRouteTypes {
     | '/registrations/$id'
     | '/registry-admin/queue'
     | '/registry-admin'
+    | '/api/public/identity/profile'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   id:
@@ -215,6 +227,7 @@ export interface FileRouteTypes {
     | '/_authenticated/registrations/$id'
     | '/_authenticated/registry-admin/queue'
     | '/_authenticated/registry-admin/'
+    | '/api/public/identity/profile'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   fileRoutesById: FileRoutesById
@@ -225,6 +238,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiPublicIdentityProfileRoute: typeof ApiPublicIdentityProfileRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
 }
@@ -343,6 +357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/identity/profile': {
+      id: '/api/public/identity/profile'
+      path: '/api/public/identity/profile'
+      fullPath: '/api/public/identity/profile'
+      preLoaderRoute: typeof ApiPublicIdentityProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -391,6 +412,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiPublicIdentityProfileRoute: ApiPublicIdentityProfileRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
 }
