@@ -35,13 +35,62 @@ export function SectionHeading({
   );
 }
 
-export function Card({ children, className }: { children: ReactNode; className?: string }) {
+/**
+ * Card tones — the only four surfaces used across the app.
+ * default: white card · notice: tinted callout · highlight: accent border only
+ * inset: muted sub-panel inside another card
+ */
+export type CardTone = "default" | "notice" | "highlight" | "inset";
+
+const cardToneClass: Record<CardTone, string> = {
+  default: "border-border bg-card shadow-soft",
+  notice: "border-notice-border bg-notice",
+  highlight: "border-primary/35 bg-card shadow-soft",
+  inset: "border-border bg-inset",
+};
+
+export function Card({
+  children,
+  className,
+  tone = "default",
+}: {
+  children: ReactNode;
+  className?: string;
+  tone?: CardTone;
+}) {
   return (
-    <div className={cn("rounded-2xl border border-border bg-card p-5 shadow-soft", className)}>
-      {children}
-    </div>
+    <div className={cn("rounded-2xl border p-5", cardToneClass[tone], className)}>{children}</div>
   );
 }
+
+/** Title inside a card — always the display serif, always this size. */
+export function CardTitle({
+  children,
+  className,
+  as: Heading = "p",
+}: {
+  children: ReactNode;
+  className?: string;
+  as?: "p" | "h2" | "h3";
+}) {
+  return <Heading className={cn("font-display text-xl", className)}>{children}</Heading>;
+}
+
+/** Small uppercase label above a value. */
+export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
+  return <p className={cn("eyebrow", className)}>{children}</p>;
+}
+
+/** Standard body paragraph. */
+export function Body({ children, className }: { children: ReactNode; className?: string }) {
+  return <p className={cn("text-sm", className)}>{children}</p>;
+}
+
+/** Supporting text under a title or field. */
+export function Muted({ children, className }: { children: ReactNode; className?: string }) {
+  return <p className={cn("text-sm text-muted-foreground", className)}>{children}</p>;
+}
+
 
 export function EmptyState({
   title,
