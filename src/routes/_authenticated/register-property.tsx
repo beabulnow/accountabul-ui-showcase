@@ -296,7 +296,7 @@ function RegisterPropertyPage() {
         <Card className="grid gap-4">
 
           <h2 className="text-xl">About you</h2>
-          <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-surface px-4 py-4">
+          <div className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-inset px-4 py-4">
             <ProfileAvatar
               avatarPath={profile?.avatar_path}
               name={profileDisplayName(profile)}

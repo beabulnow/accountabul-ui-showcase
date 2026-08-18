@@ -99,7 +99,7 @@ export function PendingDocumentSlots({
             {files.map((file, index) => (
               <li
                 key={`${file.name}-${file.size}-${index}`}
-                className="flex items-center gap-3 rounded-xl border border-border bg-surface px-3 py-2 text-sm"
+                className="flex items-center gap-3 rounded-xl border border-border bg-inset px-3 py-2 text-sm"
               >
                 <span className="min-w-0 flex-1 truncate">{file.name}</span>
                 <span className="shrink-0 text-xs text-muted-foreground">
@@ -264,7 +264,7 @@ export function RegistrationDocumentSlots({
                 {files.map((document) => (
                   <li
                     key={document.id}
-                    className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-surface px-3 py-2 text-sm"
+                    className="flex flex-wrap items-center gap-3 rounded-xl border border-border bg-inset px-3 py-2 text-sm"
                   >
                     <button
                       type="button"
@@ -311,7 +311,7 @@ function DocumentSlotShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`rounded-2xl border border-border bg-card/60 p-4 ${className ?? ""}`}>
+    <div className={`rounded-2xl border border-border bg-inset p-4 ${className ?? ""}`}>
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-medium">{label}</p>
@@ -370,7 +370,7 @@ function SlotFilePicker({
         className={`mt-3 flex w-full flex-col items-center justify-center gap-1 rounded-xl border border-dashed px-4 py-4 text-sm transition-colors ${
           dragging
             ? "border-primary bg-primary/5 text-foreground"
-            : "border-border bg-surface/60 text-muted-foreground hover:border-primary/60"
+            : "border-border bg-inset text-muted-foreground hover:border-primary/60"
         } ${disabled ? "opacity-60" : ""}`}
       >
         <span className="font-medium text-foreground">Drag files here</span>

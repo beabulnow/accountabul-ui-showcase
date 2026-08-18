@@ -205,7 +205,7 @@ function Home() {
               ].map((item) => (
                 <div
                   key={item}
-                  className="flex items-center gap-3 rounded-xl border border-border bg-surface px-3.5 py-3 text-sm"
+                  className="flex items-center gap-3 rounded-xl border border-border bg-inset px-3.5 py-3 text-sm"
                 >
                   <CheckCircle2 className="size-4 shrink-0 text-verified" aria-hidden />
                   <span>{item}</span>

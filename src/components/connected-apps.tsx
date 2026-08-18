@@ -4,7 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { useAppConsents, useEcosystemApps, useSaveConsents } from "@/hooks/use-ecosystem";
 import { useSession } from "@/hooks/use-session";
 import { consentByAppId, isConsentActive } from "@/lib/ecosystem";
-import { Card, secondaryButtonClass } from "@/components/ui-kit";
+import { Card, CardTitle, secondaryButtonClass } from "@/components/ui-kit";
 
 /** "Connected apps" management card shown on the profile page. */
 export function ConnectedApps() {
@@ -30,7 +30,7 @@ export function ConnectedApps() {
     <Card>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-medium">Connected apps</p>
+          <CardTitle>Connected apps</CardTitle>
           <p className="mt-1 text-xs text-muted-foreground">
             Apps in the Verifiabul family that can use your shared profile: photo, name, phone and
             email.

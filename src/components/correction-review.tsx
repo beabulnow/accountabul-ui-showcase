@@ -90,7 +90,7 @@ export function CorrectionReview({ registrationId }: { registrationId: string })
   }
 
   return (
-    <Card className="mt-6 border-caution/40">
+    <Card tone="notice" className="mt-6">
       <h2 className="text-xl">Review our corrections</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         {correction.source === "engine"
@@ -99,7 +99,7 @@ export function CorrectionReview({ registrationId }: { registrationId: string })
         Sent {formatDateTime(correction.sent_at)}.
       </p>
       {correction.staff_rationale ? (
-        <p className="mt-3 rounded-xl border border-border bg-surface px-4 py-3 text-sm">
+        <p className="mt-3 rounded-xl border border-border bg-inset px-4 py-3 text-sm">
           {correction.staff_rationale}
         </p>
       ) : null}
@@ -111,7 +111,7 @@ export function CorrectionReview({ registrationId }: { registrationId: string })
       ) : (
         <ul className="mt-4 grid gap-2">
           {entries.map(([key, change]) => (
-            <li key={key} className="rounded-xl border border-border bg-surface px-4 py-3 text-sm">
+            <li key={key} className="rounded-xl border border-border bg-inset px-4 py-3 text-sm">
               <p className="font-medium">{change.label ?? FIELD_LABELS[key] ?? key}</p>
               <p className="mt-1 text-muted-foreground">
                 <span className="line-through">{displayValue(change.from)}</span>

@@ -77,7 +77,7 @@ export function DateWheel({
       id={id}
       role="group"
       aria-label="Date of birth"
-      className="relative overflow-hidden rounded-2xl border border-input bg-surface"
+      className="relative overflow-hidden rounded-2xl border border-input bg-inset"
       style={{ height: ITEM_HEIGHT * VISIBLE_ITEMS }}
     >
       {/* Selection band */}
