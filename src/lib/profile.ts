@@ -9,7 +9,7 @@ export const PROFILE_AVATAR_BUCKET = "profile-avatars";
 export const PROFILE_AVATAR_MAX_BYTES = 2 * 1024 * 1024;
 
 export const PROFILE_SELECT =
-  "id, email, full_name, first_name, middle_name, last_name, date_of_birth, phone_e164, phone_verified_at, bio, avatar_path, profile_completed_at, privacy_accepted_at, privacy_policy_version, created_at, updated_at" as const;
+  "id, email, full_name, first_name, middle_name, last_name, date_of_birth, phone_e164, phone_verified_at, bio, avatar_path, profile_completed_at, privacy_accepted_at, privacy_policy_version, ecosystem_consent_at, ecosystem_consent_version, created_at, updated_at" as const;
 
 export type Profile = Tables<"profiles">;
 

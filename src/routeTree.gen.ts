@@ -11,12 +11,14 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRegistryAdminRouteImport } from './routes/_authenticated/registry-admin'
 import { Route as AuthenticatedRegisterPropertyRouteImport } from './routes/_authenticated/register-property'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
+import { Route as AuthenticatedEcosystemConsentRouteImport } from './routes/_authenticated/ecosystem-consent'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedCompleteProfileRouteImport } from './routes/_authenticated/complete-profile'
 import { Route as AuthenticatedRegistryAdminIndexRouteImport } from './routes/_authenticated/registry-admin.index'
@@ -24,6 +26,7 @@ import { Route as AuthenticatedRegistryAdminQueueRouteImport } from './routes/_a
 import { Route as AuthenticatedRegistrationsIdRouteImport } from './routes/_authenticated/registrations.$id'
 import { Route as LovableEmailAuthWebhookRouteImport } from './routes/lovable/email/auth/webhook'
 import { Route as LovableEmailAuthPreviewRouteImport } from './routes/lovable/email/auth/preview'
+import { Route as ApiPublicIdentityProfileRouteImport } from './routes/api/public/identity/profile'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -33,6 +36,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectRoute = ConnectRouteImport.update({
+  id: '/connect',
+  path: '/connect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -66,6 +74,12 @@ const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedEcosystemConsentRoute =
+  AuthenticatedEcosystemConsentRouteImport.update({
+    id: '/ecosystem-consent',
+    path: '/ecosystem-consent',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -105,35 +119,47 @@ const LovableEmailAuthPreviewRoute = LovableEmailAuthPreviewRouteImport.update({
   path: '/lovable/email/auth/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicIdentityProfileRoute =
+  ApiPublicIdentityProfileRouteImport.update({
+    id: '/api/public/identity/profile',
+    path: '/api/public/identity/profile',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/connect': typeof ConnectRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ecosystem-consent': typeof AuthenticatedEcosystemConsentRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
   '/registry-admin/': typeof AuthenticatedRegistryAdminIndexRoute
+  '/api/public/identity/profile': typeof ApiPublicIdentityProfileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/connect': typeof ConnectRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/ecosystem-consent': typeof AuthenticatedEcosystemConsentRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
   '/registry-admin': typeof AuthenticatedRegistryAdminIndexRoute
+  '/api/public/identity/profile': typeof ApiPublicIdentityProfileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -142,16 +168,19 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/connect': typeof ConnectRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/complete-profile': typeof AuthenticatedCompleteProfileRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/ecosystem-consent': typeof AuthenticatedEcosystemConsentRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/register-property': typeof AuthenticatedRegisterPropertyRoute
   '/_authenticated/registry-admin': typeof AuthenticatedRegistryAdminRouteWithChildren
   '/_authenticated/registrations/$id': typeof AuthenticatedRegistrationsIdRoute
   '/_authenticated/registry-admin/queue': typeof AuthenticatedRegistryAdminQueueRoute
   '/_authenticated/registry-admin/': typeof AuthenticatedRegistryAdminIndexRoute
+  '/api/public/identity/profile': typeof ApiPublicIdentityProfileRoute
   '/lovable/email/auth/preview': typeof LovableEmailAuthPreviewRoute
   '/lovable/email/auth/webhook': typeof LovableEmailAuthWebhookRoute
 }
@@ -160,31 +189,37 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/connect'
     | '/reset-password'
     | '/sitemap.xml'
     | '/complete-profile'
     | '/dashboard'
+    | '/ecosystem-consent'
     | '/profile'
     | '/register-property'
     | '/registry-admin'
     | '/registrations/$id'
     | '/registry-admin/queue'
     | '/registry-admin/'
+    | '/api/public/identity/profile'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/connect'
     | '/reset-password'
     | '/sitemap.xml'
     | '/complete-profile'
     | '/dashboard'
+    | '/ecosystem-consent'
     | '/profile'
     | '/register-property'
     | '/registrations/$id'
     | '/registry-admin/queue'
     | '/registry-admin'
+    | '/api/public/identity/profile'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   id:
@@ -192,16 +227,19 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/connect'
     | '/reset-password'
     | '/sitemap.xml'
     | '/_authenticated/complete-profile'
     | '/_authenticated/dashboard'
+    | '/_authenticated/ecosystem-consent'
     | '/_authenticated/profile'
     | '/_authenticated/register-property'
     | '/_authenticated/registry-admin'
     | '/_authenticated/registrations/$id'
     | '/_authenticated/registry-admin/queue'
     | '/_authenticated/registry-admin/'
+    | '/api/public/identity/profile'
     | '/lovable/email/auth/preview'
     | '/lovable/email/auth/webhook'
   fileRoutesById: FileRoutesById
@@ -210,8 +248,10 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ConnectRoute: typeof ConnectRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiPublicIdentityProfileRoute: typeof ApiPublicIdentityProfileRoute
   LovableEmailAuthPreviewRoute: typeof LovableEmailAuthPreviewRoute
   LovableEmailAuthWebhookRoute: typeof LovableEmailAuthWebhookRoute
 }
@@ -230,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connect': {
+      id: '/connect'
+      path: '/connect'
+      fullPath: '/connect'
+      preLoaderRoute: typeof ConnectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -272,6 +319,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/ecosystem-consent': {
+      id: '/_authenticated/ecosystem-consent'
+      path: '/ecosystem-consent'
+      fullPath: '/ecosystem-consent'
+      preLoaderRoute: typeof AuthenticatedEcosystemConsentRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
@@ -323,6 +377,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LovableEmailAuthPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/identity/profile': {
+      id: '/api/public/identity/profile'
+      path: '/api/public/identity/profile'
+      fullPath: '/api/public/identity/profile'
+      preLoaderRoute: typeof ApiPublicIdentityProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -345,6 +406,7 @@ const AuthenticatedRegistryAdminRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCompleteProfileRoute: typeof AuthenticatedCompleteProfileRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEcosystemConsentRoute: typeof AuthenticatedEcosystemConsentRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRegisterPropertyRoute: typeof AuthenticatedRegisterPropertyRoute
   AuthenticatedRegistryAdminRoute: typeof AuthenticatedRegistryAdminRouteWithChildren
@@ -354,6 +416,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCompleteProfileRoute: AuthenticatedCompleteProfileRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEcosystemConsentRoute: AuthenticatedEcosystemConsentRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRegisterPropertyRoute: AuthenticatedRegisterPropertyRoute,
   AuthenticatedRegistryAdminRoute: AuthenticatedRegistryAdminRouteWithChildren,
@@ -367,8 +430,10 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ConnectRoute: ConnectRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiPublicIdentityProfileRoute: ApiPublicIdentityProfileRoute,
   LovableEmailAuthPreviewRoute: LovableEmailAuthPreviewRoute,
   LovableEmailAuthWebhookRoute: LovableEmailAuthWebhookRoute,
 }
