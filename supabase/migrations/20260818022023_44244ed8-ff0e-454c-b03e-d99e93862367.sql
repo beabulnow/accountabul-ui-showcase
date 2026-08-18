@@ -1,0 +1,1 @@
+GRANT UPDATE (ecosystem_consent_at, ecosystem_consent_version) ON public.profiles TO authenticated;
