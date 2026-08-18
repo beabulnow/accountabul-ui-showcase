@@ -129,7 +129,7 @@ export function EcosystemConsentPanel({
                   >
                     <input
                       type="checkbox"
-                      className="mt-0.5 size-4 accent-[hsl(var(--primary))]"
+                      className="mt-0.5 size-4 accent-[var(--primary)]"
                       checked={checked}
                       disabled={locked}
                       onChange={() => toggle(app)}
