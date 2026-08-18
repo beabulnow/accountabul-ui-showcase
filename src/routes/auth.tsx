@@ -281,7 +281,7 @@ function AuthPage() {
         {notice ? (
           <p
             role="status"
-            className="rounded-xl border border-border bg-surface px-3.5 py-3 text-sm text-muted-foreground"
+            className="rounded-xl border border-border bg-inset px-3.5 py-3 text-sm text-muted-foreground"
           >
             {notice}
           </p>
