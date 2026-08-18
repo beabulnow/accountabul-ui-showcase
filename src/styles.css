@@ -43,7 +43,11 @@
   --color-caution: var(--caution);
   --color-caution-foreground: var(--caution-foreground);
   --color-surface: var(--surface);
+  --color-notice: var(--notice);
+  --color-notice-border: var(--notice-border);
+  --color-inset: var(--inset);
   --color-ink: var(--ink);
+
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
